@@ -1,0 +1,168 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model orderdetails {
+  orderdetailid Int       @id @default(autoincrement())
+  orderid       Int?
+  productid     String?
+  price         Int?
+  quantity      Int?
+  total         Int?
+  orders        orders?   @relation(fields: [orderid], references: [orderid], onDelete: NoAction, onUpdate: NoAction)
+  products      products? @relation(fields: [productid], references: [productid], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model orders {
+  orderid      Int            @id @default(autoincrement())
+  userid       String?
+  orderdate    DateTime?      @default(now()) @db.Date
+  fulfilled    Boolean?
+  deleted      Boolean?
+  orderdetails orderdetails[]
+  users        users?         @relation(fields: [userid], references: [userid], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model products {
+  productid             String          @id @default(uuid())
+  name                  String          @db.VarChar(255)
+  price                 Int
+  instock               Boolean
+  supplierid            Int?
+  sku                   String?         @db.VarChar(255)
+  discountavailable     Boolean?
+  discount              Int?
+  producttype           devicetype?
+  releaseyear           Int?            @db.SmallInt
+  color                 String?         @db.Char(7)
+  memoryamount          Int?
+  memoryunit            memorytype?
+  sdslot                Boolean?
+  cameracount           Int?            @db.SmallInt
+  cameraresolution      Int?            @db.SmallInt
+  frontcameraresolution Int?
+  os                    String?         @db.VarChar(50)
+  osversion             String?         @db.VarChar(100)
+  cpumodel              String?         @db.VarChar(100)
+  cpucores              Int?
+  cpufrequency          Float?
+  cpufrequencyunit      frequencytype?
+  simtype               simtype?
+  simcount              Int?            @db.SmallInt
+  displaysize           Float?
+  displayheight         Int?
+  displaywidth          Int?
+  refreshrate           Int?
+  batterytype           String?
+  batterycapacity       Int?
+  width                 Float?
+  height                Float?
+  thickness             Float?
+  weight                Float?
+  photo                 String[]
+  ramamount             Int?
+  ramunit               memorytype?
+  orderdetails          orderdetails[]
+  suppliers             suppliers?      @relation(fields: [supplierid], references: [supplierid], onDelete: NoAction, onUpdate: NoAction)
+  ratings               ratings[]
+  wishlistitems         wishlistitems[]
+}
+
+model suppliers {
+  supplierid   Int          @id @default(autoincrement())
+  companyname  String       @db.VarChar(255)
+  contactlname String       @db.VarChar(100)
+  contactfname String       @db.VarChar(100)
+  contacttitle String       @db.VarChar(100)
+  country      String       @db.VarChar(100)
+  city         String       @db.VarChar(100)
+  address      String       @db.VarChar(255)
+  postalcode   Int
+  phone        String       @db.VarChar(20)
+  email        String?      @db.VarChar(255)
+  producttype  devicetype[]
+  products     products[]
+}
+
+model ratings {
+  ratingid  Int       @id @default(autoincrement())
+  userid    String?
+  productid String?
+  rating    Int
+  time      DateTime  @default(now())
+  users     users?    @relation(fields: [userid], references: [userid], onDelete: NoAction, onUpdate: NoAction)
+  products  products? @relation(fields: [productid], references: [productid], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model wishlists {
+  wishlistid    Int             @id @default(autoincrement())
+  userid        String?
+  users         users?          @relation(fields: [userid], references: [userid], onDelete: NoAction, onUpdate: NoAction)
+  wishlistitems wishlistitems[]
+}
+
+model wishlistitems {
+  wishlistid Int
+  productid  String
+  wishlists  wishlists @relation(fields: [wishlistid], references: [wishlistid], onDelete: NoAction, onUpdate: NoAction)
+  products   products  @relation(fields: [productid], references: [productid], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([wishlistid, productid])
+}
+
+model users {
+  userid      String      @id @default(uuid())
+  username    String      @db.VarChar(255)
+  password    String      @db.VarChar(255)
+  salt        String      @db.VarChar(64)
+  privileges  String      @default("default") @db.VarChar(100)
+  email       String?     @db.VarChar(255)
+  lastname    String?     @db.VarChar(255)
+  firstname   String?     @db.VarChar(255)
+  birthdate   DateTime?   @db.Date
+  country     String?     @db.VarChar(100)
+  city        String?     @db.VarChar(100)
+  postalcode  Int?
+  address     String?     @db.VarChar(255)
+  datecreated DateTime?   @default(now()) @db.Timestamp(0)
+  orders      orders[]
+  ratings     ratings[]
+  wishlists   wishlists[]
+}
+
+enum devicetype {
+  SMARTPHONE
+  CELLPHONE
+  TABLET
+  HEADPHONE
+  CHARGER
+  CABLE
+  PLAYER
+  WATCH
+}
+
+enum simtype {
+  MINI_SIM
+  MICRO_SIM
+  NANO_SIM
+  ESIM
+}
+
+enum memorytype {
+  TB
+  GB
+  MB
+  KB
+}
+
+enum frequencytype {
+  GHz
+  MHz
+  KHz
+  Hz
+}

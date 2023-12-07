@@ -3,6 +3,10 @@
   export let data: PageData;
 </script>
 
+<svelte:head>
+  <title>...</title>
+</svelte:head>
+
 <slot>
   <div>
     {#each data.products as product (product.productid)}

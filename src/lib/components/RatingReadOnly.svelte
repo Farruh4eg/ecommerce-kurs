@@ -4,6 +4,7 @@
   import Star from './Star.svelte';
 
   export let rating: number, ratingCount: number;
+  export let height: string;
 
   let stars = Array.from({ length: 5 }, (_, index) => index + 1);
 
@@ -24,11 +25,11 @@
   <section class="flex">
     {#each stars as index (index)}
       {#if getStarType(index) === 'filled'}
-        <StarFilled />
+        <StarFilled {height} />
       {:else if getStarType(index) === 'partial'}
-        <StarPartial percent={(rating % 1) * 100} />
+        <StarPartial percent={(rating % 1) * 100} {height} />
       {:else}
-        <Star />
+        <Star {height} />
       {/if}
     {/each}
   </section>

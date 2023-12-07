@@ -4,6 +4,9 @@
   export let data: PageData;
 </script>
 
+<svelte:head>
+  <title>Результаты поиска</title>
+</svelte:head>
 <slot>
   <section class="flex flex-col gap-4 mt-6 mb-4">
     {#each data.products as product (product.productid)}

@@ -13,6 +13,9 @@ export const GET = (async ({ url }) => {
           mode: 'insensitive',
         },
       },
+      include: {
+        ratings: true,
+      },
     });
   } else if (urlProductId == 'all') {
     product = await prisma.products.findMany({});

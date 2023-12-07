@@ -1,9 +1,14 @@
 <script lang="ts">
-  export let percent;
+  export let percent: number;
+  export let height: string = '7';
 </script>
 
 <section>
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-7">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    class="h-{height}"
+  >
     <defs>
       <linearGradient id="part">
         <stop id="stop1" offset="{percent}%" stop-color="orange" />

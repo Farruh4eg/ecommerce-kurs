@@ -52,6 +52,8 @@ model products {
   cpucores              Int?
   cpufrequency          Float?
   cpufrequencyunit      frequencytype?
+  ramamount             Int?
+  ramunit               memorytype?
   simtype               simtype?
   simcount              Int?            @db.SmallInt
   displaysize           Float?
@@ -65,8 +67,7 @@ model products {
   thickness             Float?
   weight                Float?
   photo                 String[]
-  ramamount             Int?
-  ramunit               memorytype?
+  dateCreated           DateTime?       @default(now())
   orderdetails          orderdetails[]
   suppliers             suppliers?      @relation(fields: [supplierid], references: [supplierid], onDelete: NoAction, onUpdate: NoAction)
   ratings               ratings[]
@@ -74,19 +75,17 @@ model products {
 }
 
 model suppliers {
-  supplierid   Int          @id @default(autoincrement())
-  companyname  String       @db.VarChar(255)
-  contactlname String       @db.VarChar(100)
-  contactfname String       @db.VarChar(100)
-  contacttitle String       @db.VarChar(100)
-  country      String       @db.VarChar(100)
-  city         String       @db.VarChar(100)
-  address      String       @db.VarChar(255)
-  postalcode   Int
-  phone        String       @db.VarChar(20)
-  email        String?      @db.VarChar(255)
-  producttype  devicetype[]
-  products     products[]
+  supplierid  Int          @id @default(autoincrement())
+  companyname String       @db.VarChar(255)
+  country     String       @db.VarChar(100)
+  city        String       @db.VarChar(100)
+  address     String       @db.VarChar(255)
+  logo        String?
+  postalcode  Int
+  phone       String       @db.VarChar(20)
+  email       String?      @db.VarChar(255)
+  producttype devicetype[]
+  products    products[]
 }
 
 model ratings {

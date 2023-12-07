@@ -1,14 +1,14 @@
 <script lang="ts">
   import type { PageData } from '../../../.svelte-kit/types/src/routes/$types.d.ts';
 
-  import Rating from './Rating.svelte';
-
   import {
     deviceEnumValueToString,
     memoryEnumValueToString,
     frequencyEnumValueToString,
     addSpaceInString,
   } from '$lib/utils/helpers';
+
+  import RatingReadOnly from './RatingReadOnly.svelte';
 
   $: isHearted = false;
 
@@ -72,7 +72,7 @@
 
 <section class="w-full flex bg-white p-5 rounded-lg">
   <div class="relative h-52 flex justify-end w-64">
-    <img src={productThumb} alt="thumb-{productName}" class="w-full" />
+    <img src={productThumb} alt="thumb-{productName}" />
     {#if productDiscountAvailable}
       <span
         class="absolute rounded-3xl bg-blue-500 text-gray-50 p-2 text-xs font-bold"
@@ -82,7 +82,7 @@
   </div>
   <section class="flex justify-between w-full p-1 flex-col">
     <a
-      href="products/{productId}"
+      href="/products/{productId}"
       class="hover:text-blue-600 w-full h-max pb-12"
       >{productDisplaySize}" {productType}
       {productName}
@@ -116,7 +116,7 @@
                 <span class="text-red-600">нет</span>
               {/if}
             </span>
-            <Rating rating={avg.toFixed(1)} ratingCount={count} />
+            <RatingReadOnly rating={avg.toFixed(1)} ratingCount={count} />
           </section>
         </section>
         <section class="flex gap-x-4 items-end">

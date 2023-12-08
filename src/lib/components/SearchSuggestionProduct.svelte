@@ -42,17 +42,23 @@
   sum = productRatingsArray.reduce((a, b) => a + b, 0);
   count = productRatingsArray.length;
   avg = sum / count || 0;
+
+  const handleProductChange = () => {
+    window.location.href = `/products/${productId}`;
+  };
 </script>
 
 <section class="w-full flex gap-2">
-  <div class="relative h-16 flex justify-start w-32">
+  <div class="relative h-16 flex justify-center w-32">
     <img src={productThumb} alt="thumb-{productName}" class="h-full" />
   </div>
   <section class="flex flex-col justify-start w-full gap-2">
-    <a href="/products/{productId}" class="hover:text-blue-600 w-full h-max">
+    <a
+      on:click={handleProductChange}
+      class="hover:text-blue-600 w-full h-max hover:cursor-pointer"
+    >
       {productName}
     </a>
     <span class="font-semibold text-blue-600">{productPrice} &#8381;</span>
   </section>
-  <RatingReadOnly rating={avg.toFixed(1)} ratingCount={count} height={'5'} />
 </section>

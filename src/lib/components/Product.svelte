@@ -8,8 +8,22 @@
   } from '$lib/utils/helpers';
 
   import ImageContainer from './ImageContainer.svelte';
+  import RatingReadOnly from './RatingReadOnly.svelte';
 
   export let product: PageData;
+
+  let productRatingsArray: number[] = [];
+  let sum: number;
+  let count: number;
+  let avg: number;
+
+  product.ratings.forEach((element) => {
+    productRatingsArray.push(element.rating);
+  });
+
+  sum = productRatingsArray.reduce((a, b) => a + b, 0);
+  count = productRatingsArray.length;
+  avg = sum / count || 0;
 
   $: supplierLogo = product.suppliers.logo;
   $: productId = product.productid;
@@ -94,7 +108,9 @@
             <img src={supplierLogo} alt="supplier-logo" class="h-full" />
           </section>
         </section>
-        <section class="flex w-full"></section>
+        <section class="flex w-full">
+          <RatingReadOnly rating={avg} ratingCount={count} height={5} />
+        </section>
       </section>
     </section>
   </section>

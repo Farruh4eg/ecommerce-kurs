@@ -22,7 +22,9 @@
   }
 </script>
 
-<section class="flex flex-col">
+<section
+  class="flex gap-x-2 p-1 border box-border border-gray-300 rounded-lg text-sm items-center"
+>
   <section class="flex">
     {#each stars as index (index)}
       {#if getStarType(index) === 'filled'}
@@ -34,5 +36,7 @@
       {/if}
     {/each}
   </section>
-  <section class="flex w-full justify-end">{rating} ({ratingCount})</section>
+  <section class="flex w-full justify-end">
+    {ratingCount}
+  </section>
 </section>

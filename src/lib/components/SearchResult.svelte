@@ -71,16 +71,17 @@
 </script>
 
 <section class="w-full flex bg-white p-5 rounded-lg">
-  <div class="relative h-52 flex justify-end w-64">
+  <div class="relative h-52 flex justify-center w-64">
     <img src={productThumb} alt="thumb-{productName}" />
     {#if productDiscountAvailable}
       <span
-        class="absolute rounded-3xl bg-blue-500 text-gray-50 p-2 text-xs font-bold"
+        class="absolute rounded-3xl bg-blue-500 text-gray-50 p-2 text-xs right-36 top-40"
         >-{productDiscountAmount}%</span
       >
     {/if}
   </div>
-  <section class="flex justify-between w-full p-1 flex-col">
+
+  <section class="flex justify-between w-full p-1 flex-col rounded-xl">
     <a
       href="/products/{productId}"
       class="hover:text-blue-600 w-full h-max pb-12"
@@ -116,7 +117,11 @@
                 <span class="text-red-600">нет</span>
               {/if}
             </span>
-            <RatingReadOnly rating={avg.toFixed(1)} ratingCount={count} />
+            <RatingReadOnly
+              rating={avg.toFixed(1)}
+              ratingCount={count}
+              height={5}
+            />
           </section>
         </section>
         <section class="flex gap-x-4 items-end">

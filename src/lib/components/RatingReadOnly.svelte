@@ -3,7 +3,8 @@
   import StarPartial from './StarPartial.svelte';
   import Star from './Star.svelte';
 
-  export let rating: number, ratingCount: number;
+  export let rating: number;
+  export let ratingCount: number;
   export let height: string;
 
   let stars = Array.from({ length: 5 }, (_, index) => index + 1);

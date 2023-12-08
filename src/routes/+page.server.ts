@@ -4,7 +4,11 @@ import type { PageServerLoad } from './$types';
 export const load = (async () => {
   const products = await prisma.products.findMany({
     include: {
-      ratings: true,
+      ratings: {
+        select: {
+          rating: true,
+        },
+      },
     },
   });
   return { products };

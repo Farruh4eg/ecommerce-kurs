@@ -4,10 +4,4 @@
   export let data: PageData;
 </script>
 
-<slot>
-  <div>
-    <main>
-      <Product product={data.product} />
-    </main>
-  </div>
-</slot>
+<Product product={data.product} />

@@ -6,61 +6,56 @@
     frequencyEnumValueToString,
     addSpaceInString,
   } from '$lib/utils/helpers';
+
   import ImageContainer from './ImageContainer.svelte';
 
   export let product: PageData;
 
-  let supplierLogo = product.suppliers.logo;
-  let productId = product.productid;
-  let productThumb = product.photo[0];
-  let productName = product.name;
-  let productColor = product.color;
-  let productInStock: boolean = product.instock;
-  let productDiscountAvailable: boolean = true;
-  let productDiscountAmount = product.discount || 8;
-  let productRatingsArray = [];
-  product.ratings.forEach((element) => {
-    productRatingsArray.push(element.rating);
-  });
-  const sum = productRatingsArray.reduce((a, b) => a + b, 0);
-  const count = productRatingsArray.length;
-  const avg = sum / count || 0;
-  let productType = deviceEnumValueToString(product.producttype);
-  let productDisplaySize = product.displaysize || '';
-  let productPrice = product.price;
-  let productPriceString = addSpaceInString(product.price.toString());
+  $: supplierLogo = product.suppliers.logo;
+  $: productId = product.productid;
+  $: productThumb = product.photo[0];
+  $: productName = product.name;
+  $: productColor = product.color;
+  $: productInStock = product.instock;
+  $: productDiscountAvailable = true;
+  $: productDiscountAmount = product.discount || 8;
 
-  let productMemory = product.memoryamount
+  $: productType = deviceEnumValueToString(product.producttype);
+  $: productDisplaySize = product.displaysize || '';
+  $: productPrice = product.price;
+  $: productPriceString = addSpaceInString(product.price.toString());
+
+  $: productMemory = product.memoryamount
     ? `${product.memoryamount} ${memoryEnumValueToString(product.memoryunit)}`
     : '';
 
-  let productCpu = product.cpucores
+  $: productCpu = product.cpucores
     ? `ядер - ${product.cpucores}x(${
         product.cpufrequency
       } ${frequencyEnumValueToString(product.cpufrequencyunit)})`
     : '';
 
-  let productRam = product.ramamount
+  $: productRam = product.ramamount
     ? `${product.ramamount} ${memoryEnumValueToString(product.ramunit)}`
     : '';
 
-  let productSim = product.simcount ? `${product.simcount} SIM` : '';
+  $: productSim = product.simcount ? `${product.simcount} SIM` : '';
 
-  let productDisplayResolution = product.displayheight
+  $: productDisplayResolution = product.displayheight
     ? product.displaywidth > product.displayheight
       ? `${product.displaywidth}x${product.displayheight}`
       : `${product.displayheight}x${product.displaywidth}`
     : '';
 
-  let productDisplayRefresh = product.refreshrate
+  $: productDisplayRefresh = product.refreshrate
     ? `${product.refreshrate} Гц`
     : '';
 
-  let productCamera = product.cameraresolution
+  $: productCamera = product.cameraresolution
     ? `камера ${product.cameraresolution} Мп`
     : '';
 
-  let productBattery = product.batterycapacity
+  $: productBattery = product.batterycapacity
     ? `${product.batterycapacity} мА*ч`
     : '';
 </script>
@@ -99,6 +94,7 @@
             <img src={supplierLogo} alt="supplier-logo" class="h-full" />
           </section>
         </section>
+        <section class="flex w-full"></section>
       </section>
     </section>
   </section>

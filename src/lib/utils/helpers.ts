@@ -1,4 +1,6 @@
-export const deviceEnumValueToString = (deviceEnum: any) => {
+import type { devicetype, frequencytype, memorytype } from '@prisma/client';
+
+export const deviceEnumValueToString = (deviceEnum: devicetype): string => {
   let devType = null;
 
   switch (deviceEnum) {
@@ -11,7 +13,7 @@ export const deviceEnumValueToString = (deviceEnum: any) => {
     case 'WATCH':
       devType = 'Часы';
       break;
-    case 'HEADPHONES':
+    case 'HEADPHONE':
       devType = 'Наушники';
       break;
     case 'CABLE':
@@ -30,7 +32,7 @@ export const deviceEnumValueToString = (deviceEnum: any) => {
   return devType;
 };
 
-export const memoryEnumValueToString = (memoryEnum: any) => {
+export const memoryEnumValueToString = (memoryEnum: memorytype): string => {
   let memType = null;
   switch (memoryEnum) {
     case 'TB':
@@ -49,7 +51,9 @@ export const memoryEnumValueToString = (memoryEnum: any) => {
   return memType;
 };
 
-export const frequencyEnumValueToString = (frequencyEnum: any) => {
+export const frequencyEnumValueToString = (
+  frequencyEnum: frequencytype
+): string => {
   let frequencyType = null;
 
   switch (frequencyEnum) {

@@ -1,7 +1,7 @@
 <script lang="ts"></script>
 
 <section class="h-screen w-1/4 bg-white rounded-xl flex flex-col p-4">
-  <section class="flex w-full gap-x-4">
+  <section class="flex w-full gap-x-4 items-center">
     <input
       type="checkbox"
       name="rating"

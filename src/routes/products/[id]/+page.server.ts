@@ -1,6 +1,5 @@
 import prisma from '$lib/prisma';
 import type { PageServerLoad } from './$types';
-import on
 
 export const load = (async ({ params: { id } }) => {
   const product = await prisma.products.findUnique({

@@ -8,10 +8,10 @@
     const target = element.target;
 
     if (currentImageSelected && currentImageSelected !== target) {
-      currentImageSelected.classList.remove('border-blue-600', 'border-l');
+      currentImageSelected.classList.remove("border-blue-600", "border-l");
     }
 
-    target.classList.add('border-blue-600', 'border-l');
+    target.classList.add("border-blue-600", "border-l");
 
     currentImageSelected = target;
     currentHoveredImage = target.src;

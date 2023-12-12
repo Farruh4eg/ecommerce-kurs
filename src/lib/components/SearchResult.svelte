@@ -96,8 +96,8 @@
             <span class="text-sm text-gray-600 line-through"
               >{addSpaceInString(
                 parseInt(
-                  productPrice + (productPrice / 100) * productDiscountAmount
-                ).toString()
+                  productPrice + (productPrice / 100) * productDiscountAmount,
+                ).toString(),
               )}</span
             >
           {/if}

@@ -2,7 +2,6 @@
 </script>
 
 <button
-  on:click={fillHeart}
   class="p-4 border border-solid border-gray-300 w-16 h-16 rounded-xl hover:bg-gray-50 flex justify-center items-center"
 >
   <svg
@@ -10,7 +9,7 @@
     viewBox="0 0 24 24"
     stroke-width="1.5"
     stroke="gray"
-    fill={isHearted ? "blue" : "none"}
+    fill="none"
     class="h-8"
   >
     <path

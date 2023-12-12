@@ -1,6 +1,6 @@
 <script lang="ts">
   export let percent: number;
-  export let height: string = '7';
+  export let height: string = "7";
 </script>
 
 <section>
@@ -11,7 +11,7 @@
   >
     <defs>
       <linearGradient id="part">
-        <stop id="stop1" offset="{percent}%" stop-color="orange" />
+        <stop id="stop1" offset={percent} stop-color="orange" />
         <stop id="stop2" offset="0%" stop-color="transparent" />
       </linearGradient>
     </defs>

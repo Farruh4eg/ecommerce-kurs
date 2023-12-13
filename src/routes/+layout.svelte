@@ -1,7 +1,7 @@
 <script lang="ts">
-  import "../app.css";
-  import SearchSuggestions from "$lib/components/SearchSuggestions.svelte";
-  import { session } from "$lib/session";
+  import '../app.css';
+  import SearchSuggestions from '$lib/components/SearchSuggestions.svelte';
+  import { session } from '$lib/session';
 
   $: isLoggedIn = $session.isLoggedIn;
 
@@ -21,20 +21,20 @@
     setTimeout(() => {
       isFocused = !isFocused;
       if (isFocused) {
-        searchElement.classList.add("rounded-b-none");
+        searchElement.classList.add('rounded-b-none');
       } else if (!isFocused) {
-        searchElement.classList.remove("rounded-b-none");
+        searchElement.classList.remove('rounded-b-none');
       }
     }, 150);
   };
 
   const handleShowPassword = () => {
     switch (passwordInput.type) {
-      case "password":
-        passwordInput.type = "text";
+      case 'password':
+        passwordInput.type = 'text';
         break;
-      case "text":
-        passwordInput.type = "password";
+      case 'text':
+        passwordInput.type = 'password';
     }
     showPassword = !showPassword;
   };
@@ -199,7 +199,7 @@
   id="loginDialog"
   bind:this={loginDialog}
   on:click={handleDialogClick}
-  class="w-[30rem] justify-center rounded-3xl h-[36rem] mx-auto mt-24 shadow-lg"
+  class="w-[30rem] justify-center rounded-3xl h-[36rem] mx-auto mt-12 shadow-lg"
 >
   <form
     method="POST"
@@ -287,5 +287,6 @@
     margin: 0;
     background-color: rgb(243, 244, 246);
     width: 100vw;
+    overflow-x: hidden;
   }
 </style>

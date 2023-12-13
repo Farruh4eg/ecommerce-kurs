@@ -8,16 +8,16 @@
 
   const submitForm = () => {
     if (passwordInput !== confirmPasswordInput) {
-      errorElement.textContent = "Пароли не совпадают";
+      errorElement.textContent = 'Пароли не совпадают';
     } else {
-      errorElement.textContent = "";
+      errorElement.textContent = '';
       registerForm.submit();
     }
   };
 </script>
 
 <section
-  class="w-[30rem] bg-white justify-center flex rounded-3xl h-[36rem] mx-auto mt-24 shadow-lg box-content p-5"
+  class="w-[30rem] bg-white justify-center flex rounded-3xl h-[36rem] mx-auto mt-12 mb-12 shadow-lg box-content p-5"
 >
   {#if data?.success}
     <p>{data.formData.password}</p>

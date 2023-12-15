@@ -1,9 +1,13 @@
 <script lang="ts">
-  import '../app.css';
-  import SearchSuggestions from '$lib/components/SearchSuggestions.svelte';
-  import { session } from '$lib/session';
+  import "../app.css";
+  import SearchSuggestions from "$lib/components/SearchSuggestions.svelte";
+  import { session } from "$lib/session";
 
-  $: isLoggedIn = $session.isLoggedIn;
+  let isLoggedIn: boolean;
+
+  const unsubscribe = session.subscribe(
+    (value) => (isLoggedIn = value.isLoggedIn)
+  );
 
   let showPassword = false;
   let passwordInput: HTMLInputElement;
@@ -21,20 +25,20 @@
     setTimeout(() => {
       isFocused = !isFocused;
       if (isFocused) {
-        searchElement.classList.add('rounded-b-none');
+        searchElement.classList.add("rounded-b-none");
       } else if (!isFocused) {
-        searchElement.classList.remove('rounded-b-none');
+        searchElement.classList.remove("rounded-b-none");
       }
     }, 150);
   };
 
   const handleShowPassword = () => {
     switch (passwordInput.type) {
-      case 'password':
-        passwordInput.type = 'text';
+      case "password":
+        passwordInput.type = "text";
         break;
-      case 'text':
-        passwordInput.type = 'password';
+      case "text":
+        passwordInput.type = "password";
     }
     showPassword = !showPassword;
   };
@@ -65,6 +69,7 @@
 
   const showDialog = () => {
     loginDialog.showModal();
+    console.log(isLoggedIn);
   };
 </script>
 

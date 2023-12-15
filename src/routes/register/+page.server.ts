@@ -1,15 +1,15 @@
-import prisma from '$lib/prisma';
-import bcrypt from 'bcrypt';
-import { json, type Actions } from '@sveltejs/kit';
+import prisma from "$lib/prisma";
+import bcrypt from "bcrypt";
+import type { Actions } from "@sveltejs/kit";
 
 export const actions = {
   default: async ({ request }) => {
     const data = await request.formData();
-    const username = String(data.get('username'));
-    const password = String(data.get('password'));
+    const username = String(data.get("username"));
+    const password = String(data.get("password"));
     const res = {
       success: false,
-      errorMessage: '',
+      errorMessage: "",
     };
 
     const getUsername = await prisma.users.findFirst({
@@ -19,13 +19,12 @@ export const actions = {
     });
 
     if (getUsername !== null) {
-      res.errorMessage = 'username exists';
-      return json(res, { status: 400 });
+      res.errorMessage = "Имя пользователя занято";
     } else {
       const saltRounds = 14;
       const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-      prisma.users.create({
+      await prisma.users.create({
         data: {
           username,
           password: hashedPassword,
@@ -33,6 +32,6 @@ export const actions = {
       });
       res.success = true;
     }
-    return json(res);
+    return res;
   },
 } satisfies Actions;

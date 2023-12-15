@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { onMount } from "svelte";
+
+  export let data;
   let showPassword = false;
   let passwordInput: HTMLInputElement;
 
@@ -12,6 +15,10 @@
     }
     showPassword = !showPassword;
   };
+
+  onMount(() => {
+    console.log(data);
+  });
 </script>
 
 <section
@@ -19,6 +26,7 @@
 >
   <form
     method="POST"
+    action="/login/"
     class="w-full flex flex-col p-4 gap-y-12 h-full items-center justify-center"
   >
     <section class="flex flex-col justify-center w-full gap-y-2 items-center">

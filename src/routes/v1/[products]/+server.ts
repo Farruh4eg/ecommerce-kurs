@@ -32,5 +32,9 @@ export const GET = (async ({ url }) => {
     });
   }
   product = JSON.stringify(product, null, 2);
-  return new Response(product);
+  return new Response(product, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
 }) satisfies PageServerLoad;

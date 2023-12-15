@@ -4,7 +4,8 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://Farruh4eg:F52286565f_@172.20.7.8:5432/farruh4eg_kurs_db"
+  // url      = "postgresql://Farruh4eg:F52286565f_@172.20.7.8:5432/farruh4eg_kurs_db"
+  url      = "postgresql://farruh4eg:F52286565f_@localhost:5432/kurs"
 }
 
 model orderdetails {

@@ -8,6 +8,9 @@ export const GET: RequestHandler = async ({ url }: { url: URL }) => {
     where: {
       userid: urlUserId!,
     },
+    include: {
+      addresses: true,
+    },
   });
 
   const userJson = JSON.stringify(user, null, 2);

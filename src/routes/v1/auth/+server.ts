@@ -61,13 +61,13 @@ export const GET: RequestHandler = async ({ request }) => {
       },
     });
     const newToken = jwt.sign({ username, userid }, SECRET_ACCESS_TOKEN, {
-      expiresIn: 15 * 60,
+      expiresIn: '90 days',
     });
     const setCookieHeader = [
-      `token='${newToken}'; Max-Age=${15 * 60}; Path=/; HttpOnly`,
+      `token='${newToken}'; Max-Age=${90 * 24 * 60 * 60}; Path=/; HttpOnly`,
 
       `refresh-token=${newRefreshToken}; Max-Age=${
-        30 * 24 * 60 * 60
+        30 * 24 * 60 * 60 * 12
       }; Path=/; HttpOnly`,
     ].join(', ');
 

@@ -58,14 +58,16 @@ export const POST: RequestHandler = async ({ request }) => {
     };
     const secure = dev ? '' : 'Secure;';
     const token = jwt.sign(user, SECRET_ACCESS_TOKEN, {
-      expiresIn: `${15 * 60 * 1000}`,
+      expiresIn: '90 days',
     });
 
     const setCookieHeader = [
-      `token=${token}; Max-Age=${15 * 60}; Path=/; ${secure} HttpOnly`,
+      `token=${token}; Max-Age=${
+        90 * 24 * 60 * 60
+      }; Path=/; ${secure} HttpOnly`,
 
       `refresh-token=${refreshToken}; Max-Age=${
-        30 * 24 * 60 * 60
+        30 * 24 * 60 * 60 * 12
       }; Path=/; ${secure} HttpOnly`,
     ].join(', ');
 

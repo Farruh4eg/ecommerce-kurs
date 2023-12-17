@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { error } from '@sveltejs/kit';
+
   let loginInput: HTMLInputElement;
   let passwordInput: HTMLInputElement;
   let confirmPasswordInput: HTMLInputElement;
@@ -13,9 +15,6 @@
       const username = loginInput;
       const password = passwordInput;
 
-      console.log(password);
-      console.log(username);
-
       const response = await fetch('/v1/createuser', {
         method: 'POST',
         credentials: 'same-origin',
@@ -26,7 +25,12 @@
       });
 
       if (response.ok) {
-        window.location.href = '/';
+        errorElement.classList.add('text-green-500');
+        errorElement.textContent =
+          'Учетная запись создана успешно. Вы будете перенаправлены на страницу входа';
+        setTimeout(() => {
+          window.location.href = '/login';
+        }, 2000);
       } else if (response.status == 409) {
         errorElement.textContent =
           'Пользователь уже существует. Если это вы, попробуйте войти.';

@@ -27,7 +27,7 @@
       const username = usernameInput;
       const password = passwordInput.value;
 
-      const response = await fetch('/v1/signin', {
+      const response = await fetch('/v1/login', {
         method: 'POST',
         credentials: 'same-origin',
         body: JSON.stringify({ username, password }),
@@ -48,10 +48,6 @@
       }
     };
   }
-
-  onMount(() => {
-    console.log(data);
-  });
 </script>
 
 <section
@@ -61,6 +57,7 @@
     class="w-full flex flex-col p-4 gap-y-12 h-full items-center justify-center"
     on:submit|preventDefault={submitForm}
   >
+    <h1 class="h-max text-3xl text-gray-700 font-bold">Вход</h1>
     <section class="flex flex-col justify-center w-full gap-y-2 items-center">
       <label for="username"> Логин </label>
       <input

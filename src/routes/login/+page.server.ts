@@ -5,6 +5,7 @@ export const load: Load = async (event) => {
   const contentType = response.headers.get('content-type');
   if (contentType && contentType.includes('application/json')) {
     const user = await response.json();
+
     if (!user.user_id) {
       return {
         status: 401,

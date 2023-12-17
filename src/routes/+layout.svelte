@@ -2,15 +2,18 @@
   import '../app.css';
   import SearchSuggestions from '$lib/components/SearchSuggestions.svelte';
   import session from '$lib/session';
-  import type { FormEventHandler } from 'svelte/elements';
+  import type { EventHandler, FormEventHandler } from 'svelte/elements';
   import { onDestroy } from 'svelte';
 
-  let isLoggedIn: boolean;
-  let userData: object;
+  export let data;
 
+  let isLoggedIn: boolean;
+
+  let usernameInput: HTMLInputElement;
   let showPassword = false;
   let passwordInput: HTMLInputElement;
 
+  let errorElement: HTMLParagraphElement;
   let loginDialog: HTMLDialogElement;
 
   let searchElement: HTMLInputElement;
@@ -19,6 +22,35 @@
 
   $: isFocused = false;
   $: isSuggestionsVisible = isFocused && product.length > 0;
+
+  let submitForm: EventHandler;
+
+  $: {
+    submitForm = async () => {
+      const username = usernameInput;
+      const password = passwordInput;
+
+      const response = await fetch('/v1/login', {
+        method: 'POST',
+        credentials: 'same-origin',
+        body: JSON.stringify({ username, password }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        session.set({
+          isLoggedIn: true,
+        });
+        window.location.href = '/';
+      } else if (response.status === 401) {
+        errorElement.textContent = 'Неверный логин или пароль';
+      } else if (response.status === 404) {
+        errorElement.textContent = 'Пользователя не существует';
+      }
+    };
+  }
 
   const handleFocusChange = () => {
     setTimeout(() => {
@@ -29,6 +61,21 @@
         searchElement.classList.remove('rounded-b-none');
       }
     }, 150);
+  };
+
+  const handleLogout = async () => {
+    const response = await fetch('/v1/logout', {
+      method: 'POST',
+      headers: {
+        credentials: 'same-origin',
+      },
+    });
+    if (response.ok) {
+      session.set({
+        isLoggedIn: false,
+      });
+      window.location.href = '/';
+    }
   };
 
   const handleShowPassword = () => {
@@ -68,7 +115,6 @@
 
   const unsubscribe = session.subscribe((value) => {
     isLoggedIn = value.isLoggedIn;
-    userData = value.userData;
   });
 
   onDestroy(() => {
@@ -77,7 +123,6 @@
 
   const showDialog = () => {
     loginDialog.showModal();
-    console.log(isLoggedIn);
   };
 </script>
 
@@ -203,7 +248,27 @@
             d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
           />
         </svg>
-        Профиль</a
+        {data.userInfo.username}</a
+      >
+      <a
+        class="scale-90 hover:bg-gray-100 p-5 rounded-lg min-w-[5rem] text-center transition-colors flex flex-col text-gray-500 hover: cursor-pointer"
+        on:click={handleLogout}
+        ><svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="red"
+          class="h-7"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"
+          />
+        </svg>
+
+        Выйти</a
       >
     {/if}
   </section>
@@ -215,16 +280,17 @@
   class="w-[30rem] justify-center rounded-3xl h-[36rem] mx-auto mt-12 shadow-lg"
 >
   <form
-    method="POST"
-    action="/login/"
-    class="w-full flex flex-col p-4 gap-y-12 h-full items-center justify-center"
+    on:submit|preventDefault={submitForm}
+    class="w-full flex flex-col p-4 gap-y-12 h-[36rem] items-center justify-center"
     id="loginForm"
   >
+    <h1 class="h-max text-3xl text-gray-700 font-bold">Вход</h1>
     <section class="flex flex-col justify-center w-full gap-y-2 items-center">
       <label for="username"> Логин </label>
       <input
         type="text"
         name="username"
+        bind:value={usernameInput}
         class="w-7/12 box-content py-2 px-5 rounded-lg shadow-md border border-gray-300"
         required
       />
@@ -235,7 +301,7 @@
         type="password"
         name="password"
         class="w-7/12 box-content py-2 px-2 rounded-lg shadow-md border border-gray-300 relative pr-8"
-        bind:this={passwordInput}
+        bind:value={passwordInput}
         required
       />
       <button
@@ -281,6 +347,7 @@
         {/if}
       </button>
     </section>
+    <p bind:this={errorElement}></p>
     <button
       type="submit"
       class="bg-white py-3 rounded-xl px-10 mt-12 hover:bg-blue-500 hover:text-white shadow-md border border-gray-200"

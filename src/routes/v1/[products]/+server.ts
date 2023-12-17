@@ -38,7 +38,6 @@ export const GET: RequestHandler = (async ({ url }: { url: URL }) => {
       include: {
         suppliers: true,
         ratings: true,
-        wishlistitems: true,
       },
     });
   }

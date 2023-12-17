@@ -29,33 +29,33 @@ model orders {
 }
 
 model products {
-  productid             String          @id @default(uuid())
-  name                  String          @db.VarChar(255)
+  productid             String         @id @default(uuid())
+  name                  String         @db.VarChar(255)
   price                 Int
   instock               Boolean
   supplierid            Int?
-  sku                   String?         @db.VarChar(255)
+  sku                   String?        @db.VarChar(255)
   discountavailable     Boolean?
   discount              Int?
   producttype           devicetype?
-  releaseyear           Int?            @db.SmallInt
-  color                 String?         @db.Char(7)
+  releaseyear           Int?           @db.SmallInt
+  color                 String?        @db.Char(7)
   memoryamount          Int?
   memoryunit            memorytype?
   sdslot                Boolean?
-  cameracount           Int?            @db.SmallInt
-  cameraresolution      Int?            @db.SmallInt
+  cameracount           Int?           @db.SmallInt
+  cameraresolution      Int?           @db.SmallInt
   frontcameraresolution Int?
-  os                    String?         @db.VarChar(50)
-  osversion             String?         @db.VarChar(100)
-  cpumodel              String?         @db.VarChar(100)
+  os                    String?        @db.VarChar(50)
+  osversion             String?        @db.VarChar(100)
+  cpumodel              String?        @db.VarChar(100)
   cpucores              Int?
   cpufrequency          Float?
   cpufrequencyunit      frequencytype?
   ramamount             Int?
   ramunit               memorytype?
   simtype               simtype?
-  simcount              Int?            @db.SmallInt
+  simcount              Int?           @db.SmallInt
   displaysize           Float?
   displayheight         Int?
   displaywidth          Int?
@@ -67,11 +67,12 @@ model products {
   thickness             Float?
   weight                Float?
   photo                 String[]
-  dateCreated           DateTime?       @default(now())
+  dateCreated           DateTime?      @default(now())
   orderdetails          orderdetails[]
-  suppliers             suppliers?      @relation(fields: [supplierid], references: [supplierid], onDelete: NoAction, onUpdate: NoAction)
+  suppliers             suppliers?     @relation(fields: [supplierid], references: [supplierid], onDelete: NoAction, onUpdate: NoAction)
   ratings               ratings[]
-  wishlistitems         wishlistitems[]
+  wishlists             wishlists[]
+  carts                 carts[]
 }
 
 model suppliers {
@@ -99,19 +100,11 @@ model ratings {
 }
 
 model wishlists {
-  wishlistid    Int             @id @default(autoincrement())
-  userid        String?
-  users         users?          @relation(fields: [userid], references: [userid], onDelete: NoAction, onUpdate: NoAction)
-  wishlistitems wishlistitems[]
-}
-
-model wishlistitems {
-  wishlistid Int
-  productid  String
-  wishlists  wishlists @relation(fields: [wishlistid], references: [wishlistid], onDelete: NoAction, onUpdate: NoAction)
-  products   products  @relation(fields: [productid], references: [productid], onDelete: NoAction, onUpdate: NoAction)
-
-  @@unique([wishlistid, productid])
+  wishlistid Int       @id @default(autoincrement())
+  userid     String?
+  productid  String?
+  users      users?    @relation(fields: [userid], references: [userid], onDelete: Cascade, onUpdate: Cascade)
+  products   products? @relation(fields: [productid], references: [productid], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model users {
@@ -124,14 +117,30 @@ model users {
   lastname     String?     @db.VarChar(255)
   firstname    String?     @db.VarChar(255)
   birthdate    DateTime?   @db.Date
-  country      String?     @db.VarChar(100)
-  city         String?     @db.VarChar(100)
-  postalcode   Int?
-  address      String?     @db.VarChar(255)
   datecreated  DateTime?   @default(now()) @db.Timestamp(0)
+  addressid    Int?
+  addresses    addresses?  @relation(fields: [addressid], references: [addressid], onDelete: NoAction, onUpdate: Cascade)
   orders       orders[]
   ratings      ratings[]
   wishlists    wishlists[]
+  carts        carts[]
+}
+
+model carts {
+  cartid    Int       @id @default(autoincrement())
+  userid    String?
+  productid String?
+  users     users?    @relation(fields: [userid], references: [userid], onDelete: Cascade, onUpdate: Cascade)
+  products  products? @relation(fields: [productid], references: [productid], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model addresses {
+  addressid  Int     @id @default(autoincrement())
+  country    String  @db.VarChar(100)
+  city       String  @db.VarChar(100)
+  postalcode Int
+  address    String  @db.VarChar(255)
+  users      users[]
 }
 
 enum devicetype {

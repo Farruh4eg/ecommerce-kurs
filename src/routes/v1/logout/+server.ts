@@ -5,7 +5,7 @@ export const POST: RequestHandler = async () => {
   const secure = dev ? '' : 'Secure;';
 
   const setCookieHeader = [
-    `refresh_token=; Max-Age=0; Path=/; ${secure} HttpOnly`,
+    `refresh-token=; Max-Age=0; Path=/; ${secure} HttpOnly`,
     `token=; Max-Age=0; Path=/;${secure} HttpOnly`,
   ].join(', ');
 

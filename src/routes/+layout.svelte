@@ -1,13 +1,12 @@
 <script lang="ts">
-  import "../app.css";
-  import SearchSuggestions from "$lib/components/SearchSuggestions.svelte";
-  import { session } from "$lib/session";
+  import '../app.css';
+  import SearchSuggestions from '$lib/components/SearchSuggestions.svelte';
+  import session from '$lib/session';
+  import type { FormEventHandler } from 'svelte/elements';
+  import { onDestroy } from 'svelte';
 
   let isLoggedIn: boolean;
-
-  const unsubscribe = session.subscribe(
-    (value) => (isLoggedIn = value.isLoggedIn)
-  );
+  let userData: object;
 
   let showPassword = false;
   let passwordInput: HTMLInputElement;
@@ -25,28 +24,28 @@
     setTimeout(() => {
       isFocused = !isFocused;
       if (isFocused) {
-        searchElement.classList.add("rounded-b-none");
+        searchElement.classList.add('rounded-b-none');
       } else if (!isFocused) {
-        searchElement.classList.remove("rounded-b-none");
+        searchElement.classList.remove('rounded-b-none');
       }
     }, 150);
   };
 
   const handleShowPassword = () => {
     switch (passwordInput.type) {
-      case "password":
-        passwordInput.type = "text";
+      case 'password':
+        passwordInput.type = 'text';
         break;
-      case "text":
-        passwordInput.type = "password";
+      case 'text':
+        passwordInput.type = 'password';
     }
     showPassword = !showPassword;
   };
 
-  const handleDialogClick = (event) => {
+  const handleDialogClick = (event: MouseEvent) => {
     if (
       event.target === loginDialog &&
-      !loginDialog.contains(event.relatedTarget)
+      !loginDialog.contains(event.relatedTarget as Node)
     ) {
       loginDialog.close();
     }
@@ -56,16 +55,25 @@
     window.location.href = `/register/`;
   };
 
-  const fetchData = async (data) => {
-    const inputData = data.target.value.trim();
+  const fetchData: FormEventHandler<HTMLInputElement> = async (data) => {
+    const inputData = (data.target as HTMLInputElement).value.trim();
     if (inputData.length > 0) {
       const request = await fetch(`/v1/products?name=${inputData}`);
       const json = await request.json();
       product = json;
     } else {
-      product = {};
+      product = [];
     }
   };
+
+  const unsubscribe = session.subscribe((value) => {
+    isLoggedIn = value.isLoggedIn;
+    userData = value.userData;
+  });
+
+  onDestroy(() => {
+    unsubscribe();
+  });
 
   const showDialog = () => {
     loginDialog.showModal();
@@ -208,6 +216,7 @@
 >
   <form
     method="POST"
+    action="/login/"
     class="w-full flex flex-col p-4 gap-y-12 h-full items-center justify-center"
     id="loginForm"
   >

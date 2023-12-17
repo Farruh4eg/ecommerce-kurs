@@ -1,17 +1,28 @@
 import prisma from '$lib/prisma';
-import type { PageServerLoad } from './$types';
+import type { PageServerLoad } from '../../$types';
+import type { RequestHandler } from '@sveltejs/kit';
 
-export const GET = (async ({ url }) => {
+export const GET: RequestHandler = (async ({ url }: { url: URL }) => {
   const urlProductId = url.searchParams.get('q');
   const urlProductName = url.searchParams.get('name');
   let product;
   if (urlProductName) {
     product = await prisma.products.findMany({
       where: {
-        name: {
-          contains: urlProductName,
-          mode: 'insensitive',
-        },
+        OR: [
+          {
+            name: {
+              contains: urlProductName,
+              mode: 'insensitive',
+            },
+            suppliers: {
+              companyname: {
+                contains: urlProductName,
+                mode: 'insensitive',
+              },
+            },
+          },
+        ],
       },
       include: {
         ratings: true,
@@ -22,7 +33,7 @@ export const GET = (async ({ url }) => {
   } else {
     product = await prisma.products.findUnique({
       where: {
-        productid: urlProductId,
+        productid: urlProductId!,
       },
       include: {
         suppliers: true,

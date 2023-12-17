@@ -1,17 +1,21 @@
-import { writable } from "svelte/store";
+import { browser } from '$app/environment';
+import { writable } from 'svelte/store';
 
-export const session = writable({
+const defaultValue = {
   isLoggedIn: false,
+  userData: {},
+};
+
+const initialValue = browser
+  ? JSON.parse(window.localStorage.getItem('session')) || defaultValue
+  : defaultValue;
+
+const session = writable(initialValue);
+
+session.subscribe((value) => {
+  if (browser) {
+    window.localStorage.setItem('session', JSON.stringify(value));
+  }
 });
 
-export const login = () => {
-  session.update((state) => {
-    return { ...state, isLoggedIn: true };
-  });
-};
-
-export const logout = () => {
-  session.update((state) => {
-    return { ...state, isLoggedIn: false };
-  });
-};
+export default session;

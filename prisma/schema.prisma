@@ -4,8 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  // url      = "postgresql://Farruh4eg:F52286565f_@172.20.7.8:5432/farruh4eg_kurs_db"
-  url      = "postgresql://farruh4eg:F52286565f_@localhost:5432/kurs"
+  url      = env("DATABASE_URL")
 }
 
 model orderdetails {
@@ -116,22 +115,23 @@ model wishlistitems {
 }
 
 model users {
-  userid      String      @id @default(uuid())
-  username    String      @db.VarChar(255)
-  password    String      @db.VarChar(255)
-  privileges  String      @default("default") @db.VarChar(100)
-  email       String?     @db.VarChar(255)
-  lastname    String?     @db.VarChar(255)
-  firstname   String?     @db.VarChar(255)
-  birthdate   DateTime?   @db.Date
-  country     String?     @db.VarChar(100)
-  city        String?     @db.VarChar(100)
-  postalcode  Int?
-  address     String?     @db.VarChar(255)
-  datecreated DateTime?   @default(now()) @db.Timestamp(0)
-  orders      orders[]
-  ratings     ratings[]
-  wishlists   wishlists[]
+  userid       String      @id @default(uuid())
+  username     String      @db.VarChar(255)
+  password     String      @db.VarChar(255)
+  refreshToken String
+  privileges   String      @default("default") @db.VarChar(100)
+  email        String?     @db.VarChar(255)
+  lastname     String?     @db.VarChar(255)
+  firstname    String?     @db.VarChar(255)
+  birthdate    DateTime?   @db.Date
+  country      String?     @db.VarChar(100)
+  city         String?     @db.VarChar(100)
+  postalcode   Int?
+  address      String?     @db.VarChar(255)
+  datecreated  DateTime?   @default(now()) @db.Timestamp(0)
+  orders       orders[]
+  ratings      ratings[]
+  wishlists    wishlists[]
 }
 
 enum devicetype {

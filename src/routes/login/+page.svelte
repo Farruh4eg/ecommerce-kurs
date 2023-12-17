@@ -1,20 +1,53 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onMount } from 'svelte';
+  import session from '$lib/session.js';
+  import type { EventHandler } from 'svelte/elements';
 
   export let data;
   let showPassword = false;
+  let usernameInput: HTMLInputElement;
   let passwordInput: HTMLInputElement;
+  let errorElement: HTMLParagraphElement;
 
   const handleShowPassword = () => {
     switch (passwordInput.type) {
-      case "password":
-        passwordInput.type = "text";
+      case 'password':
+        passwordInput.type = 'text';
         break;
-      case "text":
-        passwordInput.type = "password";
+      case 'text':
+        passwordInput.type = 'password';
     }
     showPassword = !showPassword;
   };
+
+  let submitForm: EventHandler;
+
+  $: {
+    submitForm = async () => {
+      const username = usernameInput;
+      const password = passwordInput.value;
+
+      const response = await fetch('/v1/signin', {
+        method: 'POST',
+        credentials: 'same-origin',
+        body: JSON.stringify({ username, password }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        session.set({
+          isLoggedIn: true,
+        });
+        window.location.href = '/';
+      } else if (response.status === 401) {
+        errorElement.textContent = 'Неверный логин или пароль';
+      } else {
+        console.error(response.status);
+      }
+    };
+  }
 
   onMount(() => {
     console.log(data);
@@ -25,15 +58,16 @@
   class="w-[30rem] bg-white justify-center flex rounded-3xl h-[36rem] mx-auto mt-24 shadow-lg"
 >
   <form
-    method="POST"
-    action="/login/"
     class="w-full flex flex-col p-4 gap-y-12 h-full items-center justify-center"
+    on:submit|preventDefault={submitForm}
   >
     <section class="flex flex-col justify-center w-full gap-y-2 items-center">
       <label for="username"> Логин </label>
       <input
         type="text"
         name="username"
+        bind:value={usernameInput}
+        minlength="4"
         class="w-7/12 box-content py-2 px-5 rounded-lg shadow-md border border-gray-300"
         required
       />
@@ -43,6 +77,7 @@
       <input
         type="password"
         name="password"
+        minlength="8"
         class="w-7/12 box-content py-2 px-2 rounded-lg shadow-md border border-gray-300 relative pr-8"
         bind:this={passwordInput}
         required
@@ -89,6 +124,11 @@
           </svg>
         {/if}
       </button>
+    </section>
+    <section
+      class="h-max w-7/12 p-2 box-content text-center text-red-500 text-lg"
+    >
+      <p bind:this={errorElement}></p>
     </section>
     <button
       type="submit"

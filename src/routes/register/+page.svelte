@@ -1,17 +1,39 @@
 <script lang="ts">
-  export let data;
   let loginInput: HTMLInputElement;
   let passwordInput: HTMLInputElement;
   let confirmPasswordInput: HTMLInputElement;
   let errorElement: HTMLParagraphElement;
   let registerForm: HTMLFormElement;
 
-  const submitForm = () => {
+  const submitForm = async () => {
     if (passwordInput !== confirmPasswordInput) {
-      errorElement.textContent = "Пароли не совпадают";
+      errorElement.textContent = 'Пароли не совпадают';
     } else {
-      errorElement.textContent = "";
-      registerForm.submit();
+      errorElement.textContent = '';
+      const username = loginInput;
+      const password = passwordInput;
+
+      console.log(password);
+      console.log(username);
+
+      const response = await fetch('/v1/createuser', {
+        method: 'POST',
+        credentials: 'same-origin',
+        body: JSON.stringify({
+          username,
+          password,
+        }),
+      });
+
+      if (response.ok) {
+        window.location.href = '/';
+      } else if (response.status == 409) {
+        errorElement.textContent =
+          'Пользователь уже существует. Если это вы, попробуйте войти.';
+      } else if (response.status == 400) {
+        errorElement.textContent =
+          'Имя пользователя должно быть от 4 символов. Пароль должен быть от 8 символов.';
+      }
     }
   };
 </script>
@@ -21,7 +43,6 @@
 >
   <form
     method="POST"
-    action="/register/"
     class="w-full flex flex-col p-4 gap-y-8 h-full items-center justify-center"
     on:submit|preventDefault={submitForm}
     bind:this={registerForm}
@@ -34,6 +55,7 @@
         name="username"
         class="w-7/12 box-content py-2 px-5 rounded-lg shadow-md border border-gray-300"
         bind:value={loginInput}
+        minlength="4"
         required
       />
     </section>
@@ -44,16 +66,18 @@
         name="password"
         class="w-7/12 box-content py-2 px-2 rounded-lg shadow-md border border-gray-300 pr-8"
         bind:value={passwordInput}
+        minlength="8"
         required
       />
     </section>
     <section class="flex flex-col justify-center w-full gap-y-2 items-center">
-      <label for="password"> Подтвердите пароль </label>
+      <label for="confirmPassword"> Подтвердите пароль </label>
       <input
         type="password"
-        name="password"
+        name="confirmPassword"
         class="w-7/12 box-content py-2 px-2 rounded-lg shadow-md border border-gray-300 pr-8"
         bind:value={confirmPasswordInput}
+        minlength="8"
         required
       />
     </section>

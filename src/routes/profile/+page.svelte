@@ -43,6 +43,7 @@
       type="text"
       name="username"
       required
+      minlength="4"
       bind:value={username}
       class="border border-gray-300 py-3 px-2 w-64 rounded-lg font-bold text-sm text-gray-800"
     />

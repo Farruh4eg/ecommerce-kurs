@@ -12,6 +12,10 @@
   import ButtonLike from "./ButtonLike.svelte";
   import ButtonBuy from "./ButtonBuy.svelte";
 
+  interface Ratings {
+    rating: number;
+  }
+
   export let product: PageData;
 
   let productId = product.productid;
@@ -21,8 +25,9 @@
   let productInStock: boolean = product.instock;
   let productDiscountAvailable: boolean = true;
   let productDiscountAmount = product.discount || 8;
-  let productRatingsArray = [];
-  product.ratings.forEach((element) => {
+  let productRatingsArray: number[] = [];
+
+  product.ratings.forEach((element: Ratings) => {
     productRatingsArray.push(element.rating);
   });
   const sum = productRatingsArray.reduce((a, b) => a + b, 0);
@@ -96,8 +101,8 @@
             <span class="text-sm text-gray-600 line-through"
               >{addSpaceInString(
                 parseInt(
-                  productPrice + (productPrice / 100) * productDiscountAmount,
-                ).toString(),
+                  productPrice + (productPrice / 100) * productDiscountAmount
+                ).toString()
               )}</span
             >
           {/if}
@@ -116,7 +121,7 @@
               {/if}
             </span>
             <RatingReadOnly
-              rating={avg.toFixed(1)}
+              rating={parseFloat(avg.toFixed(1))}
               ratingCount={count}
               height={5}
             />

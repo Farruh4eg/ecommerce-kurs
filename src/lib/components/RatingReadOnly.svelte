@@ -5,7 +5,7 @@
 
   export let rating: number;
   export let ratingCount: number;
-  export let height: string;
+  export let height: number;
 
   console.log(rating % 1);
 

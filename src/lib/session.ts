@@ -1,19 +1,19 @@
-import { browser } from '$app/environment';
-import { writable } from 'svelte/store';
+import { browser } from "$app/environment";
+import { writable } from "svelte/store";
 
 const defaultValue = {
   isLoggedIn: false,
 };
 
 const initialValue = browser
-  ? JSON.parse(window.localStorage.getItem('session')) || defaultValue
+  ? JSON.parse(window.localStorage.getItem("session")!) || defaultValue
   : defaultValue;
 
 const session = writable(initialValue);
 
 session.subscribe((value) => {
   if (browser) {
-    window.localStorage.setItem('session', JSON.stringify(value));
+    window.localStorage.setItem("session", JSON.stringify(value));
   }
 });
 

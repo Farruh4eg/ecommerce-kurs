@@ -1,12 +1,5 @@
 <script lang="ts">
-  import { page } from '$app/stores';
-  let errorMessage: string;
-  switch ($page.status) {
-    case 500:
-      errorMessage =
-        'Пожалуйста, авторизируйтесь прежде чем войти в личный кабинет';
-      break;
-  }
+  import { page } from "$app/stores";
 </script>
 
-<h1 class="text-red-500">{errorMessage}</h1>
+<h1 class="text-red-500">{$page.error?.message}</h1>

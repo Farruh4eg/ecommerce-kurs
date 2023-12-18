@@ -6,6 +6,7 @@
 
   const handleHoveredImage = (element) => {
     const target = element.target;
+    console.log(target);
 
     if (currentImageSelected && currentImageSelected !== target) {
       currentImageSelected.classList.remove("border-blue-600", "border-l");

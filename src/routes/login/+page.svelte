@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import session from '$lib/session.js';
-  import type { EventHandler } from 'svelte/elements';
+  import { onMount } from "svelte";
+  import session from "$lib/session.js";
+  import type { EventHandler } from "svelte/elements";
 
   export let data;
   let showPassword = false;
@@ -11,11 +11,11 @@
 
   const handleShowPassword = () => {
     switch (passwordInput.type) {
-      case 'password':
-        passwordInput.type = 'text';
+      case "password":
+        passwordInput.type = "text";
         break;
-      case 'text':
-        passwordInput.type = 'password';
+      case "text":
+        passwordInput.type = "password";
     }
     showPassword = !showPassword;
   };
@@ -27,12 +27,12 @@
       const username = usernameInput;
       const password = passwordInput.value;
 
-      const response = await fetch('/v1/login', {
-        method: 'POST',
-        credentials: 'same-origin',
+      const response = await fetch("/v1/login", {
+        method: "POST",
+        credentials: "same-origin",
         body: JSON.stringify({ username, password }),
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
 
@@ -40,9 +40,9 @@
         session.set({
           isLoggedIn: true,
         });
-        window.location.href = '/';
+        window.location.href = "/";
       } else if (response.status === 401) {
-        errorElement.textContent = 'Неверный логин или пароль';
+        errorElement.textContent = "Неверный логин или пароль";
       } else {
         console.error(response.status);
       }
@@ -125,7 +125,7 @@
     <section
       class="h-max w-7/12 p-2 box-content text-center text-red-500 text-lg"
     >
-      <p bind:this={errorElement}></p>
+      <p bind:this={errorElement} class="text-sm"></p>
     </section>
     <button
       type="submit"

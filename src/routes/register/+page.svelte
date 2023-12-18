@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { error } from '@sveltejs/kit';
-
   let loginInput: HTMLInputElement;
   let passwordInput: HTMLInputElement;
   let confirmPasswordInput: HTMLInputElement;
@@ -9,15 +7,15 @@
 
   const submitForm = async () => {
     if (passwordInput !== confirmPasswordInput) {
-      errorElement.textContent = 'Пароли не совпадают';
+      errorElement.textContent = "Пароли не совпадают";
     } else {
-      errorElement.textContent = '';
+      errorElement.textContent = "";
       const username = loginInput;
       const password = passwordInput;
 
-      const response = await fetch('/v1/createuser', {
-        method: 'POST',
-        credentials: 'same-origin',
+      const response = await fetch("/v1/createuser", {
+        method: "POST",
+        credentials: "same-origin",
         body: JSON.stringify({
           username,
           password,
@@ -25,18 +23,18 @@
       });
 
       if (response.ok) {
-        errorElement.classList.add('text-green-500');
+        errorElement.classList.add("text-green-500");
         errorElement.textContent =
-          'Учетная запись создана успешно. Вы будете перенаправлены на страницу входа';
+          "Учетная запись создана успешно. Вы будете перенаправлены на страницу входа";
         setTimeout(() => {
-          window.location.href = '/login';
+          window.location.href = "/login";
         }, 2000);
       } else if (response.status == 409) {
         errorElement.textContent =
-          'Пользователь уже существует. Если это вы, попробуйте войти.';
+          "Пользователь уже существует. Если это вы, попробуйте войти.";
       } else if (response.status == 400) {
         errorElement.textContent =
-          'Имя пользователя должно быть от 4 символов. Пароль должен быть от 8 символов.';
+          "Имя пользователя должно быть от 4 символов. Пароль должен быть от 8 символов.";
       }
     }
   };
@@ -88,7 +86,7 @@
     <section
       class="h-max w-7/12 p-2 box-content text-center text-red-500 text-lg"
     >
-      <p bind:this={errorElement}></p>
+      <p bind:this={errorElement} class="text-sm"></p>
     </section>
     <button
       type="submit"

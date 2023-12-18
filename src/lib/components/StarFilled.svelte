@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let height: string = '7';
+  export let height: number = 7;
 </script>
 
 <section>

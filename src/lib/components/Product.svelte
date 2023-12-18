@@ -17,10 +17,7 @@
   let count: number;
   let avg: number;
 
-  $: isHearted = false;
-  const fillHeart = () => (isHearted = !isHearted);
-
-  product.ratings.forEach((element) => {
+  product.ratings.forEach((element: any) => {
     productRatingsArray.push(element.rating);
   });
 

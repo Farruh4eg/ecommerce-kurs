@@ -1,9 +1,9 @@
 <script lang="ts">
-  import '../app.css';
-  import SearchSuggestions from '$lib/components/SearchSuggestions.svelte';
-  import session from '$lib/session';
-  import type { EventHandler, FormEventHandler } from 'svelte/elements';
-  import { onDestroy } from 'svelte';
+  import "../app.css";
+  import SearchSuggestions from "$lib/components/SearchSuggestions.svelte";
+  import session from "$lib/session";
+  import type { EventHandler, FormEventHandler } from "svelte/elements";
+  import { onDestroy } from "svelte";
 
   export let data;
 
@@ -30,12 +30,12 @@
       const username = usernameInput;
       const password = passwordInput;
 
-      const response = await fetch('/v1/login', {
-        method: 'POST',
-        credentials: 'same-origin',
+      const response = await fetch("/v1/login", {
+        method: "POST",
+        credentials: "same-origin",
         body: JSON.stringify({ username, password }),
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
 
@@ -43,11 +43,11 @@
         session.set({
           isLoggedIn: true,
         });
-        window.location.href = '/';
+        window.location.href = "/";
       } else if (response.status === 401) {
-        errorElement.textContent = 'Неверный логин или пароль';
+        errorElement.textContent = "Неверный логин или пароль";
       } else if (response.status === 404) {
-        errorElement.textContent = 'Пользователя не существует';
+        errorElement.textContent = "Пользователя не существует";
       }
     };
   }
@@ -56,35 +56,35 @@
     setTimeout(() => {
       isFocused = !isFocused;
       if (isFocused) {
-        searchElement.classList.add('rounded-b-none');
+        searchElement.classList.add("rounded-b-none");
       } else if (!isFocused) {
-        searchElement.classList.remove('rounded-b-none');
+        searchElement.classList.remove("rounded-b-none");
       }
     }, 150);
   };
 
   const handleLogout = async () => {
-    const response = await fetch('/v1/logout', {
-      method: 'POST',
+    const response = await fetch("/v1/logout", {
+      method: "POST",
       headers: {
-        credentials: 'same-origin',
+        credentials: "same-origin",
       },
     });
     if (response.ok) {
       session.set({
         isLoggedIn: false,
       });
-      window.location.href = '/';
+      window.location.href = "/";
     }
   };
 
   const handleShowPassword = () => {
     switch (passwordInput.type) {
-      case 'password':
-        passwordInput.type = 'text';
+      case "password":
+        passwordInput.type = "text";
         break;
-      case 'text':
-        passwordInput.type = 'password';
+      case "text":
+        passwordInput.type = "password";
     }
     showPassword = !showPassword;
   };
@@ -144,6 +144,7 @@
         on:focusin={handleFocusChange}
         on:focusout={handleFocusChange}
         on:input={fetchData}
+        required
         bind:this={searchElement}
         type="search"
         placeholder="Поиск по магазину"

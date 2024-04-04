@@ -4,18 +4,8 @@ import type { RequestHandler } from '@sveltejs/kit';
 import jwt from 'jsonwebtoken';
 import { SECRET_ACCESS_TOKEN } from '$env/static/private';
 import { dev } from '$app/environment';
-
-interface Body {
-  username: string;
-  password: string;
-}
-
-function createErrorResponse(message: string, status: number): Response {
-  return new Response(JSON.stringify({ success: false, message }), {
-    status,
-    headers: { 'Content-Type': 'application/json' },
-  });
-}
+import { createErrorResponse } from '$lib/utils/helpers';
+import type { Body } from '$lib/utils/interfaces';
 
 export const POST: RequestHandler = async ({ request }) => {
   const body = (await request.json()) as Body;

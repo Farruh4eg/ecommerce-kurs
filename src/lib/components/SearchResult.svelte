@@ -1,20 +1,17 @@
 <script lang="ts">
-  import type { PageData } from "../../../.svelte-kit/types/src/routes/$types.d.ts";
+  import type { PageData } from '../../../.svelte-kit/types/src/routes/$types.d.ts';
+  import type { Rating } from '$lib/utils/interfaces.js';
 
   import {
     deviceEnumValueToString,
     memoryEnumValueToString,
     frequencyEnumValueToString,
     addSpaceInString,
-  } from "$lib/utils/helpers";
+  } from '$lib/utils/helpers';
 
-  import RatingReadOnly from "./RatingReadOnly.svelte";
-  import ButtonLike from "./ButtonLike.svelte";
-  import ButtonBuy from "./ButtonBuy.svelte";
-
-  interface Ratings {
-    rating: number;
-  }
+  import RatingReadOnly from './RatingReadOnly.svelte';
+  import ButtonLike from './ButtonLike.svelte';
+  import ButtonBuy from './ButtonBuy.svelte';
 
   export let product: PageData;
 
@@ -27,50 +24,50 @@
   let productDiscountAmount = product.discount || 8;
   let productRatingsArray: number[] = [];
 
-  product.ratings.forEach((element: Ratings) => {
+  product.ratings.forEach((element: Rating) => {
     productRatingsArray.push(element.rating);
   });
   const sum = productRatingsArray.reduce((a, b) => a + b, 0);
   const count = productRatingsArray.length;
   const avg = sum / count || 0;
   let productType = deviceEnumValueToString(product.producttype);
-  let productDisplaySize = product.displaysize || "";
+  let productDisplaySize = product.displaysize || '';
   let productPrice = product.price;
   let productPriceString = addSpaceInString(product.price.toString());
 
   let productMemory = product.memoryamount
     ? `${product.memoryamount} ${memoryEnumValueToString(product.memoryunit)}`
-    : "";
+    : '';
 
   let productCpu = product.cpucores
     ? `ядер - ${product.cpucores}x(${
         product.cpufrequency
       } ${frequencyEnumValueToString(product.cpufrequencyunit)})`
-    : "";
+    : '';
 
   let productRam = product.ramamount
     ? `${product.ramamount} ${memoryEnumValueToString(product.ramunit)}`
-    : "";
+    : '';
 
-  let productSim = product.simcount ? `${product.simcount} SIM` : "";
+  let productSim = product.simcount ? `${product.simcount} SIM` : '';
 
   let productDisplayResolution = product.displayheight
     ? product.displaywidth > product.displayheight
       ? `${product.displaywidth}x${product.displayheight}`
       : `${product.displayheight}x${product.displaywidth}`
-    : "";
+    : '';
 
   let productDisplayRefresh = product.refreshrate
     ? `${product.refreshrate} Гц`
-    : "";
+    : '';
 
   let productCamera = product.cameraresolution
     ? `камера ${product.cameraresolution} Мп`
-    : "";
+    : '';
 
   let productBattery = product.batterycapacity
     ? `${product.batterycapacity} мА*ч`
-    : "";
+    : '';
 </script>
 
 <section class="w-full flex bg-white p-5 rounded-lg">

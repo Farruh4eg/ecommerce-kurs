@@ -1,7 +1,8 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import session from "$lib/session.js";
-  import type { EventHandler } from "svelte/elements";
+  import { onMount } from 'svelte';
+  import session from '$lib/session.js';
+  import type { EventHandler } from 'svelte/elements';
+  import { handleSubmit } from '$lib/utils/helpers.js';
 
   export let data;
   let showPassword = false;
@@ -11,11 +12,11 @@
 
   const handleShowPassword = () => {
     switch (passwordInput.type) {
-      case "password":
-        passwordInput.type = "text";
+      case 'password':
+        passwordInput.type = 'text';
         break;
-      case "text":
-        passwordInput.type = "password";
+      case 'text':
+        passwordInput.type = 'password';
     }
     showPassword = !showPassword;
   };
@@ -27,22 +28,20 @@
       const username = usernameInput;
       const password = passwordInput.value;
 
-      const response = await fetch("/v1/login", {
-        method: "POST",
-        credentials: "same-origin",
-        body: JSON.stringify({ username, password }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await handleSubmit(
+        '/v1/login',
+        'post',
+        { username, password },
+        { 'Content-Type': 'application/json' }
+      );
 
       if (response.ok) {
         session.set({
           isLoggedIn: true,
         });
-        window.location.href = "/";
+        window.location.href = '/';
       } else if (response.status === 401) {
-        errorElement.textContent = "Неверный логин или пароль";
+        errorElement.textContent = 'Неверный логин или пароль';
       } else {
         console.error(response.status);
       }

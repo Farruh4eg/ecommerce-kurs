@@ -1,7 +1,8 @@
 <script lang="ts">
-  import type { PageData } from "../../../.svelte-kit/types/src/routes/$types.d.ts";
-  import { addSpaceInString } from "$lib/utils/helpers.js";
-  import RatingReadOnly from "./RatingReadOnly.svelte";
+  import type { PageData } from '../../../.svelte-kit/types/src/routes/$types.d.ts';
+  import { addSpaceInString } from '$lib/utils/helpers.js';
+  import type { Rating } from '$lib/utils/interfaces.js';
+  import RatingReadOnly from './RatingReadOnly.svelte';
 
   export let product: PageData;
 
@@ -23,7 +24,7 @@
       productThumb = product[0].photo[0];
     }
     productName = product[0].name;
-    product[0].ratings.forEach((element) => {
+    product[0].ratings.forEach((element: Rating) => {
       productRatingsArray.push(element.rating);
     });
   } else {
@@ -31,7 +32,7 @@
     productId = product.productid;
     productThumb = product.photo;
     productName = product.name;
-    product.ratings.forEach((element) => {
+    product.ratings.forEach((element: Rating) => {
       productRatingsArray.push(element.rating);
     });
   }

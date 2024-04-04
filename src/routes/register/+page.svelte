@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { handleSubmit } from '$lib/utils/helpers';
   let loginInput: HTMLInputElement;
   let passwordInput: HTMLInputElement;
   let confirmPasswordInput: HTMLInputElement;
@@ -7,34 +8,30 @@
 
   const submitForm = async () => {
     if (passwordInput !== confirmPasswordInput) {
-      errorElement.textContent = "Пароли не совпадают";
+      errorElement.textContent = 'Пароли не совпадают';
     } else {
-      errorElement.textContent = "";
+      errorElement.textContent = '';
       const username = loginInput;
       const password = passwordInput;
 
-      const response = await fetch("/v1/createuser", {
-        method: "POST",
-        credentials: "same-origin",
-        body: JSON.stringify({
-          username,
-          password,
-        }),
+      const response = await handleSubmit('/v1/user', 'post', {
+        username,
+        password,
       });
 
       if (response.ok) {
-        errorElement.classList.add("text-green-500");
+        errorElement.classList.add('text-green-500');
         errorElement.textContent =
-          "Учетная запись создана успешно. Вы будете перенаправлены на страницу входа";
+          'Учетная запись создана успешно. Вы будете перенаправлены на страницу входа';
         setTimeout(() => {
-          window.location.href = "/login";
+          window.location.href = '/login';
         }, 2000);
       } else if (response.status == 409) {
         errorElement.textContent =
-          "Пользователь уже существует. Если это вы, попробуйте войти.";
+          'Пользователь уже существует. Если это вы, попробуйте войти.';
       } else if (response.status == 400) {
         errorElement.textContent =
-          "Имя пользователя должно быть от 4 символов. Пароль должен быть от 8 символов.";
+          'Имя пользователя должно быть от 4 символов. Пароль должен быть от 8 символов.';
       }
     }
   };

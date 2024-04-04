@@ -2,7 +2,7 @@
   import SearchFilters from '$lib/components/SearchFilters.svelte';
   import SearchResult from '$lib/components/SearchResult.svelte';
   import type { PageData } from './$types';
-  export let data: PageData;
+  export let data: any;
 </script>
 
 <svelte:head>
@@ -12,7 +12,7 @@
   <SearchFilters />
   <section class="flex flex-col gap-4 mt-6 mb-4">
     {#each data.products as product (product.productid)}
-      <SearchResult {product} rating={product.productid} />
+      <SearchResult {product} />
     {/each}
   </section>
 </section>

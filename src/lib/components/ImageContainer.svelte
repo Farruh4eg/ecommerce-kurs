@@ -1,18 +1,18 @@
 <script lang="ts">
   export let productPhotos: string[];
 
+  let currentImageSelected: HTMLImageElement | null;
   $: currentHoveredImage = productPhotos[0];
   $: currentImageSelected = null;
 
-  const handleHoveredImage = (element) => {
-    const target = element.target;
-    console.log(target);
+  const handleHoveredImage = (element: MouseEvent) => {
+    const target = element.target as HTMLImageElement;
 
     if (currentImageSelected && currentImageSelected !== target) {
-      currentImageSelected.classList.remove("border-blue-600", "border-l");
+      currentImageSelected.classList.remove('border-blue-600', 'border-l');
     }
 
-    target.classList.add("border-blue-600", "border-l");
+    target.classList.add('border-blue-600', 'border-l');
 
     currentImageSelected = target;
     currentHoveredImage = target.src;

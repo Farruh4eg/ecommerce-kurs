@@ -138,7 +138,7 @@ model addresses {
   addressid  Int     @id @default(autoincrement())
   country    String  @db.VarChar(100)
   city       String  @db.VarChar(100)
-  postalcode Int
+  postalcode String
   address    String  @db.VarChar(255)
   users      users[]
 }

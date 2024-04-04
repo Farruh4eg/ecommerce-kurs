@@ -1,9 +1,9 @@
 <script lang="ts">
-  import "../app.css";
-  import SearchSuggestions from "$lib/components/SearchSuggestions.svelte";
-  import session from "$lib/session";
-  import type { EventHandler, FormEventHandler } from "svelte/elements";
-  import { onDestroy } from "svelte";
+  import '../app.css';
+  import SearchSuggestions from '$lib/components/SearchSuggestions.svelte';
+  import session from '$lib/session';
+  import type { EventHandler, FormEventHandler } from 'svelte/elements';
+  import { onDestroy } from 'svelte';
 
   export let data;
 
@@ -30,12 +30,12 @@
       const username = usernameInput;
       const password = passwordInput;
 
-      const response = await fetch("/v1/login", {
-        method: "POST",
-        credentials: "same-origin",
+      const response = await fetch('/v1/login', {
+        method: 'POST',
+        credentials: 'same-origin',
         body: JSON.stringify({ username, password }),
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       });
 
@@ -43,11 +43,11 @@
         session.set({
           isLoggedIn: true,
         });
-        window.location.href = "/";
+        window.location.href = '/';
       } else if (response.status === 401) {
-        errorElement.textContent = "Неверный логин или пароль";
+        errorElement.textContent = 'Неверный логин или пароль';
       } else if (response.status === 404) {
-        errorElement.textContent = "Пользователя не существует";
+        errorElement.textContent = 'Пользователя не существует';
       }
     };
   }
@@ -56,35 +56,35 @@
     setTimeout(() => {
       isFocused = !isFocused;
       if (isFocused) {
-        searchElement.classList.add("rounded-b-none");
+        searchElement.classList.add('rounded-b-none');
       } else if (!isFocused) {
-        searchElement.classList.remove("rounded-b-none");
+        searchElement.classList.remove('rounded-b-none');
       }
     }, 150);
   };
 
   const handleLogout = async () => {
-    const response = await fetch("/v1/logout", {
-      method: "POST",
+    const response = await fetch('/v1/logout', {
+      method: 'POST',
       headers: {
-        credentials: "same-origin",
+        credentials: 'same-origin',
       },
     });
     if (response.ok) {
       session.set({
         isLoggedIn: false,
       });
-      window.location.href = "/";
+      window.location.href = '/';
     }
   };
 
   const handleShowPassword = () => {
     switch (passwordInput.type) {
-      case "password":
-        passwordInput.type = "text";
+      case 'password':
+        passwordInput.type = 'text';
         break;
-      case "text":
-        passwordInput.type = "password";
+      case 'text':
+        passwordInput.type = 'password';
     }
     showPassword = !showPassword;
   };
@@ -153,7 +153,7 @@
         name="q"
       />
       {#if isSuggestionsVisible}
-        <SearchSuggestions data={product} {width} />
+        <SearchSuggestions data={product} />
       {/if}
       <button
         class="py-3 w-12 h-max rounded-lg hover:bg-gray-200 -ml-16 z-10 flex justify-center content-center items-center"
@@ -249,7 +249,7 @@
             d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
           />
         </svg>
-        {data.userInfo.username}</a
+        {data?.userInfo?.username}</a
       >
       <a
         class="scale-90 hover:bg-gray-100 p-5 rounded-lg min-w-[5rem] text-center transition-colors flex flex-col text-gray-500 hover: cursor-pointer"

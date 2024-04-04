@@ -8,7 +8,7 @@
 </svelte:head>
 
 <slot>
-  <div>
+  <div class="flex flex-col">
     {#each data.products as product (product.productid)}
       <a href="products/{product.productid}" class="text-red-500"
         >{product.name}</a

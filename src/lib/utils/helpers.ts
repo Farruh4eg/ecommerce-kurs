@@ -1,5 +1,15 @@
 import type { devicetype, frequencytype, memorytype } from '@prisma/client';
 
+export const createErrorResponse = (
+  message: string,
+  status: number
+): Response => {
+  return new Response(JSON.stringify({ success: false, message }), {
+    status,
+    headers: { 'Content-Type': 'application/json' },
+  });
+};
+
 export const deviceEnumValueToString = (deviceEnum: devicetype): string => {
   let devType = null;
 
@@ -85,4 +95,27 @@ export const addSpaceInString = (inputString: string): string => {
   const stringWithSpace = `${partBeforeInsertion} ${partAfterInsertion}`;
 
   return stringWithSpace;
+};
+
+export const handleSubmit = async (
+  url: string,
+  method: string,
+  body: {},
+  headers?: {}
+) => {
+  try {
+    const response = await fetch(url, {
+      method,
+      credentials: 'same-origin',
+      body: JSON.stringify(body),
+      headers: {
+        ...headers,
+      },
+    });
+
+    return response;
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
 };

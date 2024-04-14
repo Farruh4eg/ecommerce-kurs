@@ -5,7 +5,7 @@ export interface PostBody {
   birthdate: Date;
   country: string;
   city: string;
-  postalcode: string;
+  postalcode: number;
   address: string;
 }
 
@@ -22,4 +22,11 @@ export interface Rating {
 export interface Body {
   username: string;
   password: string;
+}
+
+export interface UserCookieInfo {
+  username: string;
+  userid: string;
+  iat: number;
+  exp: number;
 }

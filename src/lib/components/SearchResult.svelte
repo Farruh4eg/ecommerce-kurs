@@ -13,9 +13,10 @@
   import ButtonLike from './ButtonLike.svelte';
   import ButtonBuy from './ButtonBuy.svelte';
 
-  export let product: PageData;
+  export let product;
+  export let userid: string;
 
-  let productId = product.productid;
+  let productid = product.productid;
   let productThumb = product.photo[0];
   let productName = product.name;
   let productColor = product.color;
@@ -83,7 +84,7 @@
 
   <section class="flex justify-between w-full p-1 flex-col rounded-xl">
     <a
-      href="/products/{productId}"
+      href="/products/{productid}"
       class="hover:text-blue-600 w-full h-max pb-12"
       >{productDisplaySize}" {productType}
       {productName}
@@ -125,7 +126,7 @@
           </section>
         </section>
         <section class="flex gap-x-4 items-end">
-          <ButtonLike />
+          <ButtonLike {userid} {productid} />
           <ButtonBuy />
         </section>
       </section>

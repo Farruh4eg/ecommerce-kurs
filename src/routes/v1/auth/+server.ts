@@ -1,5 +1,5 @@
 import type { RequestHandler } from '@sveltejs/kit';
-import { SECRET_ACCESS_TOKEN, USER } from '$env/static/private';
+import { SECRET_ACCESS_TOKEN } from '$env/static/private';
 import prisma from '$lib/prisma';
 import * as jwt from 'jsonwebtoken';
 import cookie from 'cookie';

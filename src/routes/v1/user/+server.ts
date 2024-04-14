@@ -96,7 +96,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
 export const PUT: RequestHandler = async ({ request }) => {
   const body = (await request.json()) as PostBody;
-  const {
+  let {
     userid,
     lastname,
     firstname,
@@ -106,6 +106,10 @@ export const PUT: RequestHandler = async ({ request }) => {
     postalcode,
     address,
   } = body;
+
+  postalcode = Number(postalcode);
+
+  let isoBirthDate = new Date(birthdate).toISOString();
 
   const receivedAddressId = await prisma.users.findUnique({
     where: {
@@ -118,31 +122,42 @@ export const PUT: RequestHandler = async ({ request }) => {
 
   if (receivedAddressId == null) {
     createErrorResponse('No addressid received', 400);
-  }
-
-  const updateUser = await prisma.users.update({
-    where: {
-      userid,
-    },
-    data: {
-      lastname,
-      firstname,
-      birthdate,
-      addresses: {
-        update: {
-          where: {
-            addressid: receivedAddressId!,
-          },
-          data: {
-            country,
-            city,
-            postalcode,
-            address,
+  } else {
+    const updateUser = await prisma.users.update({
+      where: {
+        userid,
+      },
+      data: {
+        lastname,
+        firstname,
+        birthdate: isoBirthDate,
+        addresses: {
+          update: {
+            where: {
+              addressid: receivedAddressId.addressid!,
+            },
+            data: {
+              country,
+              city,
+              postalcode,
+              address,
+            },
           },
         },
       },
-    },
-  });
+    });
+  }
 
-  return new Response();
+  return new Response(
+    JSON.stringify({
+      success: true,
+      message: 'user updated successfully',
+    }),
+    {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
 };

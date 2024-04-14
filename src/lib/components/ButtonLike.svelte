@@ -1,7 +1,12 @@
 <script lang="ts">
+  export let userid: string;
+  export let productid: string;
+
+  const addToLiked = async () => {};
 </script>
 
 <button
+  on:click={addToLiked}
   class="p-4 border border-solid border-gray-300 w-16 h-16 rounded-xl hover:bg-gray-50 flex justify-center items-center"
 >
   <svg

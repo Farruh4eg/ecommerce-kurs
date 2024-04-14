@@ -24,6 +24,7 @@
       userid,
       lastname,
       firstname,
+      birthdate,
       country,
       city,
       postalcode,
@@ -115,11 +116,14 @@
     />
     <label for="address" class="text-gray-600 text-sm">Адрес</label>
   </section>
-  <section class="h-max w-7/12 p-2 box-content text-center text-lg">
+  <section class="h-max w-full p-2 box-content text-lg flex justify-center">
     <p bind:this={notice}></p>
   </section>
-  <button
-    class="ml-[50%] mt-4 px-4 py-2 bg-blue-500 w-max text-white hover:opacity-75 rounded-lg"
-    >Сохранить</button
-  >
+  <section class="w-full flex justify-center">
+    <button
+      type="submit"
+      class="px-4 py-2 bg-blue-500 w-max text-white hover:opacity-75 rounded-lg"
+      >Сохранить</button
+    >
+  </section>
 </form>

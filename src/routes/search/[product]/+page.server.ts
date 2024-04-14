@@ -1,45 +1,47 @@
-import prisma from "$lib/prisma";
-import type { ServerLoadEvent } from "@sveltejs/kit";
+import prisma from '$lib/prisma';
+import * as jwt from 'jsonwebtoken';
+import type { ServerLoadEvent } from '@sveltejs/kit';
+import type { UserCookieInfo } from '$lib/utils/interfaces';
 
-export const load = async ({ url }: ServerLoadEvent) => {
-  let searchQuery: any = url.searchParams.get("q");
+export const load = async ({ url, cookies }: ServerLoadEvent) => {
+  let searchQuery: any = url.searchParams.get('q');
   const products = await prisma.products.findMany({
     where: {
       OR: [
         {
           name: {
             contains: searchQuery,
-            mode: "insensitive",
+            mode: 'insensitive',
           },
         },
         {
           color: {
             contains: searchQuery,
-            mode: "insensitive",
+            mode: 'insensitive',
           },
         },
         {
           cpumodel: {
             contains: searchQuery,
-            mode: "insensitive",
+            mode: 'insensitive',
           },
         },
         {
           os: {
             equals: searchQuery,
-            mode: "insensitive",
+            mode: 'insensitive',
           },
         },
         {
           osversion: {
             contains: searchQuery,
-            mode: "insensitive",
+            mode: 'insensitive',
           },
         },
         {
           batterytype: {
             contains: searchQuery,
-            mode: "insensitive",
+            mode: 'insensitive',
           },
         },
       ],
@@ -49,5 +51,9 @@ export const load = async ({ url }: ServerLoadEvent) => {
     },
   });
 
-  return { products };
+  let token = cookies.get('token')?.replaceAll("'", '') as string;
+  const userInfo = jwt.decode(token) as UserCookieInfo;
+  const userId = userInfo.userid;
+
+  return { products, userId };
 };

@@ -26,7 +26,7 @@ export interface Body {
 
 export interface UserCookieInfo {
   username: string;
-  userid: string;
+  user_id: string;
   iat: number;
   exp: number;
 }

@@ -4,6 +4,10 @@ import type { ServerLoadEvent } from '@sveltejs/kit';
 import type { UserCookieInfo } from '$lib/utils/interfaces';
 
 export const load = async ({ url, cookies }: ServerLoadEvent) => {
+  let token = cookies.get('token')?.replaceAll("'", '') as string;
+  const userInfo = jwt.decode(token) as UserCookieInfo;
+  const userid = userInfo.user_id;
+
   let searchQuery: any = url.searchParams.get('q');
   const products = await prisma.products.findMany({
     where: {
@@ -51,9 +55,5 @@ export const load = async ({ url, cookies }: ServerLoadEvent) => {
     },
   });
 
-  let token = cookies.get('token')?.replaceAll("'", '') as string;
-  const userInfo = jwt.decode(token) as UserCookieInfo;
-  const userId = userInfo.userid;
-
-  return { products, userId };
+  return { products, userid };
 };

@@ -1,8 +1,59 @@
 <script lang="ts">
+  import { handleSubmit } from '$lib/utils/helpers';
+  import { onMount } from 'svelte';
+
   export let userid: string;
   export let productid: string;
 
-  const addToLiked = async () => {};
+  $: isLiked = false;
+
+  const fillHeart = async () => {
+    const response = await fetch('/v1/like', {
+      method: 'GET',
+    });
+
+    const data = (await response.json()) as [{ productid: string }] | null;
+
+    if (data?.some((item) => item.productid === productid)) {
+      isLiked = true;
+    } else {
+      isLiked = false;
+    }
+  };
+
+  onMount(async () => {
+    fillHeart();
+  });
+
+  const addToLiked = async () => {
+    if (isLiked) {
+      await handleSubmit(
+        '/v1/like',
+        'DELETE',
+        {
+          userid,
+          productid,
+        },
+        {
+          'Content-Type': 'applicaton/json',
+        }
+      );
+      isLiked = false;
+    } else {
+      await handleSubmit(
+        '/v1/like',
+        'POST',
+        {
+          userid,
+          productid,
+        },
+        {
+          'Content-Type': 'applicaton/json',
+        }
+      );
+      isLiked = true;
+    }
+  };
 </script>
 
 <button
@@ -12,9 +63,9 @@
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
-    stroke-width="1.5"
+    stroke-width="1.0"
     stroke="gray"
-    fill="none"
+    fill={isLiked ? 'blue' : 'none'}
     class="h-8"
   >
     <path

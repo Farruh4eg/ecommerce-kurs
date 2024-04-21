@@ -101,7 +101,8 @@
                 parseInt(
                   productPrice + (productPrice / 100) * productDiscountAmount
                 ).toString()
-              )}</span
+              )}
+              <p></p></span
             >
           {/if}
           <span class="font-semibold text-2xl text-blue-600"

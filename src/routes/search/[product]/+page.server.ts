@@ -8,7 +8,7 @@ export const load = async ({ url, cookies }: ServerLoadEvent) => {
   const userInfo = jwt.decode(token) as UserCookieInfo;
   const userid = userInfo.user_id;
 
-  let searchQuery: any = url.searchParams.get('q');
+  let searchQuery: string = url.searchParams.get('q')!;
   const products = await prisma.products.findMany({
     where: {
       OR: [

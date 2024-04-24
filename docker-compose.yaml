@@ -1,0 +1,11 @@
+services:
+   kurs:
+    restart: on-failure
+    image: kurs
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: run
+    ports:
+      - 3000:3000
+      - 80:80

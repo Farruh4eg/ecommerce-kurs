@@ -4,6 +4,9 @@
   import session from '$lib/session';
   import type { EventHandler, FormEventHandler } from 'svelte/elements';
   import { onDestroy } from 'svelte';
+  import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
+
+  injectSpeedInsights();
 
   export let data;
 

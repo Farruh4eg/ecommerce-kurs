@@ -6,7 +6,7 @@ import type { UserCookieInfo } from '$lib/utils/interfaces';
 export const load = async ({ url, cookies }: ServerLoadEvent) => {
   let token = cookies.get('token')?.replaceAll("'", '') as string;
   const userInfo = jwt.decode(token) as UserCookieInfo;
-  const userid = userInfo.user_id;
+  const userid = userInfo?.user_id;
 
   let searchQuery: string = url.searchParams.get('q')!;
   const products = await prisma.products.findMany({

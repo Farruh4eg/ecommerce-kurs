@@ -53,8 +53,13 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 export const GET: RequestHandler = async ({ cookies }) => {
   let token = cookies.get('token')?.replaceAll("'", '') as string;
   const userInfo = jwt.decode(token) as UserCookieInfo;
-  const cookieUserId = userInfo.user_id;
+  const cookieUserId = userInfo?.user_id;
 
+  if (!cookieUserId) {
+    return new Response(
+      JSON.stringify({ success: false, message: 'User not logged in' })
+    );
+  }
   const wishlist = await prisma.wishlists.findMany({
     where: {
       userid: cookieUserId,

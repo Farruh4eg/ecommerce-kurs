@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import session from '$lib/session.js';
+  import { session } from '$lib/session.js';
   import type { EventHandler } from 'svelte/elements';
   import { handleSubmit } from '$lib/utils/helpers.js';
 

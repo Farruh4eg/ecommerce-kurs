@@ -1,14 +1,24 @@
 <script lang="ts">
   import '../app.css';
   import SearchSuggestions from '$lib/components/SearchSuggestions.svelte';
-  import session from '$lib/session';
+  import { session, wishlistCountStore, cartCountStore } from '$lib/session';
   import type { EventHandler, FormEventHandler } from 'svelte/elements';
   import { onDestroy } from 'svelte';
   import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
+  import type { UserCookieInfo } from '$lib/utils/interfaces';
 
   injectSpeedInsights();
 
-  export let data;
+  type Data = {
+    userInfo: UserCookieInfo;
+    wishlistCount: number;
+    cartCount: number;
+  };
+
+  let wishlistCount: number;
+  let cartCount: number;
+
+  export let data: Data;
 
   let isLoggedIn: boolean;
 
@@ -116,12 +126,22 @@
     }
   };
 
-  const unsubscribe = session.subscribe((value) => {
+  const sessionUnsubsribe = session.subscribe((value) => {
     isLoggedIn = value.isLoggedIn;
   });
 
+  const wishlistCountUnsubscribe = wishlistCountStore.subscribe((value) => {
+    wishlistCount = value;
+  });
+
+  const cartCountUnsubscribe = cartCountStore.subscribe((value) => {
+    cartCount = value;
+  });
+
   onDestroy(() => {
-    unsubscribe();
+    sessionUnsubsribe();
+    wishlistCountUnsubscribe();
+    cartCountUnsubscribe();
   });
 
   const showDialog = () => {
@@ -185,16 +205,28 @@
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
         stroke-width="1.5"
+        stroke="blue"
         fill="none"
-        class="h-7 fill-blue-600"
+        class="h-7 relative"
       >
         <path
           stroke-linecap="round"
           stroke-linejoin="round"
           d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
         />
-      </svg>Избранное</a
+      </svg>
+      {#if wishlistCount > 0}
+        <a id="wishlist-counter">
+          <span
+            class="z-40 absolute bottom-14 right-10 text-white font-bold text-[12px] bg-blue-600 rounded-full px-[0.3rem] inline-flex justify-center content-center items-center"
+          >
+            {wishlistCount}
+          </span>
+        </a>
+      {/if}
+      Избранное</a
     >
+
     <a
       href="/cart/"
       class="scale-90 hover:bg-gray-100 p-5 rounded-lg min-w-[5rem] text-center transition-colors flex flex-col text-gray-500"

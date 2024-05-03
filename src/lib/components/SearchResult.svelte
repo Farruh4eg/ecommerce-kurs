@@ -128,7 +128,7 @@
         </section>
         <section class="flex gap-x-4 items-end">
           <ButtonLike {userid} {productid} />
-          <ButtonBuy />
+          <ButtonBuy {userid} {productid} />
         </section>
       </section>
     </section>

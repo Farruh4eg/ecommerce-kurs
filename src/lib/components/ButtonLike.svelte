@@ -1,6 +1,7 @@
 <script lang="ts">
   import { handleSubmit } from '$lib/utils/helpers';
   import { onMount } from 'svelte';
+  import { wishlistCountStore } from '$lib/session';
 
   export let userid: string;
   export let productid: string;
@@ -16,8 +17,10 @@
 
     if (data?.some((item) => item.productid === productid)) {
       isLiked = true;
+      wishlistCountStore.update((value) => value + 1);
     } else {
       isLiked = false;
+      wishlistCountStore.update((value) => value - 1);
     }
   };
 
@@ -39,6 +42,7 @@
         }
       );
       isLiked = false;
+      wishlistCountStore.update((value) => value - 1);
     } else {
       await handleSubmit(
         '/v1/like',
@@ -52,6 +56,7 @@
         }
       );
       isLiked = true;
+      wishlistCountStore.update((value) => value + 1);
     }
   };
 </script>

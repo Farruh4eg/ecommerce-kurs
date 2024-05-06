@@ -18,4 +18,3 @@ session.subscribe((value) => {
 });
 
 export const wishlistCountStore = writable(0);
-export const cartCountStore = writable(0);

@@ -1,4 +1,6 @@
+import prisma from '$lib/prisma';
 import type { devicetype, frequencytype, memorytype } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 
 export const createErrorResponse = (
   message: string,
@@ -118,4 +120,52 @@ export const handleSubmit = async (
     console.error('Error:', error);
     throw error;
   }
+};
+
+export const debounce = <T extends (...args: any[]) => void>(
+  func: T,
+  delay: number
+) => {
+  let timerId: ReturnType<typeof setTimeout>;
+
+  return function (this: ThisParameterType<T>, ...args: Parameters<T>) {
+    clearTimeout(timerId);
+    timerId = setTimeout(() => {
+      func.apply(this, args);
+    }, delay);
+  };
+};
+
+export const fetchProducts = async (
+  searchQuery: string,
+  page: number,
+  pageSize: number
+) => {
+  const offset = (page - 1) * pageSize;
+
+  return prisma.products.findMany({
+    where: {
+      OR: [
+        {
+          name: {
+            contains: searchQuery,
+            mode: 'insensitive',
+          },
+        },
+        {
+          suppliers: {
+            companyname: {
+              contains: searchQuery,
+              mode: 'insensitive',
+            },
+          },
+        },
+      ],
+    },
+    include: {
+      ratings: true,
+    },
+    skip: offset,
+    take: pageSize,
+  });
 };

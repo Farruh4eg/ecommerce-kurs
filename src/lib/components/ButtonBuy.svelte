@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { cartCountStore } from '$lib/session';
   import { handleSubmit } from '$lib/utils/helpers';
   import { onMount } from 'svelte';
 
@@ -24,12 +23,10 @@
       isInCart = true;
       buttonText = 'В корзине';
       hoverColor = 'bg-red-600';
-      cartCountStore.update((value) => value + 1);
     } else {
       isInCart = false;
       buttonText = 'Купить';
       hoverColor = 'bg-blue-600';
-      cartCountStore.update((value) => value - 1);
     }
   });
 
@@ -51,7 +48,6 @@
       isInCart = true;
       buttonText = 'В корзине';
       hoverColor = 'bg-red-600';
-      cartCountStore.update((value) => value + 1);
     }
   };
 </script>

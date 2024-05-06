@@ -9,7 +9,7 @@
   $: isLiked = false;
 
   const fillHeart = async () => {
-    const response = await fetch('/v1/like', {
+    const response = await fetch('/v1/wishlist', {
       method: 'GET',
     });
 
@@ -31,7 +31,7 @@
   const addToLiked = async () => {
     if (isLiked) {
       await handleSubmit(
-        '/v1/like',
+        '/v1/wishlist',
         'DELETE',
         {
           userid,
@@ -45,7 +45,7 @@
       wishlistCountStore.update((value) => value - 1);
     } else {
       await handleSubmit(
-        '/v1/like',
+        '/v1/wishlist',
         'POST',
         {
           userid,

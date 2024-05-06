@@ -1,5 +1,4 @@
 <script lang="ts">
-  import SearchFilters from '$lib/components/SearchFilters.svelte';
   import SearchResult from '$lib/components/SearchResult.svelte';
   import type { PageData } from '../$types';
   export let data: PageData;

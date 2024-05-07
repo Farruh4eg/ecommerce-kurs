@@ -1,6 +1,4 @@
-import prisma from '$lib/prisma';
 import type { devicetype, frequencytype, memorytype } from '@prisma/client';
-import { PrismaClient } from '@prisma/client';
 
 export const createErrorResponse = (
   message: string,

@@ -23,10 +23,6 @@
   onMount(async () => {
     fetchProductData();
   });
-
-  $: {
-    fetchProductData();
-  }
 </script>
 
 <svelte:head>

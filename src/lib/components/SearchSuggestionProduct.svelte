@@ -2,7 +2,6 @@
   import type { PageData } from '../../../.svelte-kit/types/src/routes/$types.d.ts';
   import { addSpaceInString } from '$lib/utils/helpers.js';
   import type { Rating } from '$lib/utils/interfaces.js';
-  import RatingReadOnly from './RatingReadOnly.svelte';
 
   export let product: PageData;
 

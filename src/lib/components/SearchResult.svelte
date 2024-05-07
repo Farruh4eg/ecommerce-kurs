@@ -97,16 +97,19 @@
         <section class="flex flex-col w-full">
           {#if productDiscountAvailable}
             <span class="text-sm text-gray-600 line-through"
-              >{addSpaceInString(
-                parseInt(
-                  productPrice + (productPrice / 100) * productDiscountAmount
-                ).toString()
-              )}
+              >{addSpaceInString(productPriceString)}
               <p></p></span
             >
           {/if}
           <span class="font-semibold text-2xl text-blue-600"
-            >{productPriceString} &#8381;</span
+            >{addSpaceInString(
+              parseInt(
+                (
+                  productPrice -
+                  (productPrice / 100) * productDiscountAmount
+                ).toString()
+              ).toString()
+            )} &#8381;</span
           >
           <section
             class="w-full flex justify-between pr-8 text-md text-gray-600 items-end"

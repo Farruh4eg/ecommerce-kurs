@@ -139,33 +139,13 @@ export const debounce = <T extends (...args: any[]) => void>(
 export const fetchProducts = async (
   searchQuery: string,
   page: number,
-  pageSize: number
+  eventFetch: (
+    input: string | URL | Request,
+    init?: RequestInit | undefined
+  ) => Promise<Response>
 ) => {
-  const offset = (page - 1) * pageSize;
-
-  return prisma.products.findMany({
-    where: {
-      OR: [
-        {
-          name: {
-            contains: searchQuery,
-            mode: 'insensitive',
-          },
-        },
-        {
-          suppliers: {
-            companyname: {
-              contains: searchQuery,
-              mode: 'insensitive',
-            },
-          },
-        },
-      ],
-    },
-    include: {
-      ratings: true,
-    },
-    skip: offset,
-    take: pageSize,
-  });
+  const response = await eventFetch(
+    `/v1/products?q=${searchQuery}&page=${page}`
+  );
+  return response.json();
 };

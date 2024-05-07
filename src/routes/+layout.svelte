@@ -123,7 +123,7 @@
         `/v1/products?name=${inputData}&page=${page}`
       );
       const json = await request.json();
-      product = json;
+      product = json.products;
     } else {
       product = [];
     }

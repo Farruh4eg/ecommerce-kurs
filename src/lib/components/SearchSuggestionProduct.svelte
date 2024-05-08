@@ -48,7 +48,7 @@
   };
 </script>
 
-<section class="w-full flex gap-2">
+<section class="w-full flex gap-2 z-50">
   <div class="relative h-16 flex justify-center w-32">
     <img src={productThumb} alt="thumb-{productName}" class="h-full" />
   </div>

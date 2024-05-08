@@ -160,7 +160,9 @@
   <search class="flex gap-x-1 justify-center relative">
     <form
       autocomplete="off"
-      action="/search/product"
+      on:submit={() => {
+        window.location.href = `/search/products?q=${searchElement.value.trim()}&page=1`;
+      }}
       class="w-full flex justify-center gap-x-2 content-center items-center"
     >
       <input

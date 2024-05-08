@@ -1,4 +1,3 @@
-import prisma from '$lib/prisma';
 import * as jwt from 'jsonwebtoken';
 import type { ServerLoadEvent } from '@sveltejs/kit';
 import type { UserCookieInfo } from '$lib/utils/interfaces';

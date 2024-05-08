@@ -71,7 +71,7 @@
     : '';
 </script>
 
-<section class="w-full flex bg-white p-5 rounded-lg">
+<section class="w-full flex bg-white p-5 rounded-lg -z-10">
   <div class="relative h-52 flex justify-center w-64">
     <img src={productThumb} alt="thumb-{productName}" />
     {#if productDiscountAvailable}

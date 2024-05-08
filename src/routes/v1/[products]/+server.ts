@@ -3,9 +3,30 @@ import type { PageServerLoad } from '../../$types';
 import type { RequestHandler } from '@sveltejs/kit';
 
 export const GET: RequestHandler = (async ({ url }: { url: URL }) => {
-  const urlProductId = url.searchParams.get('q');
-  const urlProductName = url.searchParams.get('name');
-  const page = parseInt(url.searchParams.get('page') ?? '1');
+  const urlProductId = url.searchParams.get('q') || '';
+  const urlProductName = url.searchParams.get('name') || '';
+  const page = parseInt(url.searchParams.get('page') || '1');
+  const instock: boolean = url.searchParams.get('inStock') === 'true' || true;
+
+  const suppliers: string[] = [];
+  const brandParam = url.searchParams.get('brand');
+  if (brandParam) {
+    suppliers.push(...brandParam.split('-'));
+  }
+  suppliers.push(urlProductId);
+
+  const price: number[] = [0, 500_000];
+  const priceParam = url.searchParams.get('price');
+  if (priceParam) {
+    let splittedPrice = priceParam.split('-');
+    try {
+      price[0] = parseInt(splittedPrice[0]);
+      price[1] = parseInt(splittedPrice[1]);
+    } catch (e) {
+      price[0] = 0;
+      price[1] = 500_000;
+    }
+  }
 
   const pageSize = 12;
 
@@ -16,6 +37,7 @@ export const GET: RequestHandler = (async ({ url }: { url: URL }) => {
   if (urlProductName) {
     product = await prisma.products.findMany({
       where: {
+        instock,
         OR: [
           {
             name: {
@@ -26,15 +48,27 @@ export const GET: RequestHandler = (async ({ url }: { url: URL }) => {
           {
             suppliers: {
               companyname: {
-                contains: urlProductName,
+                in: suppliers,
                 mode: 'insensitive',
               },
+            },
+          },
+        ],
+        AND: [
+          {
+            price: {
+              gt: price[0],
             },
           },
         ],
       },
       include: {
         ratings: true,
+        suppliers: {
+          select: {
+            companyname: true,
+          },
+        },
       },
       skip: offset,
       take: pageSize,

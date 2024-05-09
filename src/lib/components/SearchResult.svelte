@@ -21,8 +21,8 @@
   let productName = product.name;
   let productColor = product.color;
   let productInStock: boolean = product.instock;
-  let productDiscountAvailable: boolean = true;
-  let productDiscountAmount = product.discount || 8;
+  let productDiscountAvailable: boolean = product.discountAvailable;
+  let productDiscountAmount = product.discount;
   let productRatingsArray: number[] = [];
 
   product.ratings.forEach((element: Rating) => {

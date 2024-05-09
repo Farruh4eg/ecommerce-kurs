@@ -1,5 +1,4 @@
 import prisma from '$lib/prisma';
-import * as jwt from 'jsonwebtoken';
 import type { PageServerLoad } from './$types';
 
 export const load = (async () => {

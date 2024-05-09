@@ -117,11 +117,11 @@
     data,
     page: number = 1
   ) => {
-    const inputData = (data.target as HTMLInputElement).value.trim();
+    const inputData = (data.target as HTMLInputElement).value
+      .trim()
+      .replaceAll(/['"`;]/g, '');
     if (inputData.length > 0) {
-      const request = await fetch(
-        `/v1/products?name=${inputData}&page=${page}`
-      );
+      const request = await fetch(`/v1/products?q=${inputData}&page=${page}`);
       const json = await request.json();
       product = json.products;
     } else {

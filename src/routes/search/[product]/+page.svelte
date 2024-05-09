@@ -11,11 +11,16 @@
 
   let url = $page.url.searchParams;
   let pageN: Writable<number> = writable(parseInt(url.get('page') || '1'));
+  let instock = url.get('inStock') === 'true' ? 'true' : 'all';
+  let rating = url.get('rating') === 'good' ? 'good' : 'all';
+  const suppliers = url.get('brand') || '';
+  const price = url.get('price') || '0-500000';
+
   let totalPages = writable(1);
 
   const fetchProductData = async () => {
     const response = await fetch(
-      `/v1/products?name=${data.searchQuery}&page=${$pageN}`
+      `/v1/products?q=${data.searchQuery}&page=${$pageN}&inStock=${instock}&rating=${rating}&brand=${suppliers}&price=${price}`
     );
     const { products: resProducts, totalPages: resTotalPages } =
       await response.json();
@@ -33,7 +38,7 @@
 </svelte:head>
 <section class="flex justify-evenly gap-x-4 p-4">
   {#if $products?.length > 0}
-    <SearchFilters data={$products} />
+    <SearchFilters data={$products} query={data.searchQuery} />
   {/if}
   <section
     class="flex flex-col gap-4 mt-6 mb-4 -ml-80"

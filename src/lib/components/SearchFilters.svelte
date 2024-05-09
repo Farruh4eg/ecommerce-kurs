@@ -88,7 +88,11 @@
     checkboxes = [...document.getElementsByTagName('input')].filter(
       (el) => el.type === 'checkbox'
     );
-    loadFiltersFromStorage();
+    try {
+      loadFiltersFromStorage();
+    } catch (e) {
+      console.error('no search filters saved yet');
+    }
   });
 </script>
 

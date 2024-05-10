@@ -12,9 +12,17 @@
   import RatingReadOnly from './RatingReadOnly.svelte';
   import ButtonLike from './ButtonLike.svelte';
   import ButtonBuy from './ButtonBuy.svelte';
+  import { get } from 'svelte/store';
+  import { session } from '$lib/session.js';
 
   export let product;
   export let userid: string;
+
+  let isLoggedIn: boolean;
+
+  $: {
+    isLoggedIn = get(session).isLoggedIn;
+  }
 
   let productid = product.productid;
   let productThumb = product.photo[0];
@@ -129,10 +137,12 @@
             />
           </section>
         </section>
-        <section class="flex gap-x-4 items-end">
-          <ButtonLike {userid} {productid} />
-          <ButtonBuy {userid} {productid} />
-        </section>
+        {#if isLoggedIn}
+          <section class="flex gap-x-4 items-end">
+            <ButtonLike {userid} {productid} />
+            <ButtonBuy {userid} {productid} />
+          </section>
+        {/if}
       </section>
     </section>
   </section>

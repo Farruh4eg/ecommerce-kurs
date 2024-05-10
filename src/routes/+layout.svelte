@@ -181,7 +181,7 @@
     on:click={deleteFiltersFromStorage}
     href="/"
     class="bg-blue-600 h-max p-5 text-gray-200 rounded-xl hover:opacity-80 transition-opacity w-36 text-center"
-    >Главная</a
+    data-sveltekit-reload>Главная</a
   >
   <search class="flex gap-x-1 justify-center relative">
     <form
@@ -226,57 +226,123 @@
     </form>
   </search>
   <section class="flex justify-around">
-    <a
-      href="/wishlist/"
-      data-sveltekit-reload
-      class="scale-90 hover:bg-gray-100 p-5 rounded-lg min-w-[5rem] text-center transition-colors flex flex-col text-gray-500"
-      ><svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="blue"
-        fill="none"
-        class="h-7 relative"
+    {#if isLoggedIn}
+      <a
+        href="/wishlist/"
+        data-sveltekit-reload
+        class="scale-90 hover:bg-gray-100 p-5 rounded-lg min-w-[5rem] text-center transition-colors flex flex-col text-gray-500"
+        ><svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="blue"
+          fill="none"
+          class="h-7 relative"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
+          />
+        </svg>
+        {#if wishlistCount > 0}
+          <a id="wishlist-counter">
+            <span
+              class="z-40 absolute bottom-14 right-10 text-white font-bold text-[12px] bg-blue-600 rounded-full px-[0.3rem] inline-flex justify-center content-center items-center"
+            >
+              {wishlistCount}
+            </span>
+          </a>
+        {/if}
+        Избранное</a
       >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
-        />
-      </svg>
-      {#if wishlistCount > 0}
-        <a id="wishlist-counter">
-          <span
-            class="z-40 absolute bottom-14 right-10 text-white font-bold text-[12px] bg-blue-600 rounded-full px-[0.3rem] inline-flex justify-center content-center items-center"
-          >
-            {wishlistCount}
-          </span>
-        </a>
-      {/if}
-      Избранное</a
-    >
 
-    <a
-      href="/cart/"
-      data-sveltekit-reload
-      class="scale-90 hover:bg-gray-100 p-5 rounded-lg min-w-[5rem] text-center transition-colors flex flex-col text-gray-500"
-      ><svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="blue"
-        class="h-7"
+      <a
+        href="/cart/"
+        data-sveltekit-reload
+        class="scale-90 hover:bg-gray-100 p-5 rounded-lg min-w-[5rem] text-center transition-colors flex flex-col text-gray-500"
+        ><svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="blue"
+          class="h-7"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"
+          />
+        </svg>
+        Корзина</a
       >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"
-        />
-      </svg>
-      Корзина</a
-    >
+    {/if}
     {#if !isLoggedIn}
+      <a
+        href="/register"
+        class="scale-90 hover:bg-gray-100 p-5 rounded-lg min-w-[5rem] text-center transition-colors flex flex-col text-gray-500"
+        data-sveltekit-reload
+        ><svg
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="#000000"
+          class="h-7"
+          ><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g
+            id="SVGRepo_tracerCarrier"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          ></g><g id="SVGRepo_iconCarrier">
+            <title>i</title>
+            <g id="Complete">
+              <g id="user-add">
+                <g>
+                  <path
+                    d="M17,21V19a4,4,0,0,0-4-4H5a4,4,0,0,0-4,4v2"
+                    fill="none"
+                    stroke="#0000FF"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.9440000000000002"
+                  ></path>
+                  <circle
+                    cx="9"
+                    cy="7"
+                    r="4"
+                    fill="none"
+                    stroke="#0000FF"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.9440000000000002"
+                  ></circle>
+                  <line
+                    x1="17"
+                    y1="11"
+                    x2="23"
+                    y2="11"
+                    fill="none"
+                    stroke="#0000FF"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.9440000000000002"
+                  ></line>
+                  <line
+                    x1="20"
+                    y1="8"
+                    x2="20"
+                    y2="14"
+                    fill="none"
+                    stroke="#0000FF"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.9440000000000002"
+                  ></line>
+                </g>
+              </g>
+            </g>
+          </g></svg
+        >Регистрация</a
+      >
       <button
         class="scale-90 hover:bg-gray-100 p-5 rounded-lg min-w-[5rem] text-center transition-colors flex flex-col text-gray-500"
         on:click={showDialog}

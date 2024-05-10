@@ -88,13 +88,19 @@ export const addSpaceInString = (inputString: string): string => {
     return inputString;
   }
 
-  const insertionPoint = inputString.length - 3;
-  const partBeforeInsertion = inputString.slice(0, insertionPoint);
-  const partAfterInsertion = inputString.slice(insertionPoint);
+  let result = '';
+  let counter = 0;
 
-  const stringWithSpace = `${partBeforeInsertion} ${partAfterInsertion}`;
+  for (let i = inputString.length - 1; i >= 0; i--) {
+    result = inputString[i] + result;
+    counter++;
+    if (counter === 3 && i !== 0) {
+      result = ' ' + result;
+      counter = 0;
+    }
+  }
 
-  return stringWithSpace;
+  return result;
 };
 
 export const handleSubmit = async (

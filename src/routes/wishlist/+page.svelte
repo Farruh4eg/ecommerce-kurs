@@ -7,6 +7,7 @@
 <svelte:head>
   <title>Избранное</title>
 </svelte:head>
+<h1 class=" w-full pt-6 font-bold text-3xl flex justify-center">Избранное</h1>
 <section class="flex justify-evenly gap-x-4 p-4">
   {#if data.products.length === 0}
     <p>Ваш список избранных пуст</p>

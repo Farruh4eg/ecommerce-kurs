@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { PageData } from '../../../.svelte-kit/types/src/routes/$types.d.ts';
   import type { Rating } from '$lib/utils/interfaces.js';
 
   import {
@@ -7,6 +6,7 @@
     memoryEnumValueToString,
     frequencyEnumValueToString,
     addSpaceInString,
+    handleSubmit,
   } from '$lib/utils/helpers';
 
   import RatingReadOnly from './RatingReadOnly.svelte';
@@ -16,13 +16,40 @@
   export let product;
   export let userid: string;
 
+  let dialog: HTMLDialogElement;
+  let productCount: number = 1;
+
+  $: {
+    if (productCount === 0) {
+      productCount = 1;
+      dialog.showModal();
+    } else if (productCount < 1) productCount = 1;
+    else if (productCount > 129) productCount = 129;
+  }
+
+  let validateCount: (el: any) => void;
+
+  $: validateCount = (el) => {
+    if (productCount === 0) {
+      productCount = 1;
+      dialog.showModal();
+    } else if (
+      parseInt(el.target.value) < 1 ||
+      isNaN(parseInt(el.target.value))
+    ) {
+      productCount = 1;
+    } else if (parseInt(el.target.value) > 129) {
+      productCount = 129;
+    }
+  };
+
   let productid = product.productid;
   let productThumb = product.photo[0];
   let productName = product.name;
   let productColor = product.color;
   let productInStock: boolean = product.instock;
-  let productDiscountAvailable: boolean = true;
-  let productDiscountAmount = product.discount || 8;
+  let productDiscountAvailable: boolean = product.discountAvailable;
+  let productDiscountAmount = product.discount;
   let productRatingsArray: number[] = [];
 
   product.ratings.forEach((element: Rating) => {
@@ -35,6 +62,17 @@
   let productDisplaySize = product.displaysize || '';
   let productPrice = product.price;
   let productPriceString = addSpaceInString(product.price.toString());
+  let productPriceWithDiscount = addSpaceInString(
+    parseInt(
+      (productPrice - (productPrice / 100) * productDiscountAmount).toString()
+    ).toString()
+  );
+
+  $: totalProductPrice = addSpaceInString(
+    (
+      parseInt(productPriceWithDiscount.split(' ').join('')) * productCount
+    ).toString()
+  );
 
   let productMemory = product.memoryamount
     ? `${product.memoryamount} ${memoryEnumValueToString(product.memoryunit)}`
@@ -69,6 +107,21 @@
   let productBattery = product.batterycapacity
     ? `${product.batterycapacity} мА*ч`
     : '';
+
+  const deleteItem = async () => {
+    await handleSubmit(
+      '/v1/cart',
+      'DELETE',
+      {
+        userid,
+        productid,
+      },
+      {
+        'Content-Type': 'applicaton/json',
+      }
+    );
+    window.location.href = '/cart';
+  };
 </script>
 
 <section class="w-full flex bg-white p-5 rounded-lg">
@@ -92,21 +145,47 @@
       {productColor} [{productCpu}, {productRam}, {productSim}, {productDisplayResolution},
       {productDisplayRefresh}, {productCamera}, {productBattery}]</a
     >
+    <section class="border border-gray-300 flex rounded-lg w-max">
+      <button
+        on:click={() => {
+          productCount--;
+        }}
+        class="px-4 hover:bg-gray-200 rounded-md text-xl flex justify-center items-center content-center text-center w-max"
+        >&#8212;</button
+      >
+      <input
+        type="number"
+        name="product-count"
+        id="product-count"
+        bind:value={productCount}
+        step="1"
+        min="0"
+        max="129"
+        class="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none w-12 p-1 text-center"
+        on:focusout={validateCount}
+      />
+      <button
+        on:click={() => {
+          productCount++;
+        }}
+        class="px-4 hover:bg-gray-200 rounded-md text-2xl flex justify-center items-center content-center text-center w-max"
+        >+</button
+      >
+    </section>
     <section class="flex flex-col justify-between p-1 items-end">
+      <section class=" flex rounded-lg w-max font-bold">
+        <span>{totalProductPrice}&#8381;</span>
+      </section>
       <section class="flex gap-x-4 justify-between w-full">
         <section class="flex flex-col w-full">
           {#if productDiscountAvailable}
             <span class="text-sm text-gray-600 line-through"
-              >{addSpaceInString(
-                parseInt(
-                  productPrice + (productPrice / 100) * productDiscountAmount
-                ).toString()
-              )}
+              >{productPriceString}
               <p></p></span
             >
           {/if}
           <span class="font-semibold text-2xl text-blue-600"
-            >{productPriceString} &#8381;</span
+            >{productPriceWithDiscount} &#8381;</span
           >
           <section
             class="w-full flex justify-between pr-8 text-md text-gray-600 items-end"
@@ -134,3 +213,29 @@
     </section>
   </section>
 </section>
+
+<dialog bind:this={dialog} class="w-1/5 rounded-lg">
+  <section class="w-full h-48 p-10 flex flex-col justify-between">
+    <p>Вы уверены что хотите удалить товар с вашей корзины?</p>
+    <section class="flex w-full justify-end gap-x-12">
+      <button
+        on:click={() => {
+          productCount = 1;
+          dialog.close();
+        }}
+        class="py-2 px-8 border border-gray-300 hover:bg-blue-500 hover:text-white"
+        autofocus
+      >
+        Нет
+      </button>
+      <button
+        on:click={() => {
+          deleteItem();
+          dialog.close();
+        }}
+        class="py-2 px-8 border border-gray-300 bg-red-600 text-white"
+        >Да</button
+      >
+    </section>
+  </section>
+</dialog>

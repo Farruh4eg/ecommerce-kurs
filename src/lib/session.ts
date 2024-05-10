@@ -3,6 +3,7 @@ import { writable } from 'svelte/store';
 
 const defaultValue = {
   isLoggedIn: false,
+  privileges: 'default',
 };
 
 const initialValue = browser

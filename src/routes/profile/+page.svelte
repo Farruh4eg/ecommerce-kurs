@@ -1,8 +1,9 @@
 <script lang="ts">
   import type { UserData } from '$lib/utils/interfaces.js';
   import { handleSubmit } from '$lib/utils/helpers.js';
+  import type { PageServerData } from '../$types';
 
-  export let data;
+  export let data: PageServerData;
 
   const userData: UserData = JSON.parse(data.userInsensitiveData);
 
@@ -20,7 +21,7 @@
   } = userData;
 
   const formSubmit = async () => {
-    const response = await handleSubmit('/v1/user', 'put', {
+    const response = await handleSubmit('/v1/user', 'PUT', {
       userid,
       lastname,
       firstname,

@@ -21,6 +21,7 @@ export const POST: RequestHandler = async ({ request }) => {
       password: true,
       userid: true,
       refreshToken: true,
+      privileges: true,
     },
   });
 
@@ -32,6 +33,7 @@ export const POST: RequestHandler = async ({ request }) => {
       const user = {
         username: getUserCredentials.username,
         user_id: getUserCredentials.userid,
+        privileges: getUserCredentials.privileges,
       };
       const secure = dev ? '' : 'Secure';
 

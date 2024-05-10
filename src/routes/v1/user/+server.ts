@@ -68,6 +68,7 @@ export const POST: RequestHandler = async ({ request }) => {
     const user = {
       username: body.username,
       user_id,
+      privileges: create_user.privileges,
     };
     const secure = dev ? '' : 'Secure';
     const token = jwt.sign(user, SECRET_ACCESS_TOKEN, {

@@ -33,6 +33,14 @@
 
   $: isFocused = false;
   $: isSuggestionsVisible = isFocused && product.length > 0;
+  $: {
+    if (isLoggedIn) {
+      session.set({
+        isLoggedIn: true,
+        privileges: data.userInfo.privileges,
+      });
+    }
+  }
 
   let submitForm: EventHandler;
 
@@ -84,6 +92,7 @@
     if (response.ok) {
       session.set({
         isLoggedIn: false,
+        privileges: '',
       });
       window.location.href = '/';
     }
@@ -138,7 +147,7 @@
 
   const debouncedFetchData = debounce(_fetchData, 400);
 
-  const sessionUnsubsribe = session.subscribe((value) => {
+  const sessionUnsubscribe = session.subscribe((value) => {
     isLoggedIn = value.isLoggedIn;
   });
 
@@ -147,7 +156,7 @@
   });
 
   onDestroy(() => {
-    sessionUnsubsribe();
+    sessionUnsubscribe();
     wishlistCountUnsubscribe();
   });
 

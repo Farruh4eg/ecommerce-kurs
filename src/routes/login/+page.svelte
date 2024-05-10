@@ -1,14 +1,25 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { session } from '$lib/session.js';
   import type { EventHandler } from 'svelte/elements';
   import { handleSubmit } from '$lib/utils/helpers.js';
+  import type { PageServerData } from '../$types';
 
-  export let data;
+  export let data: PageServerData;
+
+  let isLoggedIn: boolean;
   let showPassword = false;
   let usernameInput: HTMLInputElement;
   let passwordInput: HTMLInputElement;
   let errorElement: HTMLParagraphElement;
+
+  $: {
+    if (isLoggedIn) {
+      session.set({
+        isLoggedIn: true,
+        privileges: data.props.user.privileges,
+      });
+    }
+  }
 
   const handleShowPassword = () => {
     switch (passwordInput.type) {
@@ -30,7 +41,7 @@
 
       const response = await handleSubmit(
         '/v1/login',
-        'post',
+        'POST',
         { username, password },
         { 'Content-Type': 'application/json' }
       );
@@ -38,6 +49,7 @@
       if (response.ok) {
         session.set({
           isLoggedIn: true,
+          privileges: data?.userInfo?.privileges,
         });
         window.location.href = '/';
       } else if (response.status === 401) {
@@ -47,6 +59,10 @@
       }
     };
   }
+
+  const sessionUnsubscribe = session.subscribe((value) => {
+    isLoggedIn = value.isLoggedIn;
+  });
 </script>
 
 <section

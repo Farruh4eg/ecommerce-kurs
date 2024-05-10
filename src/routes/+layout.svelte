@@ -109,6 +109,13 @@
     }
   };
 
+  const deleteFiltersFromStorage = () => {
+    const filters = localStorage.getItem('searchFilters');
+    if (filters) {
+      localStorage.removeItem('searchFilters');
+    }
+  };
+
   const handleRegisterClick = () => {
     window.location.href = `/register/`;
   };
@@ -150,9 +157,10 @@
 </script>
 
 <nav
-  class="h-28 flex p-2 items-center gap-x-4 w-full content-center bg-white justify-evenly sticky 2xl:my-0 2xl:mx-auto 2xl:justify-center"
+  class="h-28 flex p-2 items-center gap-x-4 w-full content-center bg-white justify-evenly sticky 2xl:my-0 2xl:mx-auto 2xl:justify-center z-[1000]"
 >
   <a
+    on:click={deleteFiltersFromStorage}
     href="/"
     class="bg-blue-600 h-max p-5 text-gray-200 rounded-xl hover:opacity-80 transition-opacity w-36 text-center"
     >Главная</a

@@ -6,6 +6,7 @@
   export let productid: string;
 
   let deleteButton: HTMLButtonElement;
+  let dialog: HTMLDialogElement;
 
   $: buttonText = 'Удалить';
 
@@ -36,7 +37,7 @@
 </script>
 
 <button
-  on:click={deleteItem}
+  on:click={() => dialog.showModal()}
   bind:this={deleteButton}
   class="p-4 border border-solid border-gray-300 w-32 rounded-xl hover:bg-red-600 hover:text-white"
 >

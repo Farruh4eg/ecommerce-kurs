@@ -3,7 +3,7 @@
   import SearchSuggestions from '$lib/components/SearchSuggestions.svelte';
   import { session, wishlistCountStore } from '$lib/session';
   import type { EventHandler, FormEventHandler } from 'svelte/elements';
-  import { onDestroy } from 'svelte';
+  import { onDestroy, onMount } from 'svelte';
   import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
   import type { UserCookieInfo } from '$lib/utils/interfaces';
   import { debounce } from '../lib/utils/helpers';
@@ -14,12 +14,11 @@
     userInfo: UserCookieInfo;
     wishlistCount: number;
   };
-
-  let wishlistCount: number;
-
   export let data: Data;
 
+  let wishlistCount: number;
   let isLoggedIn: boolean;
+  let privileges: string;
 
   let usernameInput: HTMLInputElement;
   let showPassword = false;
@@ -29,6 +28,7 @@
   let loginDialog: HTMLDialogElement;
 
   let searchElement: HTMLInputElement;
+
   $: product = [];
 
   $: isFocused = false;
@@ -37,7 +37,17 @@
     if (isLoggedIn) {
       session.set({
         isLoggedIn: true,
-        privileges: data.userInfo.privileges,
+      });
+    }
+
+    privileges = data?.userInfo?.privileges;
+    if (!privileges) {
+      session.set({
+        isLoggedIn: false,
+      });
+    } else if (privileges) {
+      session.set({
+        isLoggedIn: true,
       });
     }
   }
@@ -92,7 +102,6 @@
     if (response.ok) {
       session.set({
         isLoggedIn: false,
-        privileges: '',
       });
       window.location.href = '/';
     }
@@ -219,6 +228,7 @@
   <section class="flex justify-around">
     <a
       href="/wishlist/"
+      data-sveltekit-reload
       class="scale-90 hover:bg-gray-100 p-5 rounded-lg min-w-[5rem] text-center transition-colors flex flex-col text-gray-500"
       ><svg
         xmlns="http://www.w3.org/2000/svg"
@@ -248,6 +258,7 @@
 
     <a
       href="/cart/"
+      data-sveltekit-reload
       class="scale-90 hover:bg-gray-100 p-5 rounded-lg min-w-[5rem] text-center transition-colors flex flex-col text-gray-500"
       ><svg
         xmlns="http://www.w3.org/2000/svg"
@@ -339,6 +350,7 @@
       >
       <a
         class="scale-90 hover:bg-gray-100 p-5 rounded-lg min-w-[5rem] text-center transition-colors flex flex-col text-gray-500 hover: cursor-pointer"
+        data-sveltekit-reload
         on:click={handleLogout}
         ><svg
           xmlns="http://www.w3.org/2000/svg"

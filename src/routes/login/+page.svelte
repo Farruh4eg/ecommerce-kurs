@@ -16,7 +16,6 @@
     if (isLoggedIn) {
       session.set({
         isLoggedIn: true,
-        privileges: data.props.user.privileges,
       });
     }
   }
@@ -49,7 +48,6 @@
       if (response.ok) {
         session.set({
           isLoggedIn: true,
-          privileges: data?.userInfo?.privileges,
         });
         window.location.href = '/';
       } else if (response.status === 401) {

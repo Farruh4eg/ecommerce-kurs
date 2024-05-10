@@ -8,24 +8,24 @@ datasource db {
 }
 
 model orderdetails {
-  orderdetailid Int       @id @default(autoincrement())
-  orderid       Int?
-  productid     String?
+  orderdetailid Int      @id @default(autoincrement())
+  orderid       Int
+  productid     String
   price         Int?
   quantity      Int?
   total         Int?
-  orders        orders?   @relation(fields: [orderid], references: [orderid], onDelete: NoAction, onUpdate: NoAction)
-  products      products? @relation(fields: [productid], references: [productid], onDelete: NoAction, onUpdate: NoAction)
+  orders        orders   @relation(fields: [orderid], references: [orderid], onDelete: NoAction, onUpdate: NoAction)
+  products      products @relation(fields: [productid], references: [productid], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model orders {
   orderid      Int            @id @default(autoincrement())
-  userid       String?
+  userid       String
   orderdate    DateTime?      @default(now()) @db.Date
   fulfilled    Boolean?
   deleted      Boolean?
   orderdetails orderdetails[]
-  users        users?         @relation(fields: [userid], references: [userid], onDelete: NoAction, onUpdate: NoAction)
+  users        users          @relation(fields: [userid], references: [userid], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model products {
@@ -33,7 +33,7 @@ model products {
   name                  String         @db.VarChar(255)
   price                 Int
   instock               Boolean
-  supplierid            Int?
+  supplierid            Int
   sku                   String?        @db.VarChar(255)
   discountavailable     Boolean?
   discount              Int?
@@ -69,7 +69,7 @@ model products {
   photo                 String[]
   dateCreated           DateTime?      @default(now())
   orderdetails          orderdetails[]
-  suppliers             suppliers?     @relation(fields: [supplierid], references: [supplierid], onDelete: NoAction, onUpdate: NoAction)
+  suppliers             suppliers      @relation(fields: [supplierid], references: [supplierid], onDelete: NoAction, onUpdate: NoAction)
   ratings               ratings[]
   wishlists             wishlists[]
   carts                 carts[]
@@ -90,21 +90,21 @@ model suppliers {
 }
 
 model ratings {
-  ratingid  Int       @id @default(autoincrement())
-  userid    String?
-  productid String?
+  ratingid  Int      @id @default(autoincrement())
+  userid    String
+  productid String
   rating    Int
-  time      DateTime  @default(now())
-  users     users?    @relation(fields: [userid], references: [userid], onDelete: NoAction, onUpdate: NoAction)
-  products  products? @relation(fields: [productid], references: [productid], onDelete: NoAction, onUpdate: NoAction)
+  time      DateTime @default(now())
+  users     users    @relation(fields: [userid], references: [userid], onDelete: NoAction, onUpdate: NoAction)
+  products  products @relation(fields: [productid], references: [productid], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model wishlists {
-  wishlistid Int       @id @default(autoincrement())
-  userid     String?
-  productid  String?
-  users      users?    @relation(fields: [userid], references: [userid], onDelete: Cascade, onUpdate: Cascade)
-  products   products? @relation(fields: [productid], references: [productid], onDelete: Cascade, onUpdate: Cascade)
+  wishlistid Int      @id @default(autoincrement())
+  userid     String
+  productid  String
+  users      users    @relation(fields: [userid], references: [userid], onDelete: Cascade, onUpdate: Cascade)
+  products   products @relation(fields: [productid], references: [productid], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model users {
@@ -127,11 +127,11 @@ model users {
 }
 
 model carts {
-  cartid    Int       @id @default(autoincrement())
-  userid    String?
-  productid String?
-  users     users?    @relation(fields: [userid], references: [userid], onDelete: Cascade, onUpdate: Cascade)
-  products  products? @relation(fields: [productid], references: [productid], onDelete: Cascade, onUpdate: Cascade)
+  cartid    Int      @id @default(autoincrement())
+  userid    String
+  productid String
+  users     users    @relation(fields: [userid], references: [userid], onDelete: Cascade, onUpdate: Cascade)
+  products  products @relation(fields: [productid], references: [productid], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model addresses {

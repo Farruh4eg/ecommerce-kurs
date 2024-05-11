@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { PageData } from '../../../.svelte-kit/types/src/routes/$types.d.ts';
   import type { Rating } from '$lib/utils/interfaces.js';
 
   import {
@@ -21,7 +20,7 @@
   let isLoggedIn: boolean;
 
   $: {
-    isLoggedIn = get(session).isLoggedIn;
+    isLoggedIn = $session.isLoggedIn;
   }
 
   let productid = product.productid;

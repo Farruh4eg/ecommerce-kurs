@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { Rating } from '$lib/utils/interfaces.js';
-
   import {
     deviceEnumValueToString,
     memoryEnumValueToString,
@@ -8,16 +7,22 @@
     addSpaceInString,
     handleSubmit,
   } from '$lib/utils/helpers';
-
   import RatingReadOnly from './RatingReadOnly.svelte';
   import ButtonLike from './ButtonLike.svelte';
   import ButtonDelete from './ButtonDelete.svelte';
+  import {
+    incrementTotalCount,
+    decrementTotalCount,
+    totalProductPriceStore,
+  } from '../utils/store';
+  import { onMount } from 'svelte';
 
   export let product;
   export let userid: string;
+  export let productCount: number = 1;
+  export let number: number;
 
   let dialog: HTMLDialogElement;
-  let productCount: number = 1;
 
   $: {
     if (productCount === 0) {
@@ -68,11 +73,8 @@
     ).toString()
   );
 
-  $: totalProductPrice = addSpaceInString(
-    (
-      parseInt(productPriceWithDiscount.split(' ').join('')) * productCount
-    ).toString()
-  );
+  $: totalProductPrice =
+    parseInt(productPriceWithDiscount.split(' ').join('')) * productCount;
 
   let productMemory = product.memoryamount
     ? `${product.memoryamount} ${memoryEnumValueToString(product.memoryunit)}`
@@ -122,6 +124,17 @@
     );
     window.location.href = '/cart';
   };
+
+  onMount(() => {
+    console.log({ myNumberIs: number });
+  });
+
+  $: {
+    totalProductPriceStore.update((map) => {
+      map.set(number, totalProductPrice);
+      return map;
+    });
+  }
 </script>
 
 <section class="w-full flex bg-white p-5 rounded-lg">
@@ -149,6 +162,7 @@
       <button
         on:click={() => {
           productCount--;
+          decrementTotalCount();
         }}
         class="px-4 hover:bg-gray-200 rounded-md text-xl flex justify-center items-center content-center text-center w-max"
         >&#8212;</button
@@ -167,6 +181,7 @@
       <button
         on:click={() => {
           productCount++;
+          incrementTotalCount();
         }}
         class="px-4 hover:bg-gray-200 rounded-md text-2xl flex justify-center items-center content-center text-center w-max"
         >+</button
@@ -174,7 +189,7 @@
     </section>
     <section class="flex flex-col justify-between p-1 items-end">
       <section class=" flex rounded-lg w-max font-bold">
-        <span>{totalProductPrice}&#8381;</span>
+        <span>{addSpaceInString(totalProductPrice.toString())}&#8381;</span>
       </section>
       <section class="flex gap-x-4 justify-between w-full">
         <section class="flex flex-col w-full">

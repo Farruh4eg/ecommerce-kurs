@@ -7,12 +7,12 @@ export interface PostBody {
   city: string;
   postalcode: number;
   address: string;
+  email: string;
 }
 
 export interface UserData extends PostBody {
   username: string;
   privileges: string;
-  email: string;
 }
 
 export interface Rating {

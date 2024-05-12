@@ -18,6 +18,7 @@
     city,
     postalcode,
     address,
+    email,
   } = userData;
 
   const formSubmit = async () => {
@@ -30,6 +31,7 @@
       city: city.toUpperCase(),
       postalcode,
       address: address.toUpperCase(),
+      email,
     });
 
     if (response.ok) {
@@ -42,7 +44,6 @@
   class="flex flex-col w-[60rem] mx-auto my-4 rounded-lg bg-white p-4 border border-gray-300 gap-y-4"
   method="POST"
   on:submit|preventDefault={formSubmit}
-  data-sveltekit-reload
 >
   <h1
     class="w-full flex justify-center items-center font-bold text-3xl text-gray-600"
@@ -69,6 +70,16 @@
       class="border border-gray-300 py-3 px-2 w-64 rounded-lg font-bold text-sm text-gray-800"
     />
     <label for="firstname" class="text-gray-600 text-sm">Имя</label>
+  </section>
+  <section class="flex w-full items-center gap-x-8">
+    <input
+      type="email"
+      name="email"
+      required
+      bind:value={email}
+      class="border border-gray-300 py-3 px-2 w-64 rounded-lg font-bold text-sm text-gray-800"
+    />
+    <label for="email" class="text-gray-600 text-sm">Электронная почта</label>
   </section>
   <section class="flex w-full items-center gap-x-8">
     <input

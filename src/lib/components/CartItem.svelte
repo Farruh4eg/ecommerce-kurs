@@ -3,7 +3,6 @@
   import {
     deviceEnumValueToString,
     memoryEnumValueToString,
-    frequencyEnumValueToString,
     addSpaceInString,
     handleSubmit,
   } from '$lib/utils/helpers';
@@ -18,7 +17,7 @@
   export let product;
   export let userid: string;
   export let productCount: number = 1;
-  export let number: number;
+  export let number;
 
   let dialog: HTMLDialogElement;
 
@@ -204,7 +203,7 @@
           productCount = 1;
           dialog.close();
         }}
-        class="py-2 px-8 border border-gray-300 hover:bg-blue-500 hover:text-white"
+        class="py-2 px-8 border border-gray-300 hover:bg-blue-500 hover:text-white rounded-md"
         autofocus
       >
         Нет
@@ -214,7 +213,7 @@
           deleteItem();
           dialog.close();
         }}
-        class="py-2 px-8 border border-gray-300 bg-red-600 text-white"
+        class="py-2 px-8 border border-gray-300 bg-red-600 text-white rounded-md"
         >Да</button
       >
     </section>

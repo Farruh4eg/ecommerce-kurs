@@ -106,6 +106,7 @@ export const PUT: RequestHandler = async ({ request }) => {
     city,
     postalcode,
     address,
+    email,
   } = body;
 
   postalcode = Number(postalcode);
@@ -125,7 +126,6 @@ export const PUT: RequestHandler = async ({ request }) => {
 
   if (existingAddress) {
     addressId = existingAddress.addressid;
-    console.log('existing');
   } else {
     const createdAddress = await prisma.addresses.create({
       data: {
@@ -156,6 +156,7 @@ export const PUT: RequestHandler = async ({ request }) => {
         firstname,
         birthdate: isoBirthDate,
         addressid: addressId,
+        email,
       },
     });
   }

@@ -92,22 +92,30 @@ export const DELETE: RequestHandler = async ({ request, cookies }) => {
     return createErrorResponse('Forbidden', 403);
   }
 
-  const cart = await prisma.carts.findFirst({
-    where: {
-      userid,
-      productid,
-    },
-    select: {
-      cartid: true,
-    },
-  });
-
-  const cartid = cart?.cartid;
-
-  if (cartid) {
-    await prisma.carts.delete({
+  if (productid) {
+    const cart = await prisma.carts.findFirst({
       where: {
-        cartid,
+        userid,
+        productid,
+      },
+      select: {
+        cartid: true,
+      },
+    });
+
+    const cartid = cart?.cartid;
+
+    if (cartid) {
+      await prisma.carts.delete({
+        where: {
+          cartid,
+        },
+      });
+    }
+  } else {
+    await prisma.carts.deleteMany({
+      where: {
+        userid,
       },
     });
   }

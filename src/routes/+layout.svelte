@@ -366,6 +366,7 @@
       <a
         href="/orders/"
         class="scale-90 hover:bg-gray-100 p-5 rounded-lg min-w-[5rem] text-center transition-colors flex flex-col text-gray-500"
+        data-sveltekit-reload
       >
         <svg
           width="64px"
@@ -398,6 +399,7 @@
       <a
         class="scale-90 hover:bg-gray-100 p-5 rounded-lg min-w-[5rem] text-center transition-colors flex flex-col text-gray-500"
         href="/profile/"
+        data-sveltekit-reload
         ><svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

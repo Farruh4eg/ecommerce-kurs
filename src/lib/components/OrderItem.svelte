@@ -1,10 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import type {
-    Orders,
-    OrderDetails,
-    OrdersProduct,
-  } from '$lib/utils/interfaces.js';
+  import type { OrderDetails } from '$lib/utils/interfaces.js';
 
   import {
     addSpaceInString,
@@ -12,7 +8,7 @@
   } from '$lib/utils/helpers.js';
 
   export let order;
-  export let userid;
+  export let user;
 
   let orderdetails: OrderDetails[];
   let sum: number = 0;
@@ -20,7 +16,7 @@
 
   onMount(async () => {
     const response = await fetch(
-      `/v1/orders?q=${userid}&order=${order.orderid}`
+      `/v1/orders?q=${user.userid}&order=${order.orderid}`
     );
     const fetched = await response.json();
     ({ orderdetails } = fetched);
@@ -168,17 +164,11 @@
                 <span class="text-sm"
                   >{orderdetail.quantity} шт. x {addSpaceInString(
                     orderdetail.price.toString()
-                  )}</span
+                  )}&#8381;</span
                 >
               </section>
             </section>
           {/each}
-          <section class="flex w-full justify-end p-2">
-            <button
-              class="py-2 px-8 bg-blue-600 rounded-lg text-white font-semibold"
-              >Чек</button
-            >
-          </section>
         </section>
       {/if}
     </section>

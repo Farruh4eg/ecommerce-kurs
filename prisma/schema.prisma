@@ -14,7 +14,7 @@ model orderdetails {
   price         Int?
   quantity      Int?
   total         Int?
-  orders        orders   @relation(fields: [orderid], references: [orderid], onDelete: NoAction, onUpdate: NoAction)
+  orders        orders   @relation(fields: [orderid], references: [orderid], onDelete: Cascade, onUpdate: NoAction)
   products      products @relation(fields: [productid], references: [productid], onDelete: NoAction, onUpdate: NoAction)
 }
 
@@ -25,7 +25,7 @@ model orders {
   fulfilled    Boolean?
   deleted      Boolean?
   orderdetails orderdetails[]
-  users        users          @relation(fields: [userid], references: [userid], onDelete: NoAction, onUpdate: NoAction)
+  users        users          @relation(fields: [userid], references: [userid], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model products {
@@ -99,8 +99,8 @@ model ratings {
   productid String
   rating    Int
   time      DateTime @default(now())
-  users     users    @relation(fields: [userid], references: [userid], onDelete: NoAction, onUpdate: NoAction)
-  products  products @relation(fields: [productid], references: [productid], onDelete: NoAction, onUpdate: NoAction)
+  users     users    @relation(fields: [userid], references: [userid], onDelete: Cascade, onUpdate: NoAction)
+  products  products @relation(fields: [productid], references: [productid], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model wishlists {

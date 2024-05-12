@@ -46,7 +46,7 @@
     });
 
     if (response.ok) {
-      deleteCart();
+      await deleteCart();
       window.location.href = '/orders';
     }
   };

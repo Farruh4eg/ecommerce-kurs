@@ -7,7 +7,9 @@
   let orders: orders[];
 
   onMount(async () => {
-    const response = await fetch(`/v1/orders?q=${data.userid}`);
+    const response = await fetch(
+      `/v1/orders?q=${data.userInsensitiveData.userid}`
+    );
     const fetched = await response.json();
     orders = fetched.orders;
   });
@@ -16,7 +18,7 @@
 <section class="flex w-full justify-center flex-col gap-y-4 items-center">
   {#if orders}
     {#each orders as order}
-      <OrderItem userid={data.userid} {order} />
+      <OrderItem user={data.userInsensitiveData} {order} />
     {/each}
   {/if}
 </section>

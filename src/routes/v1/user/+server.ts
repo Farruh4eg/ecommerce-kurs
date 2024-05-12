@@ -5,12 +5,147 @@ import jwt from 'jsonwebtoken';
 import { SECRET_ACCESS_TOKEN } from '$env/static/private';
 import { dev } from '$app/environment';
 import type { RequestHandler } from '@sveltejs/kit';
-import type { PostBody } from '$lib/utils/interfaces';
+import type { PostBody, UserCookieInfo } from '$lib/utils/interfaces';
 import { createErrorResponse } from '$lib/utils/helpers';
 import type { Body } from '$lib/utils/interfaces';
 
-export const GET: RequestHandler = async ({ url }: { url: URL }) => {
+export const GET: RequestHandler = async ({ url, cookies }) => {
+  let token = cookies.get('token')?.replaceAll("'", '') as string;
+  const userInfo = jwt.decode(token) as UserCookieInfo;
+  const privileges = userInfo?.privileges;
   const urlUserId = url.searchParams.get('q');
+  const searchQuery = url.searchParams.get('search');
+  const page = parseInt(url.searchParams.get('page') || '1');
+  const sendTotalPages = url.searchParams.get('total') === 'true';
+  const pageSize = 12;
+  const offset = (page - 1) * pageSize;
+  const isPermitted = privileges === 'admin' || privileges === 'mod';
+
+  if (sendTotalPages && searchQuery) {
+    let totalPages = await prisma.users.count({
+      where: {
+        OR: [
+          {
+            username: {
+              contains: searchQuery,
+              mode: 'insensitive',
+            },
+          },
+          {
+            firstname: {
+              contains: searchQuery,
+              mode: 'insensitive',
+            },
+          },
+          {
+            lastname: {
+              contains: searchQuery,
+              mode: 'insensitive',
+            },
+          },
+          {
+            email: {
+              contains: searchQuery,
+              mode: 'insensitive',
+            },
+          },
+          {
+            privileges: {
+              contains: searchQuery,
+              mode: 'insensitive',
+            },
+          },
+        ],
+      },
+    });
+
+    totalPages = Math.ceil(totalPages / pageSize);
+
+    return new Response(JSON.stringify(totalPages), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  } else if (isPermitted && searchQuery) {
+    const users = await prisma.users.findMany({
+      where: {
+        OR: [
+          {
+            username: {
+              contains: searchQuery,
+              mode: 'insensitive',
+            },
+          },
+          {
+            firstname: {
+              contains: searchQuery,
+              mode: 'insensitive',
+            },
+          },
+          {
+            lastname: {
+              contains: searchQuery,
+              mode: 'insensitive',
+            },
+          },
+          {
+            email: {
+              contains: searchQuery,
+              mode: 'insensitive',
+            },
+          },
+          {
+            privileges: {
+              contains: searchQuery,
+              mode: 'insensitive',
+            },
+          },
+        ],
+      },
+      select: {
+        userid: true,
+        username: true,
+        firstname: true,
+        lastname: true,
+        email: true,
+        privileges: true,
+        datecreated: true,
+      },
+      skip: offset,
+      take: pageSize,
+    });
+
+    return new Response(JSON.stringify(users), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }
+
+  if (isPermitted && urlUserId === 'all') {
+    let users = await prisma.users.findMany({
+      select: {
+        userid: true,
+        username: true,
+        firstname: true,
+        lastname: true,
+        email: true,
+        privileges: true,
+        datecreated: true,
+      },
+      skip: offset,
+      take: pageSize,
+    });
+
+    return new Response(JSON.stringify(users), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }
 
   let user = await prisma.users.findUnique({
     where: {
@@ -95,82 +230,139 @@ export const POST: RequestHandler = async ({ request }) => {
   }
 };
 
-export const PUT: RequestHandler = async ({ request }) => {
-  const body = (await request.json()) as PostBody;
-  let {
-    userid,
-    lastname,
-    firstname,
-    birthdate,
-    country,
-    city,
-    postalcode,
-    address,
-    email,
-  } = body;
+export const PUT: RequestHandler = async ({ request, url }) => {
+  const privilege = url.searchParams.get('privilege');
+  const changingUserId = url.searchParams.get('userid');
 
-  postalcode = Number(postalcode);
+  if (privilege && changingUserId) {
+    const user = await prisma.users.update({
+      where: {
+        userid: changingUserId,
+      },
+      data: {
+        privileges: privilege,
+      },
+    });
 
-  let isoBirthDate = new Date(birthdate).toISOString();
-
-  const existingAddress = await prisma.addresses.findFirst({
-    where: {
+    return new Response(
+      JSON.stringify({
+        success: true,
+        message: 'User privilige changed',
+      }),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+  } else {
+    const body = (await request.json()) as PostBody;
+    let {
+      userid,
+      lastname,
+      firstname,
+      birthdate,
       country,
       city,
       postalcode,
       address,
-    },
-  });
+      email,
+    } = body;
 
-  let addressId;
+    postalcode = Number(postalcode);
 
-  if (existingAddress) {
-    addressId = existingAddress.addressid;
-  } else {
-    const createdAddress = await prisma.addresses.create({
-      data: {
+    let isoBirthDate = new Date(birthdate).toISOString();
+
+    const existingAddress = await prisma.addresses.findFirst({
+      where: {
         country,
         city,
         postalcode,
         address,
       },
     });
-    addressId = createdAddress.addressid;
-  }
 
-  const receivedUser = await prisma.users.findUnique({
-    where: {
-      userid,
-    },
-  });
+    let addressId;
 
-  if (!receivedUser) {
-    createErrorResponse('Пользователь не найден', 404);
-  } else {
-    await prisma.users.update({
+    if (existingAddress) {
+      addressId = existingAddress.addressid;
+    } else {
+      const createdAddress = await prisma.addresses.create({
+        data: {
+          country,
+          city,
+          postalcode,
+          address,
+        },
+      });
+      addressId = createdAddress.addressid;
+    }
+
+    const receivedUser = await prisma.users.findUnique({
       where: {
         userid,
       },
-      data: {
-        lastname,
-        firstname,
-        birthdate: isoBirthDate,
-        addressid: addressId,
-        email,
+    });
+
+    if (!receivedUser) {
+      createErrorResponse('Пользователь не найден', 404);
+    } else {
+      await prisma.users.update({
+        where: {
+          userid,
+        },
+        data: {
+          lastname,
+          firstname,
+          birthdate: isoBirthDate,
+          addressid: addressId,
+          email,
+        },
+      });
+    }
+
+    return new Response(
+      JSON.stringify({
+        success: true,
+        message: 'Пользователь создан успешно',
+      }),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+  }
+};
+
+export const DELETE: RequestHandler = async ({ request, url, cookies }) => {
+  let token = cookies.get('token')?.replaceAll("'", '') as string;
+  const userInfo = jwt.decode(token) as UserCookieInfo;
+  const privilege = userInfo?.privileges;
+  const queryId = url.searchParams.get('q');
+
+  if (privilege === 'admin' && queryId) {
+    await prisma.users.delete({
+      where: {
+        userid: queryId,
       },
     });
+
+    return new Response(
+      JSON.stringify({
+        success: true,
+        message: 'User deleted successfully',
+      }),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
   }
 
-  return new Response(
-    JSON.stringify({
-      success: true,
-      message: 'Пользователь создан успешно',
-    }),
-    {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
-  );
+  return createErrorResponse('Forbidden', 403);
 };

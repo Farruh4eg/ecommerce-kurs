@@ -66,6 +66,10 @@ model products {
   height                Float?
   thickness             Float?
   weight                Float?
+  chargingpower         Int?
+  length                Float?
+  iswired               Boolean?
+  connection            connection?
   photo                 String[]
   dateCreated           DateTime?      @default(now())
   orderdetails          orderdetails[]
@@ -152,6 +156,13 @@ enum devicetype {
   CABLE
   PLAYER
   WATCH
+}
+
+enum connection {
+  WIFI
+  BLUETOOTH
+  USB
+  JACK
 }
 
 enum simtype {

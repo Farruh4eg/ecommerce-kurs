@@ -11,11 +11,9 @@
   import ButtonLike from './ButtonLike.svelte';
   import ButtonDelete from './ButtonDelete.svelte';
   import {
-    incrementTotalCount,
-    decrementTotalCount,
     totalProductPriceStore,
+    totalProductCountStore,
   } from '../utils/store';
-  import { onMount } from 'svelte';
 
   export let product;
   export let userid: string;
@@ -80,36 +78,6 @@
     ? `${product.memoryamount} ${memoryEnumValueToString(product.memoryunit)}`
     : '';
 
-  let productCpu = product.cpucores
-    ? `ядер - ${product.cpucores}x(${
-        product.cpufrequency
-      } ${frequencyEnumValueToString(product.cpufrequencyunit)})`
-    : '';
-
-  let productRam = product.ramamount
-    ? `${product.ramamount} ${memoryEnumValueToString(product.ramunit)}`
-    : '';
-
-  let productSim = product.simcount ? `${product.simcount} SIM` : '';
-
-  let productDisplayResolution = product.displayheight
-    ? product.displaywidth > product.displayheight
-      ? `${product.displaywidth}x${product.displayheight}`
-      : `${product.displayheight}x${product.displaywidth}`
-    : '';
-
-  let productDisplayRefresh = product.refreshrate
-    ? `${product.refreshrate} Гц`
-    : '';
-
-  let productCamera = product.cameraresolution
-    ? `камера ${product.cameraresolution} Мп`
-    : '';
-
-  let productBattery = product.batterycapacity
-    ? `${product.batterycapacity} мА*ч`
-    : '';
-
   const deleteItem = async () => {
     await handleSubmit(
       '/v1/cart',
@@ -125,13 +93,14 @@
     window.location.href = '/cart';
   };
 
-  onMount(() => {
-    console.log({ myNumberIs: number });
-  });
-
   $: {
-    totalProductPriceStore.update((map) => {
-      map.set(number, totalProductPrice);
+    totalProductPriceStore.update((map: any) => {
+      map[productid] = totalProductPrice;
+      return map;
+    });
+
+    totalProductCountStore.update((map: any) => {
+      map[productid] = productCount;
       return map;
     });
   }
@@ -155,14 +124,12 @@
       >{productDisplaySize}" {productType}
       {productName}
       {productMemory}
-      {productColor} [{productCpu}, {productRam}, {productSim}, {productDisplayResolution},
-      {productDisplayRefresh}, {productCamera}, {productBattery}]</a
+      {productColor}</a
     >
     <section class="border border-gray-300 flex rounded-lg w-max">
       <button
         on:click={() => {
           productCount--;
-          decrementTotalCount();
         }}
         class="px-4 hover:bg-gray-200 rounded-md text-xl flex justify-center items-center content-center text-center w-max"
         >&#8212;</button
@@ -181,7 +148,6 @@
       <button
         on:click={() => {
           productCount++;
-          incrementTotalCount();
         }}
         class="px-4 hover:bg-gray-200 rounded-md text-2xl flex justify-center items-center content-center text-center w-max"
         >+</button

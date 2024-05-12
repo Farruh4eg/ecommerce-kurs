@@ -112,19 +112,42 @@ export const PUT: RequestHandler = async ({ request }) => {
 
   let isoBirthDate = new Date(birthdate).toISOString();
 
-  const receivedAddressId = await prisma.users.findUnique({
+  const existingAddress = await prisma.addresses.findFirst({
     where: {
-      userid,
-    },
-    select: {
-      addressid: true,
+      country,
+      city,
+      postalcode,
+      address,
     },
   });
 
-  if (receivedAddressId == null) {
-    createErrorResponse('No addressid received', 400);
+  let addressId;
+
+  if (existingAddress) {
+    addressId = existingAddress.addressid;
+    console.log('existing');
   } else {
-    const updateUser = await prisma.users.update({
+    const createdAddress = await prisma.addresses.create({
+      data: {
+        country,
+        city,
+        postalcode,
+        address,
+      },
+    });
+    addressId = createdAddress.addressid;
+  }
+
+  const receivedUser = await prisma.users.findUnique({
+    where: {
+      userid,
+    },
+  });
+
+  if (!receivedUser) {
+    createErrorResponse('Пользователь не найден', 404);
+  } else {
+    await prisma.users.update({
       where: {
         userid,
       },
@@ -132,19 +155,7 @@ export const PUT: RequestHandler = async ({ request }) => {
         lastname,
         firstname,
         birthdate: isoBirthDate,
-        addresses: {
-          update: {
-            where: {
-              addressid: receivedAddressId.addressid!,
-            },
-            data: {
-              country,
-              city,
-              postalcode,
-              address,
-            },
-          },
-        },
+        addressid: addressId,
       },
     });
   }
@@ -152,7 +163,7 @@ export const PUT: RequestHandler = async ({ request }) => {
   return new Response(
     JSON.stringify({
       success: true,
-      message: 'user updated successfully',
+      message: 'Пользователь создан успешно',
     }),
     {
       status: 200,

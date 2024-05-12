@@ -26,10 +26,10 @@
       lastname,
       firstname,
       birthdate,
-      country,
-      city,
+      country: country.toUpperCase(),
+      city: city.toUpperCase(),
       postalcode,
-      address,
+      address: address.toUpperCase(),
     });
 
     if (response.ok) {
@@ -42,6 +42,7 @@
   class="flex flex-col w-[60rem] mx-auto my-4 rounded-lg bg-white p-4 border border-gray-300 gap-y-4"
   method="POST"
   on:submit|preventDefault={formSubmit}
+  data-sveltekit-reload
 >
   <h1
     class="w-full flex justify-center items-center font-bold text-3xl text-gray-600"
@@ -53,6 +54,7 @@
     <input
       type="text"
       name="lastname"
+      required
       bind:value={lastname}
       class="border border-gray-300 py-3 px-2 w-64 rounded-lg font-bold text-sm text-gray-800"
     />
@@ -62,6 +64,7 @@
     <input
       type="text"
       name="firstname"
+      required
       bind:value={firstname}
       class="border border-gray-300 py-3 px-2 w-64 rounded-lg font-bold text-sm text-gray-800"
     />
@@ -71,8 +74,9 @@
     <input
       type="date"
       name="birthdate"
+      required
       bind:value={birthdate}
-      class="border border-gray-300 py-3 px-2 w-64 rounded-lg font-bold text-sm text-gray-800"
+      class="border border-gray-300 py-3 px-2 w-64 rounded-lg font-bold text-sm text-gray-800 uppercase"
     />
     <label for="birthdate" class="text-gray-600 text-sm">Дата рождения</label>
   </section>
@@ -80,8 +84,9 @@
     <input
       type="text"
       name="country"
+      required
       bind:value={country}
-      class="border border-gray-300 py-3 px-2 w-64 rounded-lg font-bold text-sm text-gray-800"
+      class="border border-gray-300 py-3 px-2 w-64 rounded-lg font-bold text-sm text-gray-800 uppercase"
     />
     <label for="country" class="text-gray-600 text-sm">Страна</label>
   </section>
@@ -89,8 +94,9 @@
     <input
       type="text"
       name="city"
+      required
       bind:value={city}
-      class="border border-gray-300 py-3 px-2 w-64 rounded-lg font-bold text-sm text-gray-800"
+      class="border border-gray-300 py-3 px-2 w-64 rounded-lg font-bold text-sm text-gray-800 uppercase"
     />
     <label for="city" class="text-gray-600 text-sm"
       >Город / Населенный пункт</label
@@ -102,8 +108,9 @@
       inputmode="numeric"
       pattern="\d*"
       name="postalcode"
+      required
       bind:value={postalcode}
-      class="border border-gray-300 py-3 px-2 w-64 rounded-lg font-bold text-sm text-gray-800"
+      class="border border-gray-300 py-3 px-2 w-64 rounded-lg font-bold text-sm text-gray-800 uppercase"
     />
     <label for="postalcode" class="text-gray-600 text-sm">Почтовый индекс</label
     >
@@ -113,7 +120,8 @@
       type="text"
       name="address"
       bind:value={address}
-      class="border border-gray-300 py-3 px-2 w-64 rounded-lg font-bold text-sm text-gray-800"
+      required
+      class="border border-gray-300 py-3 px-2 w-64 rounded-lg font-bold text-sm text-gray-800 uppercase"
     />
     <label for="address" class="text-gray-600 text-sm">Адрес</label>
   </section>

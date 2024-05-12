@@ -18,6 +18,20 @@ export const load = async ({ cookies }: ServerLoadEvent) => {
           ratings: true,
         },
       },
+      users: {
+        select: {
+          addresses: {
+            select: {
+              address: true,
+              country: true,
+              city: true,
+              postalcode: true,
+            },
+          },
+          firstname: true,
+          lastname: true,
+        },
+      },
     },
   });
 

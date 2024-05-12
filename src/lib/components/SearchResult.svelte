@@ -51,36 +51,6 @@
   let productMemory = product.memoryamount
     ? `${product.memoryamount} ${memoryEnumValueToString(product.memoryunit)}`
     : '';
-
-  let productCpu = product.cpucores
-    ? `ядер - ${product.cpucores}x(${
-        product.cpufrequency
-      } ${frequencyEnumValueToString(product.cpufrequencyunit)})`
-    : '';
-
-  let productRam = product.ramamount
-    ? `${product.ramamount} ${memoryEnumValueToString(product.ramunit)}`
-    : '';
-
-  let productSim = product.simcount ? `${product.simcount} SIM` : '';
-
-  let productDisplayResolution = product.displayheight
-    ? product.displaywidth > product.displayheight
-      ? `${product.displaywidth}x${product.displayheight}`
-      : `${product.displayheight}x${product.displaywidth}`
-    : '';
-
-  let productDisplayRefresh = product.refreshrate
-    ? `${product.refreshrate} Гц`
-    : '';
-
-  let productCamera = product.cameraresolution
-    ? `камера ${product.cameraresolution} Мп`
-    : '';
-
-  let productBattery = product.batterycapacity
-    ? `${product.batterycapacity} мА*ч`
-    : '';
 </script>
 
 <section class="w-full flex bg-white p-5 rounded-lg">
@@ -101,9 +71,8 @@
       >{productDisplaySize}" {productType}
       {productName}
       {productMemory}
-      {productColor} [{productCpu}, {productRam}, {productSim}, {productDisplayResolution},
-      {productDisplayRefresh}, {productCamera}, {productBattery}]</a
-    >
+      {productColor}
+    </a>
     <section class="flex flex-col justify-between p-1 items-end">
       <section class="flex gap-x-4 justify-between w-full">
         <section class="flex flex-col w-full">

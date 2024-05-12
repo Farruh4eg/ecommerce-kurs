@@ -91,13 +91,13 @@
     try {
       loadFiltersFromStorage();
     } catch (e) {
-      console.error('no search filters saved yet');
+      console.log('no search filters saved yet');
     }
   });
 </script>
 
 <section
-  class="h-max pb-10 w-[12%] bg-white rounded-xl flex flex-col p-4 gap-y-6 items-center"
+  class="h-max pb-10 min-w-[12%] bg-white rounded-xl flex flex-col p-4 gap-y-6 items-center"
 >
   <section class="flex w-full gap-x-4 items-center">
     <input

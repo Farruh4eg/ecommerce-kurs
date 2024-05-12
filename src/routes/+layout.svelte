@@ -144,7 +144,7 @@
   ) => {
     const inputData = (data.target as HTMLInputElement).value
       .trim()
-      .replaceAll(/['"`;]/g, '');
+      .replaceAll(/['"`;%|]/g, '');
     if (inputData.length > 0) {
       const request = await fetch(`/v1/products?q=${inputData}&page=${page}`);
       const json = await request.json();

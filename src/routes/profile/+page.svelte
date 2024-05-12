@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { UserData } from '$lib/utils/interfaces.js';
-  import { handleSubmit } from '$lib/utils/helpers.js';
+  import { handleFetch } from '$lib/utils/helpers.js';
   import type { PageServerData } from '../$types';
 
   export let data: PageServerData;
@@ -22,7 +22,7 @@
   } = userData;
 
   const formSubmit = async () => {
-    const response = await handleSubmit('/v1/user', 'PUT', {
+    const response = await handleFetch('/v1/user', 'PUT', {
       userid,
       lastname,
       firstname,

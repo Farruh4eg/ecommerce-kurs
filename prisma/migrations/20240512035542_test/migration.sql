@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "products" ALTER COLUMN "color" SET DATA TYPE VARCHAR(20);

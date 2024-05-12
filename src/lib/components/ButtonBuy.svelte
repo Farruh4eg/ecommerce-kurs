@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { handleSubmit } from '$lib/utils/helpers';
+  import { handleFetch } from '$lib/utils/helpers';
   import { onMount } from 'svelte';
 
   export let userid: string;
@@ -34,7 +34,7 @@
     if (isInCart) {
       window.location.href = '/cart';
     } else {
-      await handleSubmit(
+      await handleFetch(
         '/v1/cart',
         'POST',
         {

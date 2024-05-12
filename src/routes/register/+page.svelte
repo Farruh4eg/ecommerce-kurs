@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { handleSubmit } from '$lib/utils/helpers';
+  import { handleFetch } from '$lib/utils/helpers';
   let loginInput: HTMLInputElement;
   let passwordInput: HTMLInputElement;
   let confirmPasswordInput: HTMLInputElement;
@@ -14,7 +14,7 @@
       const username = loginInput;
       const password = passwordInput;
 
-      const response = await handleSubmit('/v1/user', 'post', {
+      const response = await handleFetch('/v1/user', 'post', {
         username,
         password,
       });

@@ -39,5 +39,5 @@ export const load = (async ({ cookies }) => {
     userDataFilled = false;
   }
 
-  return { products, userid, userDataFilled };
+  return { products, userid, userDataFilled, user };
 }) satisfies PageServerLoad;

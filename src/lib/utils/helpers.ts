@@ -103,7 +103,7 @@ export const addSpaceInString = (inputString: string): string => {
   return result;
 };
 
-export const handleSubmit = async (
+export const handleFetch = async (
   url: string,
   method: string,
   body: {},

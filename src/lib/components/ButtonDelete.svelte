@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { handleSubmit } from '$lib/utils/helpers';
+  import { handleFetch } from '$lib/utils/helpers';
 
   export let userid: string;
   export let productid: string;
@@ -10,7 +10,7 @@
   $: buttonText = 'Удалить';
 
   const deleteItem = async () => {
-    await handleSubmit(
+    await handleFetch(
       '/v1/cart',
       'DELETE',
       {

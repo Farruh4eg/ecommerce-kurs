@@ -1,6 +1,6 @@
 <script lang="ts">
   import CartItem from '$lib/components/CartItem.svelte';
-  import { addSpaceInString, handleSubmit } from '$lib/utils/helpers';
+  import { addSpaceInString, handleFetch } from '$lib/utils/helpers';
   import type { PageData } from '../$types';
   import { session } from '$lib/session';
   import { onMount } from 'svelte';
@@ -40,10 +40,19 @@
 
   const proceedCheckout = async () => {
     if (!data.userDataFilled) return;
+    const response = await handleFetch('/v1/orders', 'POST', {
+      userid: data.userid,
+      bodyProducts: $totalProductCountStore,
+    });
+
+    if (response.ok) {
+      deleteCart();
+      window.location.href = '/orders';
+    }
   };
 
   const deleteCart = async () => {
-    await handleSubmit(
+    await handleFetch(
       '/v1/cart',
       'DELETE',
       {

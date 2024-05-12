@@ -1,7 +1,7 @@
 <script lang="ts">
   import { session } from '$lib/session.js';
   import type { EventHandler } from 'svelte/elements';
-  import { handleSubmit } from '$lib/utils/helpers.js';
+  import { handleFetch } from '$lib/utils/helpers.js';
   import type { PageServerData } from '../$types';
 
   export let data: PageServerData;
@@ -38,7 +38,7 @@
       const username = usernameInput;
       const password = passwordInput.value;
 
-      const response = await handleSubmit(
+      const response = await handleFetch(
         '/v1/login',
         'POST',
         { username, password },

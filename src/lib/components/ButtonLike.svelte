@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { handleSubmit } from '$lib/utils/helpers';
+  import { handleFetch } from '$lib/utils/helpers';
   import { onMount } from 'svelte';
   import { wishlistCountStore } from '$lib/session';
 
@@ -30,7 +30,7 @@
 
   const addToLiked = async () => {
     if (isLiked) {
-      await handleSubmit(
+      await handleFetch(
         '/v1/wishlist',
         'DELETE',
         {
@@ -44,7 +44,7 @@
       isLiked = false;
       wishlistCountStore.update((value) => value - 1);
     } else {
-      await handleSubmit(
+      await handleFetch(
         '/v1/wishlist',
         'POST',
         {

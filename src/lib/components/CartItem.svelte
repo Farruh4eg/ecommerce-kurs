@@ -4,7 +4,7 @@
     deviceEnumValueToString,
     memoryEnumValueToString,
     addSpaceInString,
-    handleSubmit,
+    handleFetch,
   } from '$lib/utils/helpers';
   import RatingReadOnly from './RatingReadOnly.svelte';
   import ButtonLike from './ButtonLike.svelte';
@@ -78,7 +78,7 @@
     : '';
 
   const deleteItem = async () => {
-    await handleSubmit(
+    await handleFetch(
       '/v1/cart',
       'DELETE',
       {

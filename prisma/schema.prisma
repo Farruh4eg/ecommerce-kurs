@@ -39,7 +39,7 @@ model products {
   discount              Int?
   producttype           devicetype?
   releaseyear           Int?           @db.SmallInt
-  color                 String?        @db.Char(7)
+  color                 String?        @db.VarChar(20)
   memoryamount          Int?
   memoryunit            memorytype?
   sdslot                Boolean?

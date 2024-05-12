@@ -54,9 +54,10 @@
         >
         {#if isFolded}
           <svg
+            on:click={() => (isFolded = !isFolded)}
             fill="#000000"
             height="16"
-            class="ml-auto mr-10"
+            class="ml-auto mr-10 hover:cursor-pointer"
             version="1.1"
             id="Layer_1"
             xmlns="http://www.w3.org/2000/svg"
@@ -76,9 +77,10 @@
           >
         {:else}
           <svg
+            on:click={() => (isFolded = !isFolded)}
             fill="#000000"
             height="16"
-            class="ml-auto mr-10"
+            class="ml-auto mr-10 hover:cursor-pointer"
             version="1.1"
             id="Layer_1"
             xmlns="http://www.w3.org/2000/svg"
@@ -130,7 +132,7 @@
           class="flex flex-col gap-y-4 w-full border-t border-gray-300 pt-4"
         >
           {#each orderdetails as orderdetail}
-            <section class="flex justify-between">
+            <section class="flex justify-between border-t border-gray-300 pt-2">
               <section class="flex">
                 <a
                   href="/products/{orderdetail.products.productid}"

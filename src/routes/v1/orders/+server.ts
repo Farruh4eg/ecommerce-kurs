@@ -75,38 +75,62 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 };
 
 export const GET: RequestHandler = async ({ url }) => {
-  const userid = url.searchParams.get('q');
+  const userid = url.searchParams.get('q') || '';
+  const orderid = +(url.searchParams.get('order') || '');
 
-  if (userid) {
-    const orders = await prisma.orders.findMany({
+  if (orderid) {
+    const order = await prisma.orders.findUnique({
       where: {
         userid,
+        orderid,
       },
-      include: {
-        orderdetails: {
-          select: {
-            products: {
-              select: {
-                photo: true,
-                name: true,
-                producttype: true,
-                releaseyear: true,
-                color: true,
-                productid: true,
-              },
-            },
-            price: true,
-            quantity: true,
-            total: true,
-          },
-        },
+      select: {
+        deleted: true,
+        fulfilled: true,
+        orderdate: true,
+        orderid: true,
+      },
+    });
+
+    const orderdetails = await prisma.orderdetails.findMany({
+      where: {
+        orderid: order?.orderid,
+      },
+      select: {
+        price: true,
+        quantity: true,
+        total: true,
+        products: true,
       },
     });
 
     return new Response(
       JSON.stringify({
-        success: true,
-        message: orders,
+        orderdetails,
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        status: 200,
+      }
+    );
+  } else if (!orderid) {
+    const orders = await prisma.orders.findMany({
+      where: {
+        userid,
+      },
+      select: {
+        deleted: true,
+        fulfilled: true,
+        orderdate: true,
+        orderid: true,
+      },
+    });
+
+    return new Response(
+      JSON.stringify({
+        orders,
       }),
       {
         headers: {

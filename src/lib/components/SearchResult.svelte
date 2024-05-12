@@ -4,14 +4,12 @@
   import {
     deviceEnumValueToString,
     memoryEnumValueToString,
-    frequencyEnumValueToString,
     addSpaceInString,
   } from '$lib/utils/helpers';
 
   import RatingReadOnly from './RatingReadOnly.svelte';
   import ButtonLike from './ButtonLike.svelte';
   import ButtonBuy from './ButtonBuy.svelte';
-  import { get } from 'svelte/store';
   import { session } from '$lib/session.js';
 
   export let product;

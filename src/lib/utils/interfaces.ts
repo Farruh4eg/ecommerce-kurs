@@ -1,3 +1,5 @@
+import type { devicetype } from '@prisma/client';
+
 export interface PostBody {
   userid: string;
   lastname: string;
@@ -30,4 +32,28 @@ export interface UserCookieInfo {
   privileges: string;
   iat: number;
   exp: number;
+}
+
+export interface OrdersProduct {
+  productid: string;
+  name: string;
+  releaseyear: number | null;
+  color: string | null;
+  photo: string[];
+  producttype: devicetype;
+}
+
+export interface Orders {
+  orderid: number;
+  orderdate: string;
+  fulfilled: boolean;
+  deleted: boolean;
+}
+
+export interface OrderDetails {
+  orderid: number;
+  price: number;
+  quantity: number;
+  total: number;
+  products: OrdersProduct;
 }

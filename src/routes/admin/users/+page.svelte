@@ -112,12 +112,12 @@
     class="box-border bg-white p-2 text-sm hover:border h-12 w-96 border border-gray-500"
     bind:value={searchValue}
     on:input={() => {
-      debouncedFetchData(true);
+      if (searchValue.length) debouncedFetchData(true);
     }}
   />
 </section>
 <section class="flex w-full justify-evenly">
-  <table class="w-2/3 border-collapse mt-10 bg-white border border-gray-300">
+  <table class="w-max border-collapse mt-10 bg-white border border-gray-300">
     <thead>
       <tr class="bg-gray-100">
         <th class="py-2 px-4 text-left">id</th>
@@ -144,7 +144,7 @@
                 name="privileges"
                 id="privileges_{user.userid}"
                 bind:value={user.privileges}
-                class={'w-full p-2 ' +
+                class={'w-24 p-2 ' +
                   (user.privileges !== defaultPrivileges[user.userid]
                     ? 'bg-red-600 text-white'
                     : '')}

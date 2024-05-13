@@ -59,7 +59,11 @@
 
 <section class="w-full flex gap-2">
   <div class="relative h-16 flex justify-center w-32">
-    <img src={productThumb} alt="thumb-{productName}" class="h-full" />
+    <img
+      src="/products/{productThumb}"
+      alt="thumb-{productName}"
+      class="h-full"
+    />
   </div>
   <section class="flex flex-col justify-start w-full gap-2">
     <a

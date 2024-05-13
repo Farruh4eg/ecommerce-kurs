@@ -110,7 +110,7 @@
                 >
                   <img
                     class="h-20"
-                    src="../products/{orderdetail.products.photo[0]}"
+                    src="/products/{orderdetail.products.photo[0]}"
                     alt=""
                   />
                 </a>
@@ -137,7 +137,7 @@
                 >
                   <img
                     class="h-20"
-                    src="../products/{orderdetail.products.photo[0]}"
+                    src="/products/{orderdetail.products.photo[0]}"
                     alt=""
                   />
                 </a>

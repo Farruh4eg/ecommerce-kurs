@@ -53,7 +53,7 @@
 
 <section class="w-full flex bg-white p-5 rounded-lg">
   <div class="relative h-52 flex justify-center w-64">
-    <img src={productThumb} alt="thumb-{productName}" />
+    <img src="/products/{productThumb}" alt="thumb-{productName}" />
     {#if productDiscountAvailable}
       <span
         class="absolute rounded-3xl bg-blue-500 text-gray-50 p-2 text-xs right-36 top-40"

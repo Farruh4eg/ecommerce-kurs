@@ -89,6 +89,36 @@ export const GET: RequestHandler = (async ({ url }: { url: URL }) => {
           ],
         },
       });
+    } else if (brandParam) {
+      products = await prisma.products.findMany({
+        where: {
+          suppliers: {
+            companyname: {
+              in: suppliers,
+            },
+          },
+        },
+        include: {
+          ratings: true,
+          suppliers: {
+            select: {
+              companyname: true,
+            },
+          },
+        },
+        skip: offset,
+        take: pageSize,
+      });
+
+      totalPages = await prisma.products.count({
+        where: {
+          suppliers: {
+            companyname: {
+              in: suppliers,
+            },
+          },
+        },
+      });
     } else {
       products = await prisma.products.findMany({
         skip: offset,

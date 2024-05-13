@@ -200,3 +200,74 @@ export const fetchProducts = async (
   );
   return response.json();
 };
+
+export const localizeSpec = (str: string) => {
+  switch (str) {
+    case 'name':
+      return 'Название';
+    case 'sku':
+      return 'Артикул';
+    case 'producttype':
+      return 'Тип продукта';
+    case 'releaseyear':
+      return 'Год выпуска';
+    case 'color':
+      return 'Цвет';
+    case 'memoryamount':
+      return 'Объем памяти';
+    case 'sdslot':
+      return 'Слот для SD-карты';
+    case 'cameracount':
+      return 'Количество основных камер';
+    case 'cameraresolution':
+      return 'Разрешение камеры';
+    case 'frontcameraresolution':
+      return 'Разрешение фронтальной камеры';
+    case 'os':
+      return 'Операционная система';
+    case 'osversion':
+      return 'Версия операционной системы';
+    case 'cpumodel':
+      return 'Модель процессора';
+    case 'cpucores':
+      return 'Количество ядер процессора';
+    case 'cpufrequency':
+      return 'Частота процессора';
+    case 'ramamount':
+      return 'Объем оперативной памяти';
+    case 'simtype':
+      return 'Тип SIM-карты';
+    case 'simcount':
+      return 'Количество SIM-карт';
+    case 'displaysize':
+      return 'Размер экрана';
+    case 'displayheight':
+      return 'Высота экрана';
+    case 'displaywidth':
+      return 'Ширина экрана';
+    case 'refreshrate':
+      return 'Частота обновления';
+    case 'batterytype':
+      return 'Тип батареи';
+    case 'batterycapacity':
+      return 'Ёмкость батареи';
+    case 'width':
+      return 'Ширина';
+    case 'height':
+      return 'Высота';
+    case 'thickness':
+      return 'Толщина';
+    case 'weight':
+      return 'Вес';
+    case 'chargingpower':
+      return 'Мощность зарядки';
+    case 'length':
+      return 'Длина';
+    case 'iswired':
+      return 'Беспроводное';
+    case 'connection':
+      return 'Соединение';
+    default:
+      return '';
+  }
+};

@@ -1,5 +1,8 @@
 <script lang="ts">
+  import { page } from '$app/stores';
+  import type { devicetype } from '@prisma/client';
   import { onMount } from 'svelte';
+  import { writable } from 'svelte/store';
 
   export let data;
   export let query;
@@ -15,6 +18,11 @@
     data.map((x: any) => x.suppliers.companyname)
   );
 
+  let url = $page.url.searchParams;
+
+  let searchType = '';
+  let producttype = writable(url.get('type') || searchType);
+
   let suppliersStringified: string = '';
   let inStock: string;
   let rating: string;
@@ -26,6 +34,7 @@
     inputRating.checked = filters.rating === 'good';
     inputMinPrice.value = filters.minPrice || '50';
     inputMaxPrice.value = filters.maxPrice || '500000';
+    searchType = filters.searchType || 'SMARTPHONE';
 
     checkboxes.forEach((checkbox) => {
       checkbox.checked = filters.suppliers.includes(checkbox.name);
@@ -41,6 +50,7 @@
       suppliers: checkboxes
         .filter((checkbox) => checkbox.checked)
         .map((checkbox) => checkbox.name),
+      searchType,
     };
     localStorage.setItem('searchFilters', JSON.stringify(filters));
   };
@@ -81,10 +91,10 @@
     inputMaxPrice.value = '500000';
   };
 
-  const submitFilters = () => {
+  $: submitFilters = () => {
     validateFilters();
     saveFiltersToStorage();
-    window.location.href = `/search/products?q=${query}&inStock=${inStock}&rating=${rating}&price=${price}&brand=${suppliersStringified}`;
+    window.location.href = `/search/products?q=${query}&inStock=${inStock}&rating=${rating}&price=${price}&brand=${suppliersStringified}&type=${$producttype}`;
   };
 
   onMount(() => {
@@ -159,6 +169,27 @@
         <label for={supplier} class="text-sm">{supplier}</label>
       </section>
     {/each}
+  </section>
+  <section class="flex w-full flex-col gap-y-4">
+    <span class="font-bold w-full">Категория продукта</span>
+    <select
+      name="product-type"
+      id="product-type"
+      bind:value={searchType}
+      on:change={() => {
+        producttype.set(searchType);
+      }}
+      class="p-4 w-full rounded-md"
+    >
+      <option value="SMARTPHONE" selected>Смартфон</option>
+      <option value="TABLET">Планшет</option>
+      <option value="CELLPHONE">Сотовый телефон</option>
+      <option value="CABLE">Кабель</option>
+      <option value="CHARGER">Зарядное устройство</option>
+      <option value="WATCH">Часы</option>
+      <option value="PLAYER">Плеер</option>
+      <option value="HEADPHONE">Наушники</option>
+    </select>
   </section>
   <section class="flex flex-col gap-y-2 w-full items-center">
     <button

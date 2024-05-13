@@ -15,12 +15,13 @@
   let rating = url.get('rating') === 'good' ? 'good' : 'all';
   const suppliers = url.get('brand') || '';
   const price = url.get('price') || '0-500000';
+  const producttype = url.get('type') || '';
 
   let totalPages = writable(1);
 
   const fetchProductData = async () => {
     const response = await fetch(
-      `/v1/products?q=${data.searchQuery}&page=${$pageN}&inStock=${instock}&rating=${rating}&brand=${suppliers}&price=${price}`
+      `/v1/products?q=${data.searchQuery}&page=${$pageN}&inStock=${instock}&rating=${rating}&brand=${suppliers}&price=${price}&type=${producttype}`
     );
     const { products: resProducts, totalPages: resTotalPages } =
       await response.json();

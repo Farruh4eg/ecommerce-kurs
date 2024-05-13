@@ -54,7 +54,20 @@ export const GET: RequestHandler = (async ({ url }: { url: URL }) => {
       products = await prisma.products.findMany({
         where: {
           producttype,
+          AND: [
+            {
+              discountedprice: {
+                gt: price[0],
+              },
+            },
+            {
+              discountedprice: {
+                lt: price[1],
+              },
+            },
+          ],
         },
+
         skip: offset,
         take: pageSize,
       });
@@ -62,6 +75,18 @@ export const GET: RequestHandler = (async ({ url }: { url: URL }) => {
       totalPages = await prisma.products.count({
         where: {
           producttype,
+          AND: [
+            {
+              discountedprice: {
+                gt: price[0],
+              },
+            },
+            {
+              discountedprice: {
+                lt: price[1],
+              },
+            },
+          ],
         },
       });
     } else {
@@ -93,6 +118,18 @@ export const GET: RequestHandler = (async ({ url }: { url: URL }) => {
           contains: urlQuery,
           mode: 'insensitive',
         },
+        AND: [
+          {
+            discountedprice: {
+              gt: price[0],
+            },
+          },
+          {
+            discountedprice: {
+              lt: price[1],
+            },
+          },
+        ],
       },
       skip: offset,
       take: pageSize,
@@ -105,6 +142,18 @@ export const GET: RequestHandler = (async ({ url }: { url: URL }) => {
           contains: urlQuery,
           mode: 'insensitive',
         },
+        AND: [
+          {
+            discountedprice: {
+              gt: price[0],
+            },
+          },
+          {
+            discountedprice: {
+              lt: price[1],
+            },
+          },
+        ],
       },
     });
 
@@ -141,12 +190,12 @@ export const GET: RequestHandler = (async ({ url }: { url: URL }) => {
               },
             },
             {
-              price: {
+              discountedprice: {
                 gt: price[0],
               },
             },
             {
-              price: {
+              discountedprice: {
                 lt: price[1],
               },
             },
@@ -171,6 +220,16 @@ export const GET: RequestHandler = (async ({ url }: { url: URL }) => {
               name: {
                 contains: urlQuery,
                 mode: 'insensitive',
+              },
+            },
+            {
+              discountedprice: {
+                gt: price[0],
+              },
+            },
+            {
+              discountedprice: {
+                lt: price[1],
               },
             },
             {
@@ -226,12 +285,12 @@ export const GET: RequestHandler = (async ({ url }: { url: URL }) => {
               },
             },
             {
-              price: {
+              discountedprice: {
                 gt: price[0],
               },
             },
             {
-              price: {
+              discountedprice: {
                 lt: price[1],
               },
             },
@@ -256,6 +315,16 @@ export const GET: RequestHandler = (async ({ url }: { url: URL }) => {
               name: {
                 contains: urlQuery,
                 mode: 'insensitive',
+              },
+            },
+            {
+              discountedprice: {
+                gt: price[0],
+              },
+            },
+            {
+              discountedprice: {
+                lt: price[1],
               },
             },
             {
@@ -310,12 +379,12 @@ export const GET: RequestHandler = (async ({ url }: { url: URL }) => {
               },
             },
             {
-              price: {
+              discountedprice: {
                 gt: price[0],
               },
             },
             {
-              price: {
+              discountedprice: {
                 lt: price[1],
               },
             },
@@ -340,6 +409,16 @@ export const GET: RequestHandler = (async ({ url }: { url: URL }) => {
               name: {
                 contains: urlQuery,
                 mode: 'insensitive',
+              },
+            },
+            {
+              discountedprice: {
+                gt: price[0],
+              },
+            },
+            {
+              discountedprice: {
+                lt: price[1],
               },
             },
             {
@@ -386,12 +465,12 @@ export const GET: RequestHandler = (async ({ url }: { url: URL }) => {
           },
           AND: [
             {
-              price: {
+              discountedprice: {
                 gt: price[0],
               },
             },
             {
-              price: {
+              discountedprice: {
                 lt: price[1],
               },
             },
@@ -414,6 +493,18 @@ export const GET: RequestHandler = (async ({ url }: { url: URL }) => {
           productid: {
             in: productIds,
           },
+          AND: [
+            {
+              discountedprice: {
+                gt: price[0],
+              },
+            },
+            {
+              discountedprice: {
+                lt: price[1],
+              },
+            },
+          ],
         },
       });
 

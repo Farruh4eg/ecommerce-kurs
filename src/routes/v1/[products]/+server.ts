@@ -141,12 +141,12 @@ export const GET: RequestHandler = (async ({ url }: { url: URL }) => {
               },
             },
             {
-              discountedprice: {
+              price: {
                 gt: price[0],
               },
             },
             {
-              discountedprice: {
+              price: {
                 lt: price[1],
               },
             },
@@ -166,7 +166,6 @@ export const GET: RequestHandler = (async ({ url }: { url: URL }) => {
 
       totalPages = await prisma.products.count({
         where: {
-          instock: true,
           AND: [
             {
               name: {
@@ -176,20 +175,20 @@ export const GET: RequestHandler = (async ({ url }: { url: URL }) => {
             },
             {
               suppliers: {
-                companyname: {
-                  in: suppliers,
-                  mode: 'insensitive',
-                },
-              },
-            },
-            {
-              discountedprice: {
-                gt: price[0],
-              },
-            },
-            {
-              discountedprice: {
-                lt: price[1],
+                OR: [
+                  {
+                    companyname: {
+                      in: suppliers,
+                      mode: 'insensitive',
+                    },
+                  },
+                  {
+                    companyname: {
+                      contains: suppliers.join(''),
+                      mode: 'insensitive',
+                    },
+                  },
+                ],
               },
             },
           ],
@@ -311,12 +310,12 @@ export const GET: RequestHandler = (async ({ url }: { url: URL }) => {
               },
             },
             {
-              discountedprice: {
+              price: {
                 gt: price[0],
               },
             },
             {
-              discountedprice: {
+              price: {
                 lt: price[1],
               },
             },
@@ -361,16 +360,6 @@ export const GET: RequestHandler = (async ({ url }: { url: URL }) => {
                 ],
               },
             },
-            {
-              discountedprice: {
-                gt: price[0],
-              },
-            },
-            {
-              discountedprice: {
-                lt: price[1],
-              },
-            },
           ],
         },
       });
@@ -397,12 +386,12 @@ export const GET: RequestHandler = (async ({ url }: { url: URL }) => {
           },
           AND: [
             {
-              discountedprice: {
+              price: {
                 gt: price[0],
               },
             },
             {
-              discountedprice: {
+              price: {
                 lt: price[1],
               },
             },

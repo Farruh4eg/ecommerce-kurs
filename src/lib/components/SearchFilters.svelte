@@ -11,9 +11,7 @@
     inputMaxPrice: HTMLInputElement,
     inputRating: HTMLInputElement;
 
-  let suppliersArray: Set<string> = new Set(
-    data.map((x: any) => x.suppliers.companyname)
-  );
+  let suppliersArray = data.map((x: any) => x.suppliers.companyname);
   let suppliersStringified: string = '';
   let inStock: string;
   let rating: string;

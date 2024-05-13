@@ -37,7 +37,6 @@ model products {
   sku                   String?        @db.VarChar(255)
   discountavailable     Boolean?
   discount              Int?
-  discountedprice       Int?
   producttype           devicetype?
   releaseyear           Int?           @db.SmallInt
   color                 String?        @db.VarChar(20)

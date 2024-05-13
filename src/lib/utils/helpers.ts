@@ -1,4 +1,10 @@
-import type { devicetype, frequencytype, memorytype } from '@prisma/client';
+import type {
+  connection,
+  devicetype,
+  frequencytype,
+  memorytype,
+  simtype,
+} from '@prisma/client';
 
 export const createErrorResponse = (
   message: string,
@@ -61,6 +67,25 @@ export const memoryEnumValueToString = (memoryEnum: memorytype): string => {
   return memType;
 };
 
+export const simEnumValueToString = (simEnum: simtype): string => {
+  let simType = null;
+  switch (simEnum) {
+    case 'ESIM':
+      simType = 'eSIM';
+      break;
+    case 'MICRO_SIM':
+      simType = 'Micro-SIM';
+      break;
+    case 'MINI_SIM':
+      simType = 'Mini-SIM';
+      break;
+    case 'NANO_SIM':
+      simType = 'Nano-SIM';
+  }
+
+  return simType;
+};
+
 export const frequencyEnumValueToString = (
   frequencyEnum: frequencytype
 ): string => {
@@ -81,6 +106,28 @@ export const frequencyEnumValueToString = (
   }
 
   return frequencyType;
+};
+
+export const connectionEnumValueToString = (
+  connectionEnum: connection
+): string => {
+  let connectionType = null;
+
+  switch (connectionEnum) {
+    case 'BLUETOOTH':
+      connectionType = 'Bluetooth';
+      break;
+    case 'JACK':
+      connectionType = 'Jack';
+      break;
+    case 'USB':
+      connectionType = 'USB';
+      break;
+    case 'WIFI':
+      connectionType = 'Wi-Fi';
+  }
+
+  return connectionType;
 };
 
 export const addSpaceInString = (inputString: string): string => {

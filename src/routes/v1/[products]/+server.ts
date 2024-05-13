@@ -1,8 +1,8 @@
 import prisma from '$lib/prisma';
 import { createErrorResponse } from '$lib/utils/helpers';
 import type { UserCookieInfo } from '$lib/utils/interfaces';
-import { devicetype } from '@prisma/client';
-import type { RequestHandler, ServerLoad } from '@sveltejs/kit';
+import { Prisma, devicetype } from '@prisma/client';
+import type { RequestHandler, Server, ServerLoad } from '@sveltejs/kit';
 import * as jwt from 'jsonwebtoken';
 
 export const GET: RequestHandler = (async ({ url }: { url: URL }) => {
@@ -495,4 +495,38 @@ export const DELETE: RequestHandler = async ({ url, cookies }) => {
     }
   }
   return createErrorResponse('Forbidden', 403);
+};
+
+export const POST: RequestHandler = async ({ request, cookies }) => {
+  let token = cookies.get('token')?.replaceAll("'", '') as string;
+  const userInfo = jwt.decode(token) as UserCookieInfo;
+  const privileges = userInfo?.privileges;
+
+  if (privileges !== 'admin' && privileges !== 'mod') {
+    return createErrorResponse('Forbidden', 403);
+  }
+
+  const body = await request.json();
+
+  let productinfo: Record<any, any> = {};
+  Object.entries(body).forEach(([key, value]) => {
+    if (body[key]) {
+      productinfo[key] = value;
+    }
+  });
+
+  const prismaProductData = productinfo as Prisma.productsCreateInput;
+  await prisma.products.create({
+    data: prismaProductData,
+  });
+
+  return new Response(
+    JSON.stringify({ success: true, message: 'Product created successfully' }),
+    {
+      headers: {
+        'Content-Type': 'apllication/json',
+      },
+      status: 200,
+    }
+  );
 };

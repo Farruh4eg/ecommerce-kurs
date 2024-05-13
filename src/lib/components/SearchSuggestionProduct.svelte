@@ -16,11 +16,13 @@
 
   if (Array.isArray(product)) {
     productPrice = addSpaceInString(
-      (
-        product[0].price -
-        (product[0].price / 100) * product[0].discount
+      parseInt(
+        (
+          product[0].price -
+          (product[0].price * product[0].discount) / 100
+        ).toString()
       ).toString()
-    ).toString();
+    );
     productId = product[0].productid;
     if (Array.isArray(product[0].photo)) {
       productThumb = product[0].photo[0];

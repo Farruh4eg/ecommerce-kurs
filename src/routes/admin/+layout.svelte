@@ -28,7 +28,7 @@
       <button
         class="py-4 px-6 border border-gray-400 bg-white rounded-md disabled:bg-blue-600 disabled:text-white"
         bind:this={productsButton}
-        on:click={() => (window.location.href = '/admin/products')}
+        on:click={() => (window.location.href = '/admin/products/edit')}
         >Товары</button
       >
     </section>

@@ -26,7 +26,7 @@
   let productName = product.name;
   let productColor = product.color;
   let productInStock: boolean = product.instock;
-  let productDiscountAvailable: boolean = product.discountAvailable;
+  let productDiscountAvailable: boolean = product.discountavailable;
   let productDiscountAmount = product.discount;
   let productRatingsArray: number[] = [];
 

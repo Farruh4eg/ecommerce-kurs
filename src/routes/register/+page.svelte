@@ -1,20 +1,33 @@
 <script lang="ts">
   import { handleFetch } from '$lib/utils/helpers';
-  let loginInput: HTMLInputElement;
-  let passwordInput: HTMLInputElement;
-  let confirmPasswordInput: HTMLInputElement;
+  let loginInput: string;
+  let passwordInput: string;
+  let confirmPasswordInput: string;
   let errorElement: HTMLParagraphElement;
   let registerForm: HTMLFormElement;
+  let submitButton: HTMLButtonElement;
 
   const submitForm = async () => {
     if (passwordInput !== confirmPasswordInput) {
       errorElement.textContent = 'Пароли не совпадают';
     } else {
+      submitButton.disabled = true;
       errorElement.textContent = '';
       const username = loginInput;
       const password = passwordInput;
 
-      const response = await handleFetch('/v1/user', 'post', {
+      if (
+        username.replaceAll(/['"`;%|]/g, '').trim().length < 4 ||
+        password.replaceAll(/['"`;%|]/g, '').trim().length < 8
+      ) {
+        errorElement.textContent =
+          'Некоррекные данные. Попробуйте снова через 5 секунд';
+        setTimeout(() => {
+          window.location.reload();
+        }, 5000);
+      }
+
+      const response = await handleFetch('/v1/user', 'POST', {
         username,
         password,
       });
@@ -29,9 +42,11 @@
       } else if (response.status == 409) {
         errorElement.textContent =
           'Пользователь уже существует. Если это вы, попробуйте войти.';
+        submitButton.disabled = false;
       } else if (response.status == 400) {
         errorElement.textContent =
           'Имя пользователя должно быть от 4 символов. Пароль должен быть от 8 символов.';
+        submitButton.disabled = false;
       }
     }
   };
@@ -86,8 +101,9 @@
       <p bind:this={errorElement} class="text-sm"></p>
     </section>
     <button
+      bind:this={submitButton}
       type="submit"
-      class="bg-white py-3 rounded-xl px-10 mt-12 hover:bg-blue-500 hover:text-white shadow-md border border-gray-200"
+      class="bg-white py-3 rounded-xl px-10 mt-12 hover:bg-blue-500 hover:text-white shadow-md border border-gray-200 disabled:bg-gray-300 disabled:text-white"
       >Регистрация</button
     >
   </form>

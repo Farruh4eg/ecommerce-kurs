@@ -169,7 +169,10 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 export const POST: RequestHandler = async ({ request }) => {
   const body = (await request.json()) as Body;
 
-  if (body.username.length < 4 || body.password.length < 8) {
+  if (
+    body.username.replaceAll(/['"`;%|]/g, '').trim().length < 4 ||
+    body.password.replaceAll(/['"`;%|]/g, '').trim().length < 8
+  ) {
     return createErrorResponse(
       'Логин должен быть больше 4 символов. Пароль должен быть больше 8 символов',
       400

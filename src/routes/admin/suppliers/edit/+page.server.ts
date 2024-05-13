@@ -8,7 +8,10 @@ export const load = (async ({ cookies, fetch, url }) => {
   let token = cookies.get('token')?.replaceAll("'", '') as string;
   const userInfo = jwt.decode(token) as UserCookieInfo;
   const privileges = userInfo?.privileges;
-  const userid = userInfo?.user_id;
+
+  if (privileges !== 'admin' && privileges !== 'mod') {
+    throw new Error('Forbidden');
+  }
 
   const page: number = parseInt(url.searchParams.get('page') ?? '1');
   const pageSize = 12;

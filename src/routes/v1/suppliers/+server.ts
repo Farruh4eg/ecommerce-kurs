@@ -5,6 +5,17 @@ import type { UserCookieInfo } from '$lib/utils/interfaces';
 import { createErrorResponse } from '$lib/utils/helpers';
 import { devicetype } from '@prisma/client';
 
+const devicetypes = [
+  devicetype.CABLE,
+  devicetype.CELLPHONE,
+  devicetype.CHARGER,
+  devicetype.HEADPHONE,
+  devicetype.PLAYER,
+  devicetype.SMARTPHONE,
+  devicetype.TABLET,
+  devicetype.WATCH,
+];
+
 export const GET: RequestHandler = async ({ url, cookies }) => {
   let token = cookies.get('token')?.replaceAll("'", '') as string;
   const userInfo = jwt.decode(token) as UserCookieInfo;
@@ -205,16 +216,6 @@ export const PUT: RequestHandler = async ({ request, cookies }) => {
   let token = cookies.get('token')?.replaceAll("'", '') as string;
   const userInfo = jwt.decode(token) as UserCookieInfo;
   const privileges = userInfo?.privileges;
-  const devicetypes = [
-    devicetype.CABLE,
-    devicetype.CELLPHONE,
-    devicetype.CHARGER,
-    devicetype.HEADPHONE,
-    devicetype.PLAYER,
-    devicetype.SMARTPHONE,
-    devicetype.TABLET,
-    devicetype.WATCH,
-  ];
   if (privileges === 'admin' || privileges === 'mod') {
     try {
       let ids: number[] = [];
@@ -251,6 +252,37 @@ export const PUT: RequestHandler = async ({ request, cookies }) => {
     } catch (error) {
       return createErrorResponse(`Unknown error`, 500);
     }
+  }
+  return createErrorResponse('Forbidden', 403);
+};
+
+export const POST: RequestHandler = async ({ request, cookies }) => {
+  let token = cookies.get('token')?.replaceAll("'", '') as string;
+  const userInfo = jwt.decode(token) as UserCookieInfo;
+  const privileges = userInfo?.privileges;
+
+  if (privileges === 'admin' || privileges === 'mod') {
+    let producttypeVar: devicetype[];
+
+    const body = await request.json();
+
+    producttypeVar = body.producttype;
+
+    body.producttype = [producttypeVar];
+
+    await prisma.suppliers.create({
+      data: body,
+    });
+
+    return new Response(
+      JSON.stringify({ success: true, message: 'Supplier created' }),
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        status: 200,
+      }
+    );
   }
   return createErrorResponse('Forbidden', 403);
 };

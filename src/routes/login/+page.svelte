@@ -8,7 +8,7 @@
 
   let isLoggedIn: boolean;
   let showPassword = false;
-  let usernameInput: HTMLInputElement;
+  let usernameInput: string;
   let passwordInput: HTMLInputElement;
   let errorElement: HTMLParagraphElement;
 

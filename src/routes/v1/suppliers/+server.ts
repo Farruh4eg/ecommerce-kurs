@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import type { RequestHandler } from '@sveltejs/kit';
 import type { UserCookieInfo } from '$lib/utils/interfaces';
 import { createErrorResponse } from '$lib/utils/helpers';
+import { devicetype } from '@prisma/client';
 
 export const GET: RequestHandler = async ({ url, cookies }) => {
   let token = cookies.get('token')?.replaceAll("'", '') as string;
@@ -93,12 +94,8 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
         ],
       },
       select: {
-        _count: {
-          select: {
-            products: true,
-          },
-        },
         companyname: true,
+        supplierid: true,
         address: true,
         city: true,
         country: true,
@@ -106,6 +103,7 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
         logo: true,
         phone: true,
         postalcode: true,
+        producttype: true,
       },
       skip: offset,
       take: pageSize,
@@ -122,12 +120,8 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
   if (isPermitted && urlSupplierId === -1) {
     let suppliers = await prisma.suppliers.findMany({
       select: {
-        _count: {
-          select: {
-            products: true,
-          },
-        },
         companyname: true,
+        supplierid: true,
         address: true,
         city: true,
         country: true,
@@ -135,6 +129,7 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
         logo: true,
         phone: true,
         postalcode: true,
+        producttype: true,
       },
       skip: offset,
       take: pageSize,
@@ -153,12 +148,8 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
       supplierid: urlSupplierId,
     },
     select: {
-      _count: {
-        select: {
-          products: true,
-        },
-      },
       companyname: true,
+      supplierid: true,
       address: true,
       city: true,
       country: true,
@@ -166,6 +157,7 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
       logo: true,
       phone: true,
       postalcode: true,
+      producttype: true,
     },
   });
 
@@ -177,4 +169,89 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
       'Content-Type': 'application/json',
     },
   });
+};
+
+export const DELETE: RequestHandler = async ({ url, cookies }) => {
+  let token = cookies.get('token')?.replaceAll("'", '') as string;
+  const userInfo = jwt.decode(token) as UserCookieInfo;
+  const privilege = userInfo?.privileges;
+  const queryId = parseInt(url.searchParams.get('q') || '');
+
+  if ((privilege === 'admin' || privilege === 'mod') && queryId) {
+    await prisma.suppliers.delete({
+      where: {
+        supplierid: queryId,
+      },
+    });
+
+    return new Response(
+      JSON.stringify({
+        success: true,
+        message: 'User deleted successfully',
+      }),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+  }
+
+  return createErrorResponse('Forbidden', 403);
+};
+
+export const PUT: RequestHandler = async ({ request, cookies }) => {
+  let token = cookies.get('token')?.replaceAll("'", '') as string;
+  const userInfo = jwt.decode(token) as UserCookieInfo;
+  const privileges = userInfo?.privileges;
+  const devicetypes = [
+    devicetype.CABLE,
+    devicetype.CELLPHONE,
+    devicetype.CHARGER,
+    devicetype.HEADPHONE,
+    devicetype.PLAYER,
+    devicetype.SMARTPHONE,
+    devicetype.TABLET,
+    devicetype.WATCH,
+  ];
+  if (privileges === 'admin' || privileges === 'mod') {
+    try {
+      let ids: number[] = [];
+      const body = await request.json();
+      Object.keys(body).forEach((id) => {
+        ids.push(parseInt(id));
+      });
+      ids.forEach(async (supplierid) => {
+        let producttypeVar;
+        if (body[supplierid].postalcode) {
+          body[supplierid].postalcode = parseInt(body[supplierid].postalcode);
+        }
+        if (body[supplierid].producttype) {
+          producttypeVar =
+            devicetypes[devicetypes.indexOf(body[supplierid].producttype)];
+          body[supplierid].producttype = [producttypeVar];
+        }
+
+        // await prisma.suppliers.update({
+        //   where: {
+        //     supplierid,
+        //   },
+        //   data: body[supplierid],
+        // });
+      });
+      return new Response(
+        JSON.stringify({ success: true, message: 'Supplier changed' }),
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          status: 200,
+        }
+      );
+    } catch (error) {
+      return createErrorResponse(`Unknown error`, 500);
+    }
+  }
+  return createErrorResponse('Forbidden', 403);
 };

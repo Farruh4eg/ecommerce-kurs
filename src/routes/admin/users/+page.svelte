@@ -19,6 +19,17 @@
 
   let defaultPrivileges: Record<string, string> = {};
 
+  const privilegesAsNumber = (p: string) => {
+    switch (p) {
+      case 'admin':
+        return 2;
+      case 'mod':
+        return 1;
+      default:
+        return 0;
+    }
+  };
+
   const _fetchUserData = async (getTotal = false) => {
     if (getTotal) {
       const response = await fetch(
@@ -144,6 +155,8 @@
                 name="privileges"
                 id="privileges_{user.userid}"
                 bind:value={user.privileges}
+                disabled={currentUserLevel <
+                  privilegesAsNumber(user.privileges)}
                 class={'w-24 p-2 ' +
                   (user.privileges !== defaultPrivileges[user.userid]
                     ? 'bg-red-600 text-white'
@@ -152,20 +165,16 @@
                   handlePrivilegeChange(e, user.userid);
                 }}
               >
-                <option
-                  value="default"
-                  selected={user.privileges === 'default'}
-                  disabled={currentUserLevel < 1 ? true : false}>default</option
+                <option value="default" selected={user.privileges === 'default'}
+                  >default</option
                 >
-                <option
-                  value="mod"
-                  selected={user.privileges === 'mod'}
-                  disabled={currentUserLevel < 1 ? true : false}>mod</option
+                <option value="mod" selected={user.privileges === 'mod'}
+                  >mod</option
                 >
                 <option
                   value="admin"
                   selected={user.privileges === 'admin'}
-                  disabled={currentUserLevel < 2 ? true : false}>admin</option
+                  disabled={currentUserLevel < 2}>admin</option
                 >
               </select>
             </td>

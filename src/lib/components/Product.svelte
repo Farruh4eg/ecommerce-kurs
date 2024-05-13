@@ -180,7 +180,13 @@
                 {productType}
                 {productName}
               </section>
-              <a href="#specs" class="no-underline text-blue-600">подробнее</a>
+              <a
+                class="no-underline text-blue-600 hover:cursor-pointer"
+                on:click={() =>
+                  document.getElementById('specs')?.scrollIntoView({
+                    behavior: 'smooth',
+                  })}>подробнее</a
+              >
             </h1>
           </section>
           <section class="w-1/5 flex justify-end mx-1">
@@ -249,7 +255,7 @@
   >
     {#if localizedSpecs}
       {#each Object.keys(localizedSpecs) as spec}
-        {#if spec === 'Объем оперативной памяти'}
+        {#if spec === 'Объем оперативной памяти pr-24'}
           <p class="flex w-full pl-4 justify-between">
             <span>Объем оперативной памяти</span><span
               class="w-72 flex justify-start"
@@ -257,7 +263,7 @@
             >
           </p>
           {#each Object.keys(displaySpecs) as spec}
-            <p class="flex w-full pl-4 justify-between">
+            <p class="flex w-full pl-4 justify-between pr-24">
               <span class="w-72 flex justify-start">{spec}</span><span
                 class="w-72 flex justify-start">{displaySpecs[spec]}</span
               >
@@ -266,7 +272,7 @@
         {:else if spec === 'Характеристики дисплея'}
           <!-- skip -->
         {:else}
-          <p class="flex w-full pl-4 justify-between">
+          <p class="flex w-full pl-4 justify-between pr-24">
             <span class="w-72 flex justify-start">{spec}</span><span
               class="w-72 flex justify-start">{localizedSpecs[spec]}</span
             >

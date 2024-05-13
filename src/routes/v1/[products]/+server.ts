@@ -440,6 +440,8 @@ export const GET: RequestHandler = (async ({ url }: { url: URL }) => {
         take: pageSize,
       });
 
+      console.log(product);
+
       totalPages = await prisma.products.count({
         where: {
           AND: [

@@ -37,6 +37,7 @@ model products {
   sku                   String?        @db.VarChar(255)
   discountavailable     Boolean?
   discount              Int?
+  discountedprice       Int?
   producttype           devicetype?
   releaseyear           Int?           @db.SmallInt
   color                 String?        @db.VarChar(20)
@@ -83,11 +84,11 @@ model suppliers {
   supplierid  Int          @id @default(autoincrement())
   companyname String       @db.VarChar(255)
   country     String       @db.VarChar(100)
-  city        String       @db.VarChar(100)
-  address     String       @db.VarChar(255)
+  city        String?      @db.VarChar(100)
+  address     String?      @db.VarChar(255)
   logo        String?
-  postalcode  Int
-  phone       String       @db.VarChar(20)
+  postalcode  Int?
+  phone       String?      @db.VarChar(20)
   email       String?      @db.VarChar(255)
   producttype devicetype[]
   products    products[]

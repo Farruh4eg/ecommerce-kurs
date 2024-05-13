@@ -4,10 +4,12 @@
   import { session, wishlistCountStore } from '$lib/session';
   import type { EventHandler, FormEventHandler } from 'svelte/elements';
   import { onDestroy, onMount } from 'svelte';
+  import { inject } from '@vercel/analytics';
   import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
   import type { UserCookieInfo } from '$lib/utils/interfaces';
   import { debounce } from '../lib/utils/helpers';
 
+  inject();
   injectSpeedInsights();
 
   type Data = {

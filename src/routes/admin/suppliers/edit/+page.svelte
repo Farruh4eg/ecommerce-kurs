@@ -13,8 +13,8 @@
   let pageN: Writable<number> = writable(parseInt(url.get('page') || '1'));
   let totalPages = writable(1);
 
-  let newSuppliers: Writable<any> = writable([]);
   let defaultSuppliers: Record<string, any> = {};
+  let newSuppliers: Record<string, any> = {};
 
   const _fetchSupplierData = async (getTotal = false) => {
     if (getTotal) {
@@ -35,9 +35,22 @@
     });
   };
 
-  $: console.log(data);
-
   const debouncedFetchData = debounce(_fetchSupplierData, 400);
+
+  const updateNewValue = (supplierid: number, header: string, value: any) => {
+    if (!newSuppliers[supplierid]) {
+      newSuppliers[supplierid] = {};
+    }
+    newSuppliers[supplierid][header] = value;
+    if (!newSuppliers[supplierid].hasOwnProperty('country')) {
+      newSuppliers[supplierid]['country'] =
+        defaultSuppliers[supplierid]['country'];
+    }
+    if (!newSuppliers[supplierid].hasOwnProperty('companyname')) {
+      newSuppliers[supplierid]['companyname'] =
+        defaultSuppliers[supplierid]['companyname'];
+    }
+  };
 
   onMount(async () => {
     await _fetchSupplierData();
@@ -49,19 +62,39 @@
 
   $: {
     totalPages.set(data.totalPages);
+    console.log($totalPages);
   }
 
-  const deleteSupplier = async (userid: string) => {
-    const response = await fetch(`/v1/user?q=${userid}`, {
+  const deleteSupplier = async (supplierid: number) => {
+    const response = await fetch(`/v1/suppliers?q=${supplierid}`, {
       method: 'DELETE',
     });
 
     if (response.ok) {
-      window.location.href = '/admin/users';
+      window.location.reload();
     }
   };
 
-  const editSupplier = async () => {};
+  const saveChanges = async () => {
+    const requestBody = newSuppliers;
+    try {
+      const response = await fetch('/v1/suppliers', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
+      });
+      if (response.ok) {
+        console.log('Changes saved successfully');
+        window.location.reload();
+      } else {
+        console.error('Failed to save changes');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 </script>
 
 <section class="flex w-full justify-center mt-4">
@@ -73,51 +106,184 @@
     class="box-border bg-white p-2 text-sm hover:border h-12 w-96 border border-gray-500"
     bind:value={searchValue}
     on:input={() => {
-      if (searchValue.length) debouncedFetchData(true);
+      debouncedFetchData(true);
     }}
   />
 </section>
-<section class="flex w-full justify-evenly">
-  <table class="w-max border-collapse mt-10 bg-white border border-gray-300">
+<section class="flex w-full justify-evenly overflow-x-scroll">
+  <table class="border-collapse mt-10 bg-white border border-gray-300">
     <thead>
       <tr class="bg-gray-100">
         <th class="py-2 px-4 text-left">id</th>
         <th class="py-2 px-4 text-left">Наименование</th>
-        <th class="py-2 px-4 text-left">Имя</th>
-        <th class="py-2 px-4 text-left">Фамилия</th>
+        <th class="py-2 px-4 text-left">Тип устройств</th>
+        <th class="py-2 px-4 text-left">Страна</th>
+        <th class="py-2 px-4 text-left">Город</th>
+        <th class="py-2 px-4 text-left">Адрес</th>
         <th class="py-2 px-4 text-left">Почта</th>
-        <th class="py-2 px-4 text-left">Роль</th>
-        <th class="py-2 px-4 text-left">Дата создания</th>
+        <th class="py-2 px-4 text-left">Телефон</th>
+        <th class="py-2 px-4 text-left">Индекс</th>
+        <th class="py-2 px-4 text-left">Лого</th>
         <th class="py-2 px-4 text-left">Действие</th>
       </tr>
     </thead>
     <tbody>
-      <!-- {#if $suppliers}
+      {#if $suppliers}
         {#each $suppliers as supplier}
           <tr class="hover:bg-gray-200">
-            <td class="py-2 px-4 text-left"
-              ><span>{supplier.supplierid}</span></td
+            <td class="py-2 px-4 text-left w-1/12"
+              ><input
+                type="number"
+                bind:value={supplier.supplierid}
+                disabled={true}
+                class="border border-gray-300"
+              /></td
             >
-            <td class="py-2 px-4 text-left"><span>{supplier.companyname}</span></td
+            <td class="py-2 px-4 text-left w-1/12"
+              ><input
+                type="text"
+                name="companyname"
+                bind:value={supplier.companyname}
+                class="border border-gray-300"
+                on:input={(e) =>
+                  updateNewValue(
+                    supplier.supplierid,
+                    e.target.name,
+                    e.target.value
+                  )}
+              /></td
             >
-            <td class="py-2 px-4 text-left"
-              ><span>{supplier.firstname}</span></td
+            <td class="py-2 px-4 text-left w-1/12"
+              ><select
+                name="producttype"
+                id="producttype"
+                bind:value={supplier.producttype[0]}
+                class="p-2"
+                on:input={(e) =>
+                  updateNewValue(
+                    supplier.supplierid,
+                    e.target.name,
+                    e.target.value
+                  )}
+              >
+                <option value="SMARTPHONE">Смартфон</option>
+                <option value="TABLET">Планшет</option>
+                <option value="CELLPHONE">Сотовый телефон</option>
+                <option value="CABLE">Кабель</option>
+                <option value="HEADPHONES">Наушники</option>
+                <option value="WATCH">Часы</option>
+                <option value="PLAYER">Плеер</option>
+                <option value="CHARGER">Зарядное устройство</option>
+              </select></td
             >
-            <td class="py-2 px-4 text-left"><span>{supplier.lastname}</span></td
+            <td class="py-2 px-4 text-left w-1/12"
+              ><input
+                type="text"
+                name="country"
+                bind:value={supplier.country}
+                class="border border-gray-300 w-40"
+                on:input={(e) =>
+                  updateNewValue(
+                    supplier.supplierid,
+                    e.target.name,
+                    e.target.value
+                  )}
+              /></td
             >
-            <td class="py-2 px-4 text-left"><span>{supplier.email}</span></td>
-
-            <td class="py-2 px-4 text-left"
-              ><span>{supplier.datecreated}</span></td
+            <td class="py-2 px-4 text-left w-1/12"
+              ><input
+                type="text"
+                name="city"
+                bind:value={supplier.city}
+                class="border border-gray-300 w-40"
+                on:input={(e) =>
+                  updateNewValue(
+                    supplier.supplierid,
+                    e.target.name,
+                    e.target.value
+                  )}
+              /></td
             >
-            <td class="py-2 px-4 text-left font-bold hover:cursor-pointer"
+            <td class="py-2 px-4 text-left w-1/12"
+              ><input
+                type="text"
+                name="address"
+                bind:value={supplier.address}
+                class="border border-gray-300 w-40"
+                on:input={(e) =>
+                  updateNewValue(
+                    supplier.supplierid,
+                    e.target.name,
+                    e.target.value
+                  )}
+              /></td
+            >
+            <td class="py-2 px-4 text-left w-1/12"
+              ><input
+                type="email"
+                name="email"
+                bind:value={supplier.email}
+                class="border border-gray-300 w-40"
+                on:input={(e) =>
+                  updateNewValue(
+                    supplier.supplierid,
+                    e.target.name,
+                    e.target.value
+                  )}
+              /></td
+            >
+            <td class="py-2 px-4 text-left w-1/12"
+              ><input
+                type="text"
+                name="phone"
+                bind:value={supplier.phone}
+                class="border border-gray-300 w-40"
+                on:input={(e) =>
+                  updateNewValue(
+                    supplier.supplierid,
+                    e.target.name,
+                    e.target.value
+                  )}
+              /></td
+            >
+            <td class="py-2 px-4 text-left w-1/12"
+              ><input
+                type="number"
+                name="postalcode"
+                bind:value={supplier.postalcode}
+                class="border border-gray-300 w-40"
+                on:input={(e) =>
+                  updateNewValue(
+                    supplier.supplierid,
+                    e.target.name,
+                    e.target.value
+                  )}
+              /></td
+            >
+            <td class="py-2 px-4 text-left flex"
+              ><input
+                type="file"
+                name="logo"
+                bind:value={defaultSuppliers[supplier.supplierid].logo}
+                on:input={(e) => {
+                  console.log(e.target.files[0]?.name);
+                  updateNewValue(
+                    supplier.supplierid,
+                    e.target.name,
+                    e.target.files[0]?.name
+                  );
+                }}
+              />
+            </td>
+            <td
+              class="py-2 px-4 text-left font-bold hover:cursor-pointer text-red-600"
               ><a on:click={() => deleteSupplier(supplier.supplierid)}
                 >Удалить</a
               ></td
             >
           </tr>
         {/each}
-      {/if} -->
+      {/if}
     </tbody>
   </table>
 </section>
@@ -140,7 +306,9 @@
     }}>Вперед</button
   >
   <button
-    class="bg-blue-600 py-4 px-8 text-white rounded-lg"
-    on:click={editSupplier}>Сохранить изменения</button
+    class="bg-blue-600 py-4 px-8 text-white rounded-lg disabled:bg-gray-300 disabled:text-black"
+    on:click={saveChanges}
+    disabled={Object.keys(newSuppliers).length > 0 ? false : true}
+    >Сохранить изменения</button
   >
 </section>

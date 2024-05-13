@@ -223,22 +223,21 @@ export const PUT: RequestHandler = async ({ request, cookies }) => {
         ids.push(parseInt(id));
       });
       ids.forEach(async (supplierid) => {
-        let producttypeVar;
+        let producttypeVar: devicetype[];
         if (body[supplierid].postalcode) {
           body[supplierid].postalcode = parseInt(body[supplierid].postalcode);
         }
         if (body[supplierid].producttype) {
-          producttypeVar =
-            devicetypes[devicetypes.indexOf(body[supplierid].producttype)];
+          producttypeVar = body[supplierid].producttype;
           body[supplierid].producttype = [producttypeVar];
         }
 
-        // await prisma.suppliers.update({
-        //   where: {
-        //     supplierid,
-        //   },
-        //   data: body[supplierid],
-        // });
+        await prisma.suppliers.update({
+          where: {
+            supplierid,
+          },
+          data: body[supplierid],
+        });
       });
       return new Response(
         JSON.stringify({ success: true, message: 'Supplier changed' }),

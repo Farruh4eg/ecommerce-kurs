@@ -155,8 +155,8 @@
                 name="privileges"
                 id="privileges_{user.userid}"
                 bind:value={user.privileges}
-                disabled={currentUserLevel <
-                  privilegesAsNumber(user.privileges)}
+                disabled={currentUserLevel != 2 &&
+                  currentUserLevel < privilegesAsNumber(user.privileges)}
                 class={'w-24 p-2 ' +
                   (user.privileges !== defaultPrivileges[user.userid]
                     ? 'bg-red-600 text-white'

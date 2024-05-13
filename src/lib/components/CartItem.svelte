@@ -62,16 +62,13 @@
   const avg = sum / count || 0;
   let productType = deviceEnumValueToString(product.producttype);
   let productDisplaySize = product.displaysize || '';
-  let productPrice = product.price;
   let productPriceString = addSpaceInString(product.price.toString());
-  let productPriceWithDiscount = addSpaceInString(
-    parseInt(
-      (productPrice - (productPrice / 100) * productDiscountAmount).toString()
-    ).toString()
+  let productDiscountedPrice = addSpaceInString(
+    parseInt(product.discountedprice).toString()
   );
 
   $: totalProductPrice =
-    parseInt(productPriceWithDiscount.split(' ').join('')) * productCount;
+    parseInt(productDiscountedPrice.split(' ').join('')) * productCount;
 
   let productMemory = product.memoryamount
     ? `${product.memoryamount} ${memoryEnumValueToString(product.memoryunit)}`
@@ -165,7 +162,7 @@
             >
           {/if}
           <span class="font-semibold text-2xl text-blue-600"
-            >{productPriceWithDiscount} &#8381;</span
+            >{productDiscountedPrice} &#8381;</span
           >
           <section
             class="w-full flex justify-between pr-8 text-md text-gray-600 items-end"

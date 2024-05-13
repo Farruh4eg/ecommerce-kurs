@@ -163,7 +163,7 @@
                 >
                 <span class="text-sm"
                   >{orderdetail.quantity} шт. x {addSpaceInString(
-                    orderdetail.price.toString()
+                    orderdetail.products.discountedprice.toString()
                   )}&#8381;</span
                 >
               </section>

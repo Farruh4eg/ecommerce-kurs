@@ -20,5 +20,7 @@
     {#each orders as order}
       <OrderItem user={data.userInsensitiveData} {order} />
     {/each}
+  {:else}
+    <p>У вас пока что нет никаких заказов</p>
   {/if}
 </section>

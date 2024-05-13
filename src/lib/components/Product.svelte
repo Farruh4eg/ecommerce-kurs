@@ -67,6 +67,7 @@
   $: productType = deviceEnumValueToString(product.producttype);
   $: productDisplaySize = product.displaysize + ' "' || '';
   $: productPrice = product.price;
+  $: productDiscountedPrice = product.discountedprice;
   $: productPriceString = addSpaceInString(product.price.toString());
 
   $: productMemory = product.memoryamount
@@ -207,15 +208,11 @@
             class="flex items-end gap-x-1 w-full py-4 pl-4 pr-12 bg-gray-100 bg-opacity-80 rounded-lg"
           >
             <span class="font-semibold text-2xl text-blue-600"
-              >{productPriceString} &#8381;</span
+              >{addSpaceInString(parseInt(productDiscountedPrice).toString())} &#8381;</span
             >
             {#if productDiscountAvailable}
               <span class="text-sm text-gray-600 line-through"
-                >{addSpaceInString(
-                  parseInt(
-                    productPrice + (productPrice / 100) * productDiscountAmount
-                  ).toString()
-                )}</span
+                >{addSpaceInString(parseInt(productPrice).toString())}</span
               >
             {/if}
           </section>

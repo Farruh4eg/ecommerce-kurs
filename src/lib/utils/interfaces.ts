@@ -36,6 +36,7 @@ export interface UserCookieInfo {
 
 export interface OrdersProduct {
   productid: string;
+  discountedprice: number;
   name: string;
   releaseyear: number | null;
   color: string | null;

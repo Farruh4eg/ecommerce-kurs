@@ -86,7 +86,7 @@
       {/each}
     </section>
     <section
-      class="relative bg-white rounded-lg border border-gray-300 ml-16 h-80 mt-10"
+      class="relative bg-white rounded-lg border border-gray-300 ml-16 h-80 mt-10 h-max"
     >
       <section
         class="sticky flex flex-col gap-y-4 w-96 p-6 justify-between h-full"

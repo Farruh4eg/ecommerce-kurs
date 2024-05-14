@@ -13,6 +13,7 @@ export const load = async ({ params: { id }, cookies }) => {
       ratings: {
         select: {
           rating: true,
+          ratingid: true,
         },
       },
       suppliers: {
@@ -25,5 +26,22 @@ export const load = async ({ params: { id }, cookies }) => {
     },
   });
 
-  return { product, userid };
+  const rating = await prisma.ratings.findMany({
+    where: {
+      productid: id,
+      userid,
+    },
+    select: {
+      rating: true,
+      ratingid: true,
+    },
+  });
+
+  let isRated: boolean = false;
+
+  if (rating.length > 0) {
+    isRated = true;
+  }
+
+  return { product, userid, rating, isRated };
 };

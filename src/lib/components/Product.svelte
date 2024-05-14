@@ -13,13 +13,27 @@
   import { session } from '$lib/session';
   import { onMount } from 'svelte';
 
-  let isLoggedIn: boolean;
-  let displaySpecs: Record<any, any> = {};
-
-  $: isLoggedIn = $session.isLoggedIn;
-
   export let product;
   export let userid;
+  export let rating;
+  export let isRated;
+
+  let isLoggedIn: boolean;
+  let displaySpecs: Record<any, any> = {};
+  let dialog: HTMLDialogElement, deleteDialog: HTMLDialogElement;
+  let ratingValue: number;
+  let notice = '';
+
+  let productRating: number, ratingid: number;
+
+  $: {
+    if (rating && rating.length > 0) {
+      productRating = rating[0].rating;
+      ratingid = rating[0].ratingid;
+    }
+  }
+
+  $: isLoggedIn = $session.isLoggedIn;
 
   let productRatingsArray: number[] = [];
   let sum: number;
@@ -159,6 +173,55 @@
     }
     localizedSpecs['Характеристики дисплея'] = displaySpecs;
   });
+
+  const submitRating = async () => {
+    if (!ratingValue || ratingValue < 1 || ratingValue > 5) {
+      notice = 'Некорректное значение оценки. Введите число от 1 до 5';
+    } else if (!isRated) {
+      const response = await fetch('/v1/ratings', {
+        method: 'POST',
+        body: JSON.stringify({
+          userid,
+          productid,
+          ratingValue: Math.floor(ratingValue),
+        }),
+      });
+
+      if (response.ok) {
+        window.location.reload();
+      } else {
+        notice = 'Неизвестная ошибка. Обновите страницу и попробуйте еще раз';
+      }
+    } else if (isRated) {
+      const response = await fetch('/v1/ratings', {
+        method: 'PUT',
+        body: JSON.stringify({
+          ratingid,
+          userid,
+          ratingValue: Math.floor(ratingValue),
+        }),
+      });
+
+      if (response.ok) {
+        window.location.reload();
+      } else {
+        notice = 'Неизвестная ошибка. Обновите страницу и попробуйте еще раз';
+      }
+    }
+  };
+
+  const deleteRating = async () => {
+    const response = await fetch('/v1/ratings', {
+      method: 'DELETE',
+      body: JSON.stringify({ ratingid, userid }),
+    });
+
+    if (response.ok) {
+      window.location.reload();
+    } else {
+      notice = 'Неизвестная ошибка. Обновите страницу и попробуйте еще раз';
+    }
+  };
 </script>
 
 <svelte:head>
@@ -200,8 +263,28 @@
             </a>
           </section>
         </section>
-        <section class="flex w-full py-2">
+        <section class="flex w-full py-2 gap-x-8 items-end">
           <RatingReadOnly rating={avg} ratingCount={count} height={5} />
+          {#if isLoggedIn}
+            {#if !isRated}
+              <span
+                class="text-blue-600 hover:cursor-pointer"
+                on:click={() => dialog.showModal()}>Оценить</span
+              >
+            {:else}
+              <span class="flex gap-x-4">
+                Ваша оценка: <span>{productRating}</span>
+              </span>
+              <span
+                class="text-blue-600 hover:cursor-pointer"
+                on:click={() => dialog.showModal()}>Изменить</span
+              >
+              <span
+                class="text-red-600 font-bold hover:cursor-pointer"
+                on:click={() => deleteDialog.showModal()}>Удалить</span
+              >
+            {/if}
+          {/if}
         </section>
         <section class="mt-4 w-full rounded-lg flex gap-x-4">
           <section
@@ -280,5 +363,56 @@
   </section>
 </section>
 
-<style>
-</style>
+<dialog bind:this={dialog} class="w-1/5 rounded-lg">
+  <section class="w-full p-10 flex flex-col justify-between gap-y-4">
+    <p class="w-full flex justify-center">Ваша оценка товара</p>
+    <section class="flex w-full flex-col items-center gap-y-2">
+      <input
+        type="number"
+        min="1"
+        max="5"
+        class="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none p-2 border border-gray-300 rounded-md w-48"
+        placeholder="Оценка (от 1 до 5)"
+        bind:value={ratingValue}
+      />
+      {#if notice}
+        <p class="flex w-full">{notice}</p>
+      {/if}
+    </section>
+    <section class="flex w-full justify-around">
+      <button
+        class="py-2 px-6 border border-gray-300 h-max rounded-lg"
+        on:click={() => dialog.close()}>Закрыть</button
+      >
+      <button
+        class="py-2 px-6 bg-blue-600 text-white h-max rounded-lg"
+        on:click={submitRating}>Сохранить</button
+      >
+    </section>
+  </section>
+</dialog>
+
+<dialog bind:this={deleteDialog} class="w-1/5 rounded-lg">
+  <section class="w-full h-48 p-10 flex flex-col justify-between">
+    <p>Вы уверены что хотите удалить свою оценку?</p>
+    <section class="flex w-full justify-end gap-x-12">
+      <button
+        on:click={() => {
+          deleteDialog.close();
+        }}
+        class="py-2 px-8 border border-gray-300 hover:bg-blue-500 hover:text-white rounded-md"
+        autofocus
+      >
+        Нет
+      </button>
+      <button
+        on:click={() => {
+          deleteRating();
+          deleteDialog.close();
+        }}
+        class="py-2 px-8 border border-gray-300 bg-red-600 text-white rounded-md"
+        >Да</button
+      >
+    </section>
+  </section>
+</dialog>

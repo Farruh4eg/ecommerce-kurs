@@ -110,14 +110,12 @@
       </section>
     </section>
   </section>
-  <section
-    class="flex gap-x-8 flex-wrap overflow-x-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] w-full"
-  >
+  <section class="flex gap-x-8 flex-wrap overflow-x-scroll w-full">
     {#if data}
       {#each data.suppliers as supplier}
         <a
           class="flex p-2 rounded-xl h-16 border border-gray-200 shadow-md"
-          href="http://localhost:5173/search/products?q=&inStock=all&rating=all&price=50-500000&brand={supplier.companyname}&type="
+          href="/search/products?q=&inStock=all&rating=all&price=50-500000&brand={supplier.companyname}&type="
           ><img
             src="/suppliers/{supplier.logo}"
             alt="{supplier.companyname}-logo"

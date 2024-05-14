@@ -42,7 +42,7 @@
     <SearchFilters data={$products} query={data.searchQuery} />
   {/if}
   <section
-    class="flex flex-col gap-4 mt-6 mb-4 min-w-[40%] mr-40"
+    class="flex flex-col gap-4 mt-6 mb-4 min-w-[40%]"
     id="search-results-container"
   >
     {#if $products?.length > 0}

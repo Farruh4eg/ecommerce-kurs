@@ -127,7 +127,7 @@
     }}
   />
 </section>
-<section class="flex w-full justify-evenly">
+<section class="flex w-full justify-evenly overflow-x-scroll">
   <table class="w-max border-collapse mt-10 bg-white border border-gray-300">
     <thead>
       <tr class="bg-gray-100">

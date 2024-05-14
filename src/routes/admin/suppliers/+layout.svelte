@@ -16,9 +16,10 @@
   });
 </script>
 
+<slot />
 <section>
-  <section class="flex gap-x-4 w-max absolute ml-2 right-1">
-    <section class="sticky flex gap-x-4 w-full">
+  <section class="flex gap-x-4 w-full justify-center my-8">
+    <section class="sticky flex gap-x-4">
       <button
         class="py-4 px-6 border border-gray-400 bg-white rounded-md disabled:bg-blue-600 disabled:text-white"
         bind:this={editButton}
@@ -33,5 +34,4 @@
       >
     </section>
   </section>
-  <slot />
 </section>

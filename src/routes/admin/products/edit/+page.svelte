@@ -199,11 +199,6 @@
                                 );
                               }}
                             />
-                            <span
-                              >{defaultProducts[product.productid].photo[
-                                index
-                              ]}</span
-                            >
                           </section>
                         {/each}
                       </section>
@@ -237,7 +232,7 @@
   </section>
 </section>
 
-<section class="flex h-max justify-center gap-x-48 mt-16">
+<section class="flex h-max justify-center gap-x-24 mt-16">
   <button
     class="text-blue-600 text-lg font-semibold disabled:text-gray-600"
     disabled={$pageN === 1}

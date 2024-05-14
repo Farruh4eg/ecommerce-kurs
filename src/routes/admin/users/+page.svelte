@@ -131,7 +131,6 @@
   <table class="w-max border-collapse mt-10 bg-white border border-gray-300">
     <thead>
       <tr class="bg-gray-100">
-        <th class="py-2 px-4 text-left">id</th>
         <th class="py-2 px-4 text-left">Логин</th>
         <th class="py-2 px-4 text-left">Имя</th>
         <th class="py-2 px-4 text-left">Фамилия</th>
@@ -145,7 +144,6 @@
       {#if $users && currentUserLevel}
         {#each $users as user}
           <tr class="hover:bg-gray-200">
-            <td class="py-2 px-4 text-left"><span>{user.userid}</span></td>
             <td class="py-2 px-4 text-left"><span>{user.username}</span></td>
             <td class="py-2 px-4 text-left"><span>{user.firstname}</span></td>
             <td class="py-2 px-4 text-left"><span>{user.lastname}</span></td>
@@ -178,7 +176,9 @@
                 >
               </select>
             </td>
-            <td class="py-2 px-4 text-left"><span>{user.datecreated}</span></td>
+            <td class="py-2 px-4 text-left"
+              ><span>{user.datecreated.split('T')[0]}</span></td
+            >
             {#if data.privileges === 'admin'}
               <td
                 class={'py-2 px-4 text-left font-bold hover:cursor-pointer ' +
@@ -199,7 +199,7 @@
   </table>
 </section>
 
-<section class="flex h-max justify-center gap-x-48 mt-16">
+<section class="flex h-max justify-center gap-x-24 mt-16">
   <button
     class="text-blue-600 text-lg font-semibold disabled:text-gray-600"
     disabled={$pageN === 1}

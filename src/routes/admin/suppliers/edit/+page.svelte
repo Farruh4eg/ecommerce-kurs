@@ -111,10 +111,11 @@
   />
 </section>
 <section class="flex w-full justify-evenly overflow-x-scroll">
-  <table class="border-collapse mt-10 bg-white border border-gray-300">
+  <table
+    class="border-collapse mt-10 bg-white border border-gray-300 w-[1280px]"
+  >
     <thead>
       <tr class="bg-gray-100">
-        <th class="py-2 px-4 text-left">id</th>
         <th class="py-2 px-4 text-left">Наименование</th>
         <th class="py-2 px-4 text-left">Тип устройств</th>
         <th class="py-2 px-4 text-left">Страна</th>
@@ -131,20 +132,12 @@
       {#if $suppliers}
         {#each $suppliers as supplier}
           <tr class="hover:bg-gray-200">
-            <td class="py-2 px-4 text-left w-1/12"
-              ><input
-                type="number"
-                bind:value={supplier.supplierid}
-                disabled={true}
-                class="border border-gray-300"
-              /></td
-            >
-            <td class="py-2 px-4 text-left w-1/12"
+            <td class="py-2 px-4 text-left"
               ><input
                 type="text"
                 name="companyname"
                 bind:value={supplier.companyname}
-                class="border border-gray-300"
+                class="border border-gray-300 w-[100px]"
                 on:input={(e) =>
                   updateNewValue(
                     supplier.supplierid,
@@ -153,12 +146,12 @@
                   )}
               /></td
             >
-            <td class="py-2 px-4 text-left w-1/12"
+            <td class="py-2 px-4 text-left"
               ><select
                 name="producttype"
                 id="producttype"
                 bind:value={supplier.producttype[0]}
-                class="p-2"
+                class="p-2 w-[100px]"
                 on:input={(e) =>
                   updateNewValue(
                     supplier.supplierid,
@@ -176,12 +169,12 @@
                 <option value="CHARGER">Зарядное устройство</option>
               </select></td
             >
-            <td class="py-2 px-4 text-left w-1/12"
+            <td class="py-2 px-4 text-left"
               ><input
                 type="text"
                 name="country"
                 bind:value={supplier.country}
-                class="border border-gray-300 w-40"
+                class="border border-gray-300 w-[100px]"
                 on:input={(e) =>
                   updateNewValue(
                     supplier.supplierid,
@@ -190,12 +183,12 @@
                   )}
               /></td
             >
-            <td class="py-2 px-4 text-left w-1/12"
+            <td class="py-2 px-4 text-left"
               ><input
                 type="text"
                 name="city"
                 bind:value={supplier.city}
-                class="border border-gray-300 w-40"
+                class="border border-gray-300 w-[100px]"
                 on:input={(e) =>
                   updateNewValue(
                     supplier.supplierid,
@@ -204,12 +197,12 @@
                   )}
               /></td
             >
-            <td class="py-2 px-4 text-left w-1/12"
+            <td class="py-2 px-4 text-left"
               ><input
                 type="text"
                 name="address"
                 bind:value={supplier.address}
-                class="border border-gray-300 w-40"
+                class="border border-gray-300 w-[100px]"
                 on:input={(e) =>
                   updateNewValue(
                     supplier.supplierid,
@@ -218,12 +211,12 @@
                   )}
               /></td
             >
-            <td class="py-2 px-4 text-left w-1/12"
+            <td class="py-2 px-4 text-left"
               ><input
                 type="email"
                 name="email"
                 bind:value={supplier.email}
-                class="border border-gray-300 w-40"
+                class="border border-gray-300 w-[100px]"
                 on:input={(e) =>
                   updateNewValue(
                     supplier.supplierid,
@@ -232,12 +225,12 @@
                   )}
               /></td
             >
-            <td class="py-2 px-4 text-left w-1/12"
+            <td class="py-2 px-4 text-left"
               ><input
                 type="text"
                 name="phone"
                 bind:value={supplier.phone}
-                class="border border-gray-300 w-40"
+                class="border border-gray-300 w-[100px]"
                 on:input={(e) =>
                   updateNewValue(
                     supplier.supplierid,
@@ -246,12 +239,12 @@
                   )}
               /></td
             >
-            <td class="py-2 px-4 text-left w-1/12"
+            <td class="py-2 px-4 text-left"
               ><input
                 type="number"
                 name="postalcode"
                 bind:value={supplier.postalcode}
-                class="border border-gray-300 w-40"
+                class="border border-gray-300 w-[100px]"
                 on:input={(e) =>
                   updateNewValue(
                     supplier.supplierid,
@@ -260,10 +253,11 @@
                   )}
               /></td
             >
-            <td class="py-2 px-4 text-left flex"
+            <td class="py-2 px-4 text-left"
               ><input
                 type="file"
                 name="logo"
+                class=" w-[100px]"
                 bind:value={defaultSuppliers[supplier.supplierid].logo}
                 on:input={(e) => {
                   console.log(e.target.files[0]?.name);
@@ -276,7 +270,7 @@
               />
             </td>
             <td
-              class="py-2 px-4 text-left font-bold hover:cursor-pointer text-red-600"
+              class="py-2 px-4 text-left font-bold hover:cursor-pointer text-red-600 w-[100px]"
               ><a on:click={() => deleteSupplier(supplier.supplierid)}
                 >Удалить</a
               ></td
@@ -288,7 +282,7 @@
   </table>
 </section>
 
-<section class="flex h-max justify-center gap-x-48 mt-16">
+<section class="flex h-max justify-center gap-x-24 mt-16">
   <button
     class="text-blue-600 text-lg font-semibold disabled:text-gray-600"
     disabled={$pageN === 1}

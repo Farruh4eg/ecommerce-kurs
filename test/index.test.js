@@ -53,7 +53,7 @@ describe('app unit tests', () => {
     it('should not let delete a user to a non-admin user', async () => {
       const userid = '2c0635ba-86f7-4361-84cf-2b25ee2c0061';
 
-      const response = await fetch(`${api}/user`, {
+      const response = await fetch(`${api}/user?q=${userid}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

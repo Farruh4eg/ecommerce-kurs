@@ -1,6 +1,9 @@
 <script lang="ts">
   import type { PageData } from '../../../.svelte-kit/types/src/routes/$types.d.ts';
-  import { addSpaceInString } from '$lib/utils/helpers.js';
+  import {
+    addSpaceInString,
+    deviceEnumValueToString,
+  } from '$lib/utils/helpers.js';
   import type { Rating } from '$lib/utils/interfaces.js';
 
   export let product: PageData;
@@ -10,6 +13,7 @@
   let avg: number;
   let productId: string;
   let productThumb: string;
+  let productType: string;
   let productName: string;
   let productPrice: string;
   let productRatingsArray: number[] = [];
@@ -24,6 +28,7 @@
       ).toString()
     );
     productId = product[0].productid;
+    productType = deviceEnumValueToString(product[0].producttype);
     if (Array.isArray(product[0].photo)) {
       productThumb = product[0].photo[0];
     } else {
@@ -41,6 +46,7 @@
     );
     productId = product.productid;
     productThumb = product.photo;
+    productType = deviceEnumValueToString(product.producttype);
     productName = product.name;
     product.ratings.forEach((element: Rating) => {
       productRatingsArray.push(element.rating);
@@ -72,6 +78,7 @@
       on:click={handleProductChange}
       class="hover:text-blue-600 w-full h-max hover:cursor-pointer"
     >
+      {productType}
       {productName}
     </a>
     <span class="font-semibold text-blue-600">{productPrice} &#8381;</span>

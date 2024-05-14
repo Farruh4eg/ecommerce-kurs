@@ -37,7 +37,7 @@
   const count = productRatingsArray.length;
   const avg = sum / count || 0;
   let productType = deviceEnumValueToString(product.producttype);
-  let productDisplaySize = product.displaysize || '';
+  let productDisplaySize = product.displaysize + '' || '';
   let productPrice = product.price;
   let productPriceString = addSpaceInString(product.price.toString());
   let productPriceWithDiscount = addSpaceInString(
@@ -66,7 +66,8 @@
     <a
       href="/products/{productid}"
       class="hover:text-blue-600 w-full h-max pb-12"
-      >{productDisplaySize}" {productType}
+    >
+      {productType}
       {productName}
       {productMemory}
       {productColor}

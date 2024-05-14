@@ -236,13 +236,17 @@
   <section class="w-full bg-white p-6 text-gray-700 rounded-xl">
     <section class="flex">
       <ImageContainer productPhotos={product.photo} />
-      <section class="flex flex-col w-full px-6 gap-y-4">
-        <section class="flex w-full h-12 items-start justify-start">
+      <section class="flex flex-col w-[600px] px-10 gap-y-4">
+        <section class="flex w-full h-24 items-start justify-start">
           <section class="flex w-full">
-            <h1 class="pb-4 w-full flex items-end gap-x-4">
-              <section class="font-bold text-3xl w-max flex">
-                {productType}
-                {productName}
+            <h1 class="pb-4 flex items-end gap-x-4 flex-wrap overflow-hidden">
+              <section
+                class="font-bold text-3xl w-max flex flex-wrap text-wrap"
+              >
+                <span class="flex text-wrap flex-wrap">
+                  {productType}
+                  {productName}
+                </span>
               </section>
               <a
                 class="no-underline text-blue-600 hover:cursor-pointer"
@@ -283,7 +287,7 @@
         </section>
         <section class="mt-4 w-full rounded-lg flex gap-x-4">
           <section
-            class="flex items-end gap-x-1 w-full py-4 pl-4 pr-12 bg-gray-100 bg-opacity-80 rounded-lg"
+            class="flex items-end gap-x-1 w-full py-4 pl-4 pr-8 bg-gray-100 bg-opacity-80 rounded-lg"
           >
             <span class="font-semibold text-2xl text-blue-600"
               >{addSpaceInString(parseInt(productDiscountedPrice).toString())} &#8381;</span

@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "vite dev",
     "build": "npx prisma generate && vite build",
+    "test": "jest",
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
@@ -17,6 +18,7 @@
     "@types/bcrypt": "^5.0.2",
     "@types/cookie": "^0.5.1",
     "@types/jsonwebtoken": "^9.0.5",
+    "jest": "^29.7.0",
     "prisma": "^5.6.0",
     "svelte": "^4.2.7",
     "svelte-check": "^3.6.0",

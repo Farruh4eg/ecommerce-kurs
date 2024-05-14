@@ -8,6 +8,7 @@ const config = {
     adapter: adapter({
       runtime: 'nodejs18.x',
     }),
+    csrf: false,
   },
 };
 

@@ -68,6 +68,15 @@ export const GET: RequestHandler = (async ({ url }: { url: URL }) => {
           ],
         },
 
+        include: {
+          suppliers: {
+            select: {
+              companyname: true,
+            },
+          },
+          ratings: true,
+        },
+
         skip: offset,
         take: pageSize,
       });

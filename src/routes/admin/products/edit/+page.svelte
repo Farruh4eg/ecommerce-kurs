@@ -167,7 +167,7 @@
                             e.target.checked
                           )}
                       />
-                    {:else if header === 'discount' || header === 'releaseyear' || header === 'price'}
+                    {:else if header === 'discount' || header === 'releaseyear' || header === 'price' || header === 'supplierid'}
                       <input
                         type="number"
                         bind:value={product[header]}

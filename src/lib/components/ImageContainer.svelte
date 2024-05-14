@@ -25,7 +25,7 @@
       <img src={photo} alt="product-photo" on:mouseover={handleHoveredImage} />
     {/each}
   </section>
-  <section class="h-[500px] w-[500px] mx-8">
+  <section class="h-[500px] w-[500px] mx-8 mr-2">
     <img src={currentHoveredImage} alt="current-picked-photo" class="h-full" />
   </section>
 </section>

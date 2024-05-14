@@ -37,7 +37,7 @@
 <svelte:head>
   <title>Результаты поиска</title>
 </svelte:head>
-<section class="flex justify-evenly gap-x-4 p-4">
+<section class="flex justify-evenly gap-x-4 p-4 w-[1280px] mx-auto">
   {#if $products?.length > 0}
     <SearchFilters data={$products} query={data.searchQuery} />
   {/if}

@@ -231,9 +231,9 @@
 </svelte:head>
 
 <section
-  class="flex w-8/12 my-0 mx-auto box-border p-8 text-gray-700 flex-col gap-y-10 items-end"
+  class="flex w-[1280px] my-0 mx-auto box-border p-8 text-gray-700 flex-col gap-y-10 items-end"
 >
-  <section class="w-full bg-white p-8 text-gray-700 rounded-xl">
+  <section class="w-full bg-white p-6 text-gray-700 rounded-xl">
     <section class="flex">
       <ImageContainer productPhotos={product.photo} />
       <section class="flex flex-col w-full px-6 gap-y-4">
@@ -253,17 +253,8 @@
               >
             </h1>
           </section>
-          <section class="w-1/5 flex justify-end mx-1">
-            <a href="/search/products?q=&brand={supplierName}">
-              <img
-                src="/suppliers/{supplierLogo}"
-                alt="supplier-logo"
-                class="h-full"
-              />
-            </a>
-          </section>
         </section>
-        <section class="flex w-full py-2 gap-x-8 items-end">
+        <section class="flex w-full py-2 gap-x-16 items-end">
           <RatingReadOnly rating={avg} ratingCount={count} height={5} />
           {#if isLoggedIn}
             {#if !isRated}
@@ -272,17 +263,21 @@
                 on:click={() => dialog.showModal()}>Оценить</span
               >
             {:else}
-              <span class="flex gap-x-4">
-                Ваша оценка: <span>{productRating}</span>
+              <span class="flex gap-x-4 items-end">
+                Ваша оценка: <span class="text-lg font-bold"
+                  >{productRating}</span
+                >
               </span>
-              <span
-                class="text-blue-600 hover:cursor-pointer"
-                on:click={() => dialog.showModal()}>Изменить</span
-              >
-              <span
-                class="text-red-600 font-bold hover:cursor-pointer"
-                on:click={() => deleteDialog.showModal()}>Удалить</span
-              >
+              <section class="flex gap-x-8">
+                <span
+                  class="text-blue-600 hover:cursor-pointer"
+                  on:click={() => dialog.showModal()}>Изменить</span
+                >
+                <span
+                  class="text-red-600 font-bold hover:cursor-pointer"
+                  on:click={() => deleteDialog.showModal()}>Удалить</span
+                >
+              </section>
             {/if}
           {/if}
         </section>
@@ -325,6 +320,15 @@
           {#if productMemory}
             <span>Память: <span class="font-bold">{productMemory}</span> </span>
           {/if}
+        </section>
+        <section class="flex justify-start mx-1">
+          <a href="/search/products?q=&brand={supplierName}">
+            <img
+              src="/suppliers/{supplierLogo}"
+              alt="supplier-logo"
+              class="h-full"
+            />
+          </a>
         </section>
       </section>
     </section>

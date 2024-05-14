@@ -111,7 +111,7 @@
     </section>
   </section>
   <section
-    class="flex gap-x-8 overflow-x-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] w-full"
+    class="flex gap-x-8 flex-wrap overflow-x-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] w-full"
   >
     {#if data}
       {#each data.suppliers as supplier}

@@ -16,6 +16,7 @@ describe('app unit tests', () => {
       expect(data).toBeFalsy();
     });
   });
+
   describe('users POST endpoint', () => {
     it('should create a user', async () => {
       const crypto = require('crypto');
@@ -27,10 +28,38 @@ describe('app unit tests', () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(username, password),
+        body: JSON.stringify({ username, password }),
       });
 
       expect(response.status).toEqual(200);
+    });
+
+    it('should not create user with existing username', async () => {
+      const username = 'Farruh4eg';
+      const password = '11111111';
+
+      const response = await fetch(`${api}/user`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+      expect(response.status).toEqual(409);
+    });
+  });
+
+  describe('users DELETE endpoint', () => {
+    it('should not let delete a user to a non-admin user', async () => {
+      const userid = '2c0635ba-86f7-4361-84cf-2b25ee2c0061';
+
+      const response = await fetch(`${api}/user`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      expect(response.status).toEqual(403);
     });
   });
 });

@@ -168,7 +168,6 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 
 export const POST: RequestHandler = async ({ request }) => {
   const body = (await request.json()) as Body;
-  console.log(body);
 
   if (
     body?.username.replaceAll(/['"`;%|]/g, '').trim().length < 4 ||

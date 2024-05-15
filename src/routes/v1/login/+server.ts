@@ -35,7 +35,7 @@ export const POST: RequestHandler = async ({ request }) => {
         user_id: getUserCredentials.userid,
         privileges: getUserCredentials.privileges,
       };
-      const secure = dev ? '' : 'Secure';
+      const secure = dev ? '' : 'Secure;';
 
       const token = jwt.sign(user, SECRET_ACCESS_TOKEN, {
         expiresIn: '90 days',

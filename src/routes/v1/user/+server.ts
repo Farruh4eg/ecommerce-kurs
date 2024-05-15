@@ -208,7 +208,7 @@ export const POST: RequestHandler = async ({ request }) => {
       user_id,
       privileges: create_user.privileges,
     };
-    const secure = dev ? '' : 'Secure';
+    const secure = dev ? '' : 'Secure;';
     const token = jwt.sign(user, SECRET_ACCESS_TOKEN, {
       expiresIn: '90 days',
     });

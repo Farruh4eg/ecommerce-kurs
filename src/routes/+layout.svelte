@@ -201,7 +201,8 @@
         bind:this={searchElement}
         type="search"
         placeholder="Поиск по магазину"
-        class="relative box-border bg-gray-100 hover:bg-white p-5 rounded-xl text-sm hover:shadow-xl transition-all hover:border hover:border-gray-100 h-16 w-96"
+        class="relative box-border bg-gray-100 hover:bg-white p-5 rounded-xl
+        text-sm hover:shadow-xl transition-all hover:border hover:border-gray-100 h-16 w-96"
         id="search"
         name="q"
       />

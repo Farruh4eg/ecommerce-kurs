@@ -114,10 +114,11 @@
     {#if data}
       {#each data.suppliers as supplier}
         <a
-          class="flex p-2 rounded-xl h-16 border border-gray-200 shadow-md"
+          class="flex p-2 items-center rounded-xl w-1/12 border border-gray-200 shadow-md justify-center"
           href="/search/products?q=&inStock=all&rating=all&price=50-500000&brand={supplier.companyname}&type="
           ><img
             src="/suppliers/{supplier.logo}"
+            class="h-max"
             alt="{supplier.companyname}-logo"
           /></a
         >

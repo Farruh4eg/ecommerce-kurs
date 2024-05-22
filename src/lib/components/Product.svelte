@@ -343,8 +343,8 @@
   >
     {#if localizedSpecs}
       {#each Object.keys(localizedSpecs) as spec}
-        {#if spec === 'Объем оперативной памяти pr-24'}
-          <p class="flex w-full pl-4 justify-between">
+        {#if spec === 'Объем оперативной памяти'}
+          <p class="flex w-full pl-4 justify-between pr-24">
             <span>Объем оперативной памяти</span><span
               class="w-72 flex justify-start"
               >{localizedSpecs['Объем оперативной памяти']}</span
